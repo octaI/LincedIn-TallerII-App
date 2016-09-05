@@ -1,4 +1,4 @@
-package com.fiuba.tallerii.lincedin;
+package com.fiuba.tallerii.lincedin.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+
+import com.fiuba.tallerii.lincedin.R;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -53,6 +55,7 @@ public class HomeActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        setTabLayoutIcons(tabLayout);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +89,13 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setTabLayoutIcons(TabLayout tabLayout) {
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_account_circle);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_group);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_person_add);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_chat);
     }
 
     /**
@@ -148,20 +158,6 @@ public class HomeActivity extends AppCompatActivity {
             return COUNT_SECTIONS;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-                case 3:
-                    return "SECTION 4";
-            }
-            return null;
-        }
     }
 
 }
