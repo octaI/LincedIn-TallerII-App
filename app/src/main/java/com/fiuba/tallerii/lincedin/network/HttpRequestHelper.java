@@ -19,6 +19,8 @@ import java.util.Map;
  */
 public class HttpRequestHelper {
 
+    public static final String LOCAL_IP = "192.168.0.14";
+
     private static RequestQueue mRequestQueue;
 
     /**
@@ -27,8 +29,7 @@ public class HttpRequestHelper {
      * @param appContext is the application context
      */
     public static void initialize(Context appContext) {
-        if (mRequestQueue != null)
-            mRequestQueue = Volley.newRequestQueue(appContext);
+        mRequestQueue = Volley.newRequestQueue(appContext);
     }
 
     /**
@@ -40,10 +41,13 @@ public class HttpRequestHelper {
      * @param listener is the listener that triggers the actions to perform when the response is successful
      * @param errorListener is the listener that triggers the actions to perform when the response fails
      * @param requestTag the tag associated to the request to enqueue
-     * @return the enqueued Request{@link Request}
+     * @return the enqueued Request{@link Request} or null{@code null} if the RequestQueue couldn't be initialized.
      */
     private static Request<JSONObject> enqueue(int method, String url, @Nullable final Map<String, String> requestParams, JSONObject jsonRequest,
                                                Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, String requestTag) {
+        if (mRequestQueue == null)
+            return null;
+
         JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
             @Override
             protected Map<String, String> getParams() {
@@ -59,7 +63,8 @@ public class HttpRequestHelper {
      * @param tag is the tag associated to the requests that must be canceled
      */
     public static void cancelPendingRequests(Object tag) {
-        mRequestQueue.cancelAll(tag);
+        if (mRequestQueue != null)
+            mRequestQueue.cancelAll(tag);
     }
 
     /**

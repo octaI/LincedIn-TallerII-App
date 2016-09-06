@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +20,15 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -57,14 +66,46 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         setTabLayoutIcons(tabLayout);
 
+        // TODO: 06/09/16 Only for testing purposes. Remove this request!
+        // ------------------------------------------------------------->
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final Map<String, String> requestParams = new HashMap<>();
+                requestParams.put("appName", "LincedIn");
+                requestParams.put("testing", Boolean.TRUE.toString());
+                final String url = "http://" + HttpRequestHelper.LOCAL_IP + ":8080/main";
+                Snackbar.make(view, "Testing...", Snackbar.LENGTH_LONG)
+                        .setAction(
+                                "Enviar request a AppServer",
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(final View v) {
+                                        HttpRequestHelper.get(
+                                                url,
+                                                requestParams,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+                                                        Log.d("Testing", response.toString());
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Log.e("Testing", error.toString());
+                                                    }
+                                                },
+                                                "TEST_REQUEST"
+                                        );
+                                    }
+                                }
+                        )
+                        .show();
             }
         });
+        // <-------------------------------------------------------------
 
     }
 
