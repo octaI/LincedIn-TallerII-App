@@ -75,7 +75,11 @@ public class HomeActivity extends AppCompatActivity {
                 final Map<String, String> requestParams = new HashMap<>();
                 requestParams.put("appName", "LincedIn");
                 requestParams.put("testing", Boolean.TRUE.toString());
-                final String url = "http://" + HttpRequestHelper.LOCAL_IP + ":8080/main";
+                final String url = "http://"
+                        + HttpRequestHelper.LOCAL_IP
+                        + ":"
+                        + HttpRequestHelper.LOCAL_PORT_EXPOSED
+                        + "/main";
                 Snackbar.make(view, "Testing...", Snackbar.LENGTH_LONG)
                         .setAction(
                                 "Enviar request a AppServer",
