@@ -19,9 +19,6 @@ import java.util.Map;
  */
 public class HttpRequestHelper {
 
-    public static final String LOCAL_IP = "192.168.0.14";
-    public static final String LOCAL_PORT_EXPOSED = "8080";
-
     private static RequestQueue mRequestQueue;
 
     /**

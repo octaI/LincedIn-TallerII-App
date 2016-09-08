@@ -3,6 +3,7 @@ package com.fiuba.tallerii.lincedin.activities;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,16 +19,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -52,6 +50,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        EventBus.getDefault().register(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -72,37 +72,13 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Map<String, String> requestParams = new HashMap<>();
-                requestParams.put("appName", "LincedIn");
-                requestParams.put("testing", Boolean.TRUE.toString());
-                final String url = "http://"
-                        + HttpRequestHelper.LOCAL_IP
-                        + ":"
-                        + HttpRequestHelper.LOCAL_PORT_EXPOSED
-                        + "/main";
                 Snackbar.make(view, "Testing...", Snackbar.LENGTH_LONG)
                         .setAction(
                                 "Enviar request a AppServer",
                                 new View.OnClickListener() {
                                     @Override
-                                    public void onClick(final View v) {
-                                        HttpRequestHelper.get(
-                                                url,
-                                                requestParams,
-                                                new Response.Listener<JSONObject>() {
-                                                    @Override
-                                                    public void onResponse(JSONObject response) {
-                                                        Log.d("Testing", response.toString());
-                                                    }
-                                                },
-                                                new Response.ErrorListener() {
-                                                    @Override
-                                                    public void onErrorResponse(VolleyError error) {
-                                                        Log.e("Testing", error.toString());
-                                                    }
-                                                },
-                                                "TEST_REQUEST"
-                                        );
+                                    public void onClick(View v) {
+                                            openHTTPConfigurationDialog();
                                     }
                                 }
                         )
@@ -113,6 +89,15 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    private void openHTTPConfigurationDialog() {
+        DialogFragment httpDialog = new HTTPConfigurationDialogFragment();
+        httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onHTTPResponseReceived(MessageEvent event) {
+        Toast.makeText(this, event.message, Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
