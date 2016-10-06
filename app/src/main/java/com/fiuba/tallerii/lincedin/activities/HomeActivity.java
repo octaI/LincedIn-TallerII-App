@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,8 @@ import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -44,6 +48,19 @@ public class HomeActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private ArrayAdapter mSkillsAdapter;
+    private ArrayList<String> listSkills = new ArrayList<>();
+
+    public ArrayList<String> getArrayList(){
+        return listSkills;
+    }
+    public ArrayAdapter getArrayAdapter(){
+        return mSkillsAdapter;
+    }
+
+    public void setArrayAdapter(ArrayAdapter adapter){
+        mSkillsAdapter = adapter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         setTabLayoutIcons(tabLayout);
 
+
         // TODO: 06/09/16 Only for testing purposes. Remove this request!
         // ------------------------------------------------------------->
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -79,6 +97,7 @@ public class HomeActivity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View v) {
                                             openHTTPConfigurationDialog();
+
                                     }
                                 }
                         )
@@ -88,9 +107,18 @@ public class HomeActivity extends AppCompatActivity {
         // <-------------------------------------------------------------
 
     }
+    public void addskillsTolist(String string){
+        //ListView listView = (ListView) findViewById(R.id.list_skills);
+        //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
+        //adapter.add("adeentroo...");
+        //adapter.notifyDataSetChanged();
+        mSkillsAdapter.add(string);
+    }
 
     private void openHTTPConfigurationDialog() {
         DialogFragment httpDialog = new HTTPConfigurationDialogFragment();
+        HTTPConfigurationDialogFragment http = (HTTPConfigurationDialogFragment) httpDialog;
+        http.setAdapter(mSkillsAdapter);
         httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
     }
 
@@ -138,6 +166,7 @@ public class HomeActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+
         public PlaceholderFragment() {
         }
 
@@ -157,10 +186,25 @@ public class HomeActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            //TODO: 6/10/16 List for skills... only testing, remove.
+            // Instancia del ListView.
+            ListView mSkillsList = (ListView) rootView.findViewById(R.id.list_skills);
+            HomeActivity activity = (HomeActivity) getActivity();
+            ArrayList<String> listSkills = activity.getArrayList();
+            ArrayAdapter mSkillsAdapter;
+            mSkillsAdapter = new ArrayAdapter<>(
+                    getActivity(),
+                    android.R.layout.simple_list_item_1,
+                    listSkills);
+            activity.setArrayAdapter(mSkillsAdapter);
+            mSkillsList.setAdapter(mSkillsAdapter);
+
             return rootView;
         }
+
     }
 
     /**
