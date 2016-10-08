@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -105,8 +106,16 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         // <-------------------------------------------------------------
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GooglePlayServicesUtils.checkGooglePlayServicesAvailability(this);
+    }
+
+
+
     public void addskillsTolist(String string){
         //ListView listView = (ListView) findViewById(R.id.list_skills);
         //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
