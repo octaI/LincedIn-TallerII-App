@@ -8,11 +8,18 @@
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:text="@string/http_configuration_dialog_title"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/darkGrey"
+        android:textStyle="bold"
         android:textSize="18sp"
         android:contentDescription="@string/http_configuration_dialog_title" />
-    <View
-        style="@style/MainThinVerticalSeparator" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
+        android:text="@string/http_configuration_dialog_description"
+        android:textSize="16sp"
+        android:contentDescription="@string/http_configuration_dialog_description" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

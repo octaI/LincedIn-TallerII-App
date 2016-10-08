@@ -7,6 +7,7 @@
     <string name="section_title_3">Contactos</string>
     <string name="section_title_4">Mensajes</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
+    <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP local</string>
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
 </resources>
