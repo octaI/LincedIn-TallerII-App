@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "406142223953",
+    "firebase_url": "https://lincedin-a68ff.firebaseio.com",
+    "project_id": "lincedin-a68ff",
+    "storage_bucket": "lincedin-a68ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406142223953:android:77599a81b6a5668f",
+        "android_client_info": {
+          "package_name": "com.fiuba.tallerii.lincedin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406142223953-ra5v6hhr63843k0qre11sq7gjdihms5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1W9Wgc8VoSVhA9EP0N93cPlQ4JLUqYNk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
