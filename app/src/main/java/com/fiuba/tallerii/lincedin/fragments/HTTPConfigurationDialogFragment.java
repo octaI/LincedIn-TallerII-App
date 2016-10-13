@@ -2,15 +2,20 @@ package com.fiuba.tallerii.lincedin.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,6 +23,7 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.HomeActivity;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.activities.MessageEvent;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -33,8 +39,8 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
 
     private static final String TAG = HTTPConfigurationDialogFragment.class.getName();
 
-    public static final String DEFAULT_LOCAL_IP = "192.168.1.33";
-    public static final String DEFAULT_PORT_EXPOSED = "8081";
+    private static final String DEFAULT_SERVER_IP = "192.168.1.19";
+    private static final String DEFAULT_PORT_EXPOSED = "8080";
 
     private ArrayAdapter adapter;
 
@@ -43,7 +49,7 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_http_configuration, null))
@@ -51,15 +57,16 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Dialog d = (Dialog) dialog;
-                        EditText localIpEditText = (EditText) d.findViewById(R.id.dialog_http_configuration_local_ip_edit_text);
-                        EditText portEditText = (EditText) d.findViewById(R.id.dialog_http_configuration_port_edit_text);
+                        EditText serverIPEditText = (EditText) d.findViewById(R.id.dialog_http_configuration_server_ip_edit_text);
+                        EditText serverPortEditText = (EditText) d.findViewById(R.id.dialog_http_configuration_port_edit_text);
 
-                        String localIp = TextUtils.isEmpty(localIpEditText.getText().toString()) ?
-                                DEFAULT_LOCAL_IP : localIpEditText.getText().toString();
-                        String port = TextUtils.isEmpty(portEditText.getText().toString()) ?
-                                DEFAULT_PORT_EXPOSED : portEditText.getText().toString();
+                        String serverIP = TextUtils.isEmpty(serverIPEditText.getText().toString()) ?
+                                DEFAULT_SERVER_IP : serverIPEditText.getText().toString();
+                        String serverPort = TextUtils.isEmpty(serverPortEditText.getText().toString()) ?
+                                DEFAULT_PORT_EXPOSED : serverPortEditText.getText().toString();
 
-                        sendDummyHTTPRequestToAppServer(localIp, port);
+                        saveChanges(serverIP, serverPort);
+                        //sendDummyHTTPRequestToAppServer(localIp, port);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -75,11 +82,23 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
 
-                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_local_ip_edit_text)).setText(DEFAULT_LOCAL_IP);
-                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_port_edit_text)).setText(DEFAULT_PORT_EXPOSED);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_server_ip_edit_text))
+                        .setText(preferences.getString(SharedPreferencesKeys.SERVER_IP, DEFAULT_SERVER_IP));
+                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_port_edit_text))
+                        .setText(preferences.getString(SharedPreferencesKeys.SERVER_PORT, DEFAULT_PORT_EXPOSED));
             }
         });
         return dialog;
+    }
+
+    private void saveChanges(String serverIP, String serverPort) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+        editor.putString(SharedPreferencesKeys.SERVER_IP, serverIP);
+        editor.putString(SharedPreferencesKeys.SERVER_PORT, serverPort);
+        editor.apply();
+
+        Toast.makeText(getContext(), "La configuración ha sido guardada", Toast.LENGTH_SHORT).show();
     }
 
     private void sendDummyHTTPRequestToAppServer(String localIp, String port) {

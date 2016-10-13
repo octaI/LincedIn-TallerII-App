@@ -30,18 +30,18 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/settings_login"
-        android:textSize="18sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="@string/settings_http"
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/settings_option_login_textview"
+            style="@style/SettingsOptionRowLayout"
+            android:text="@string/settings_login"/>
+
+        <View
+            style="@style/ThinVerticalSeparator" />
+
+        <TextView
+            android:id="@+id/settings_option_http_config_textview"
+            style="@style/SettingsOptionRowLayout"
+            android:text="@string/settings_http"/>
 
     </LinearLayout>
 

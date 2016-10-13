@@ -20,6 +20,7 @@
     <style name="ThinVerticalSeparator">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/lightGrey</item>
     </style>
 
     <style name="MainThinVerticalSeparator" parent="ThinVerticalSeparator">
@@ -32,6 +33,13 @@
 
     <style name="DarkThinVerticalSeparator" parent="ThinVerticalSeparator">
         <item name="android:background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="SettingsOptionRowLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>
