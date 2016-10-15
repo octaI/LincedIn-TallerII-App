@@ -16,4 +16,5 @@
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
+    <string name="http_configuration_dialog_saved_toast">La configuración ha sido guardada</string>
 </resources>

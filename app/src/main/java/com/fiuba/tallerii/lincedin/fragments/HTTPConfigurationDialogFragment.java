@@ -98,7 +98,7 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
         editor.putString(SharedPreferencesKeys.SERVER_PORT, serverPort);
         editor.apply();
 
-        Toast.makeText(getContext(), "La configuración ha sido guardada", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getString(R.string.http_configuration_dialog_saved_toast), Toast.LENGTH_SHORT).show();
     }
 
     private void sendDummyHTTPRequestToAppServer(String localIp, String port) {
