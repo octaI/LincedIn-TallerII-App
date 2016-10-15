@@ -9,4 +9,11 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.LoginActivity">
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="12dp"/>
+
 </android.support.design.widget.CoordinatorLayout>
