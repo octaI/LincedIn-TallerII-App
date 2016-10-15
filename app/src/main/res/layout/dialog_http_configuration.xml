@@ -20,54 +20,65 @@
         android:text="@string/http_configuration_dialog_description"
         android:textSize="16sp"
         android:contentDescription="@string/http_configuration_dialog_description" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp">
-        <TextView
+        android:orientation="horizontal">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/http_configuration_dialog_local_ip_text_view"
-            android:textSize="16sp"/>
-        <EditText
-            android:id="@+id/dialog_http_configuration_server_ip_edit_text"
-            android:inputType="textUri"
+            android:orientation="vertical"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/http_configuration_dialog_local_ip_text_view"
+                android:layout_margin="12dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textAlignment="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/http_configuration_dialog_port_text_view"
+                android:layout_margin="12dp"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:textCursorDrawable="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark" />
+            android:orientation="vertical"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp">
+            <EditText
+                android:id="@+id/dialog_http_configuration_server_ip_edit_text"
+                android:inputType="textUri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textCursorDrawable="@color/colorPrimary"/>
+            <EditText
+                android:id="@+id/dialog_http_configuration_port_edit_text"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textCursorDrawable="@color/colorPrimary"/>
+        </LinearLayout>
+
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/http_configuration_dialog_port_text_view"
-            android:textSize="16sp"/>
-        <EditText
-            android:id="@+id/dialog_http_configuration_port_edit_text"
-            android:inputType="number"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:textCursorDrawable="@color/colorPrimaryDark"
-            android:textColor="@color/colorPrimaryDark"/>
-    </LinearLayout>
+
 </LinearLayout>

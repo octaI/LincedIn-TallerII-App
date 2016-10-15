@@ -11,6 +11,6 @@
     <string name="settings_http">Comunicación con servidor</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
-    <string name="http_configuration_dialog_local_ip_text_view">IP local</string>
+    <string name="http_configuration_dialog_local_ip_text_view">IP</string>
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
 </resources>
