@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,15 +47,32 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
+        findViewById(R.id.settings_option_login_textview).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startLoginActivity();
+                    }
+                }
+        );
+
         findViewById(R.id.settings_option_http_config_textview).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogFragment httpDialog = new HTTPConfigurationDialogFragment();
-                        HTTPConfigurationDialogFragment http = (HTTPConfigurationDialogFragment) httpDialog;
-                        httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
+                        openHTTPConfigurationDialog();
                     }
                 }
         );
+    }
+
+    private void startLoginActivity() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+    }
+
+    private void openHTTPConfigurationDialog() {
+        DialogFragment httpDialog = new HTTPConfigurationDialogFragment();
+        httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
     }
 }
