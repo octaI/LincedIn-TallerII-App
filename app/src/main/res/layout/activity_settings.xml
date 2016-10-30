@@ -33,7 +33,7 @@
         <TextView
             android:id="@+id/settings_option_login_textview"
             style="@style/SettingsOptionRowLayout"
-            android:text="@string/settings_login"/>
+            android:text="@string/login"/>
 
         <View
             style="@style/ThinVerticalSeparator" />

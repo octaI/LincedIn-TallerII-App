@@ -9,9 +9,13 @@
     <string name="section_title_3">Contactos</string>
     <string name="section_title_4">Mensajes</string>
     <string name="settings_title">Configuración</string>
-    <string name="settings_login">Inicio de sesión</string>
     <string name="settings_http">Comunicación con servidor</string>
     <string name="login_title">Inicio de sesión</string>
+    <string name="login_with_lincedin_account">Inicia sesión con tu cuenta de LincedIn</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="email">E-mail&#8230;</string>
+    <string name="password">Contraseña&#8230;</string>
+    <string name="or">ó</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>

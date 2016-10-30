@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setFacebookLoginButtonListener() {
-        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_button);
+        LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_facebook_button);
         if (fbLoginButton == null) {
             return;
         }
