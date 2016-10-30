@@ -15,6 +15,8 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.UserAccount;
+import com.fiuba.tallerii.lincedin.model.UserAccountManager;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -58,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "Facebook profile Graph request success.");
                                     String jsonResult = new Gson().toJson(json);
                                     Log.d(TAG, jsonResult);
-                                    // TODO: 30/10/16 LogIn user in the AppServer.
+                                    UserAccountManager.createUserAccountFromFacebookResponse(json);
+                                    logInUser();
                                 }
                             }
                         });
@@ -83,10 +86,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void logInUser() {
+        UserAccountManager.logIn(this);
+    }
+
     private void setFacebookAccessTokenTracker() {
+        final UserAccount userAccount = UserAccountManager.getUserAccount();
+
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d(TAG, "Facebook AccessToken: " + (accessToken != null ? accessToken.getToken() : "null"));
+        if (userAccount != null && accessToken != null) {
+            userAccount.setSessionToken(accessToken.getToken());
+        }
 
         accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -94,8 +106,10 @@ public class LoginActivity extends AppCompatActivity {
                     AccessToken oldAccessToken,
                     AccessToken currentAccessToken) {
                 Log.i(TAG, "Facebook access token has changed.");
-                accessToken = currentAccessToken;
                 Log.d(TAG, "New Facebook AccessToken: " + (currentAccessToken != null ? currentAccessToken.getToken() : "null"));
+                if (userAccount != null && currentAccessToken != null) {
+                    userAccount.setSessionToken(currentAccessToken.getToken());
+                }
             }
         };
     }
