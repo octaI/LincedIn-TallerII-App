@@ -22,9 +22,9 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-public class LoginActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "LogInActivity";
 
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 

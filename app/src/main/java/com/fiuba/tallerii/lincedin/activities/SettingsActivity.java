@@ -67,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void startLoginActivity() {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
+        Intent loginIntent = new Intent(this, LogInActivity.class);
         startActivity(loginIntent);
     }
 

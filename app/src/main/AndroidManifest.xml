@@ -72,7 +72,7 @@
         </activity>
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.LogInActivity"
             android:label="@string/login_title"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
