@@ -16,8 +16,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.model.UserAccount;
-import com.fiuba.tallerii.lincedin.model.UserAccountManager;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -81,8 +80,7 @@ public class LogInActivity extends AppCompatActivity {
                                     Log.d(TAG, "Facebook profile Graph request success.");
                                     String jsonResult = new Gson().toJson(json);
                                     Log.d(TAG, jsonResult);
-                                    UserAccountManager.createUserAccountFromFacebookResponse(json);
-                                    logInUser();
+                                    facebookLogInUser(json);
                                 }
                             }
                         });
@@ -121,19 +119,15 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(signUpIntent);
     }
 
-    private void logInUser() {
-        UserAccountManager.logIn(this);
+    private void facebookLogInUser(JSONObject fbUserInfo) {
+        UserAuthenticationManager.facebookLogIn(this, fbUserInfo);
     }
 
     private void setFacebookAccessTokenTracker() {
-        final UserAccount userAccount = UserAccountManager.getUserAccount();
-
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d(TAG, "Facebook AccessToken: " + (accessToken != null ? accessToken.getToken() : "null"));
-        if (accessToken != null) {
-            UserAccountManager.updateSessionToken(accessToken.getToken());
-        }
+        updateSessionToken(accessToken);
 
         accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -142,11 +136,15 @@ public class LogInActivity extends AppCompatActivity {
                     AccessToken currentAccessToken) {
                 Log.i(TAG, "Facebook access token has changed.");
                 Log.d(TAG, "New Facebook AccessToken: " + (currentAccessToken != null ? currentAccessToken.getToken() : "null"));
-                if (currentAccessToken != null) {
-                    UserAccountManager.updateSessionToken(currentAccessToken.getToken());
-                }
+                updateSessionToken(currentAccessToken);
             }
         };
+    }
+
+    private void updateSessionToken(AccessToken accessToken) {
+        if (accessToken != null) {
+            UserAuthenticationManager.saveSessionToken(this, accessToken.getToken());
+        }
     }
 
     @Override
