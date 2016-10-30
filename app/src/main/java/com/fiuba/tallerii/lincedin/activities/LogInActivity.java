@@ -41,7 +41,8 @@ public class LogInActivity extends AppCompatActivity {
 
     private void setListeners() {
         setCancelButtonListener();
-        setFacebookLoginButtonListener();
+        setLincedInLogInButtonListener();
+        setFacebookLogInButtonListener();
         setCreateAccountTextListener();
     }
 
@@ -54,7 +55,11 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
-    private void setFacebookLoginButtonListener() {
+    private void setLincedInLogInButtonListener() {
+        // TODO: 30/10/16 Validate email and password and make log in request to app server.
+    }
+
+    private void setFacebookLogInButtonListener() {
         LoginButton fbLoginButton = (LoginButton) findViewById(R.id.login_facebook_button);
         if (fbLoginButton == null) {
             return;
@@ -82,7 +87,7 @@ public class LogInActivity extends AppCompatActivity {
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, first_name, last_name, email, gender, birthday, link, location");
+                parameters.putString("fields", "id, name, first_name, last_name, email, birthday, link, location");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -103,7 +108,17 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setCreateAccountTextListener() {
-        // TODO: 30/10/16 Go to SignUpActivity
+        findViewById(R.id.login_has_account_textview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSignUpActivity();
+            }
+        });
+    }
+
+    private void openSignUpActivity() {
+        Intent signUpIntent = new Intent(this, SignUpActivity.class);
+        startActivity(signUpIntent);
     }
 
     private void logInUser() {

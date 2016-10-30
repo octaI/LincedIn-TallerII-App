@@ -11,19 +11,17 @@ public class UserAccount {
     private String firstName;
     private String lastName;
     private String email;
-    private String gender;
     private String birthday;
     private String location;
     public UserAccount() {}
 
-    public UserAccount(String userId, String sessionToken, String fullName, String firstName, String lastName, String email, String gender, String birthday, String location) {
+    public UserAccount(String userId, String sessionToken, String fullName, String firstName, String lastName, String email, String birthday, String location) {
         this.userId = userId;
         this.sessionToken = sessionToken;
         this.fullName = fullName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.gender = gender;
         this.birthday = birthday;
         this.location = location;
     }
@@ -76,14 +74,6 @@ public class UserAccount {
         this.email = email;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
     public String getBirthday() {
         return birthday;
     }
@@ -117,7 +107,6 @@ public class UserAccount {
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
             return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null)
             return false;
         return location != null ? location.equals(that.location) : that.location == null;
@@ -132,7 +121,6 @@ public class UserAccount {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
         return result;

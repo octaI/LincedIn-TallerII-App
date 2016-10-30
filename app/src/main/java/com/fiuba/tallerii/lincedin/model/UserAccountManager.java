@@ -54,7 +54,6 @@ public class UserAccountManager {
             userAccount.setFirstName(jsonResponse.getString("first_name"));
             userAccount.setLastName(jsonResponse.getString("last_name"));
             userAccount.setEmail(jsonResponse.getString("email"));
-            userAccount.setGender(jsonResponse.getString("gender"));
             userAccount.setBirthday(jsonResponse.getString("birthday"));
             userAccount.setLocation(jsonResponse.getJSONObject("location").getString("name"));
 
