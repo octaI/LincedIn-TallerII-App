@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,5 +9,90 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.SignUpActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_signup"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+            <EditText
+                android:id="@+id/signup_first_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LogInEditText"
+                android:inputType="textPersonName"
+                android:hint="@string/first_name"/>
+
+            <EditText
+                android:id="@+id/signup_last_name_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LogInEditText"
+                android:inputType="textPersonName"
+                android:hint="@string/last_name"/>
+
+            <EditText
+                android:id="@+id/signup_email_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LogInEditText"
+                android:inputType="textEmailAddress"
+                android:hint="@string/email"/>
+
+            <EditText
+                android:id="@+id/signup_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LogInEditText"
+                android:inputType="textPassword"
+                android:fontFamily="sans-serif"
+                android:hint="@string/password"/>
+
+            <EditText
+                android:id="@+id/signup_repeat_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/LogInEditText"
+                android:inputType="textPassword"
+                android:fontFamily="sans-serif"
+                android:hint="@string/repeat_password"/>
+
+            <Button style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/signup_submit_button"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/signup_submit_button"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

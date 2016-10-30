@@ -94,7 +94,15 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/signup_title"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.LogInActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.LogInActivity" />></activity>
     </application>
 
 </manifest>
