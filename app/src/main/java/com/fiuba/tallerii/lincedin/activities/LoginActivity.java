@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -35,7 +36,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         setFacebookAccessTokenTracker();
+        setListeners();
+    }
+
+    private void setListeners() {
+        setCancelButtonListener();
         setFacebookLoginButtonListener();
+        setCreateAccountTextListener();
+    }
+
+    private void setCancelButtonListener() {
+        findViewById(R.id.login_cancel_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void setFacebookLoginButtonListener() {
@@ -86,6 +102,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void setCreateAccountTextListener() {
+        // TODO: 30/10/16 Go to SignUpActivity
+    }
+
     private void logInUser() {
         UserAccountManager.logIn(this);
     }
@@ -96,8 +116,8 @@ public class LoginActivity extends AppCompatActivity {
         // If the access token is available already assign it.
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d(TAG, "Facebook AccessToken: " + (accessToken != null ? accessToken.getToken() : "null"));
-        if (userAccount != null && accessToken != null) {
-            userAccount.setSessionToken(accessToken.getToken());
+        if (accessToken != null) {
+            UserAccountManager.updateSessionToken(accessToken.getToken());
         }
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -107,8 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                     AccessToken currentAccessToken) {
                 Log.i(TAG, "Facebook access token has changed.");
                 Log.d(TAG, "New Facebook AccessToken: " + (currentAccessToken != null ? currentAccessToken.getToken() : "null"));
-                if (userAccount != null && currentAccessToken != null) {
-                    userAccount.setSessionToken(currentAccessToken.getToken());
+                if (currentAccessToken != null) {
+                    UserAccountManager.updateSessionToken(currentAccessToken.getToken());
                 }
             }
         };

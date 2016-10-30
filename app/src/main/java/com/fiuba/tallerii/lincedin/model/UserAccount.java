@@ -7,26 +7,25 @@ import java.net.URL;
 public class UserAccount {
     private String userId;
     private String sessionToken;
+    private String fullName;
     private String firstName;
     private String lastName;
     private String email;
     private String gender;
     private String birthday;
     private String location;
-    private URL photo;
-
     public UserAccount() {}
 
-    public UserAccount(String userId, String sessionToken, String firstName, String lastName, String email, String gender, String birthday, String location, URL photo) {
+    public UserAccount(String userId, String sessionToken, String fullName, String firstName, String lastName, String email, String gender, String birthday, String location) {
         this.userId = userId;
         this.sessionToken = sessionToken;
+        this.fullName = fullName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
         this.birthday = birthday;
         this.location = location;
-        this.photo = photo;
     }
 
     public String getUserId() {
@@ -43,6 +42,14 @@ public class UserAccount {
 
     public void setSessionToken(String sessionToken) {
         this.sessionToken = sessionToken;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getFirstName() {
@@ -93,14 +100,6 @@ public class UserAccount {
         this.location = location;
     }
 
-    public URL getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(URL photo) {
-        this.photo = photo;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,16 +110,17 @@ public class UserAccount {
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (sessionToken != null ? !sessionToken.equals(that.sessionToken) : that.sessionToken != null)
             return false;
+        if (fullName != null ? !fullName.equals(that.fullName) : that.fullName != null)
+            return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null)
             return false;
         if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null)
             return false;
         if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
         if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null)
             return false;
-        if (location != null ? !location.equals(that.location) : that.location != null)
-            return false;
-        return photo != null ? photo.equals(that.photo) : that.photo == null;
+        return location != null ? location.equals(that.location) : that.location == null;
 
     }
 
@@ -128,12 +128,13 @@ public class UserAccount {
     public int hashCode() {
         int result = userId != null ? userId.hashCode() : 0;
         result = 31 * result + (sessionToken != null ? sessionToken.hashCode() : 0);
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (photo != null ? photo.hashCode() : 0);
         return result;
     }
 

@@ -40,16 +40,23 @@ public class UserAccountManager {
         editor.apply();
     }
 
+    public static void updateSessionToken(String sessionToken) {
+        if (userAccount != null) {
+            userAccount.setSessionToken(sessionToken);
+        }
+    }
+
     public static UserAccount createUserAccountFromFacebookResponse(JSONObject jsonResponse) {
         try {
             userAccount = new UserAccount();
 
-            JSONObject nameValuePairs = jsonResponse.getJSONObject("nameValuePairs");
-
-            userAccount.setUserId(nameValuePairs.getString("id"));
-            userAccount.setFirstName(nameValuePairs.getString("first_name"));
-            userAccount.setLastName(nameValuePairs.getString("last_name"));
-            userAccount.setEmail(nameValuePairs.getString("email"));
+            userAccount.setUserId(jsonResponse.getString("id"));
+            userAccount.setFirstName(jsonResponse.getString("first_name"));
+            userAccount.setLastName(jsonResponse.getString("last_name"));
+            userAccount.setEmail(jsonResponse.getString("email"));
+            userAccount.setGender(jsonResponse.getString("gender"));
+            userAccount.setBirthday(jsonResponse.getString("birthday"));
+            userAccount.setLocation(jsonResponse.getJSONObject("location").getString("name"));
 
         } catch (JSONException e) {
             e.printStackTrace();

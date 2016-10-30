@@ -12,6 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/login_cancel_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="8dp"
+            android:background="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="@color/white"
+            android:contentDescription="@android:string/cancel" />
+
         <TextView
             android:id="@+id/login_has_account_textview"
             android:layout_width="match_parent"
@@ -80,6 +92,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:inputType="textPassword"
+                    android:fontFamily="sans-serif"
                     android:hint="@string/password"/>
 
                 <Button style="@style/Widget.AppCompat.Button.Colored"
