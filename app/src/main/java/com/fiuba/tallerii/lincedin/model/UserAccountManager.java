@@ -43,9 +43,13 @@ public class UserAccountManager {
     public static UserAccount createUserAccountFromFacebookResponse(JSONObject jsonResponse) {
         try {
             userAccount = new UserAccount();
-            userAccount.setUserId(jsonResponse.getString("id"));
-            userAccount.setFirstName(jsonResponse.getString("first_name"));
-            userAccount.setLastName(jsonResponse.getString("last_name"));
+
+            JSONObject nameValuePairs = jsonResponse.getJSONObject("nameValuePairs");
+
+            userAccount.setUserId(nameValuePairs.getString("id"));
+            userAccount.setFirstName(nameValuePairs.getString("first_name"));
+            userAccount.setLastName(nameValuePairs.getString("last_name"));
+            userAccount.setEmail(nameValuePairs.getString("email"));
 
         } catch (JSONException e) {
             e.printStackTrace();
