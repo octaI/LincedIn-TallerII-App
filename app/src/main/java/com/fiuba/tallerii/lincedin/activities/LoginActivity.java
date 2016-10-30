@@ -1,8 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,16 +12,11 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
-import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
@@ -33,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private AccessTokenTracker accessTokenTracker;
-    private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.d(TAG, "Facebook profile Graph request success.");
                                     String jsonResult = new Gson().toJson(json);
                                     Log.d(TAG, jsonResult);
-                                    saveMyProfile(jsonResult);
+                                    // TODO: 30/10/16 LogIn user in the AppServer.
                                 }
                             }
                         });
@@ -93,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setFacebookAccessTokenTracker() {
         // If the access token is available already assign it.
-        accessToken = AccessToken.getCurrentAccessToken();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d(TAG, "Facebook AccessToken: " + (accessToken != null ? accessToken.getToken() : "null"));
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -101,17 +93,11 @@ public class LoginActivity extends AppCompatActivity {
             protected void onCurrentAccessTokenChanged(
                     AccessToken oldAccessToken,
                     AccessToken currentAccessToken) {
-                Log.i(TAG, "Facebook access token changed.");
+                Log.i(TAG, "Facebook access token has changed.");
                 accessToken = currentAccessToken;
                 Log.d(TAG, "New Facebook AccessToken: " + (currentAccessToken != null ? currentAccessToken.getToken() : "null"));
             }
         };
-    }
-
-    private void saveMyProfile(String jsonMyProfile) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        editor.putString(SharedPreferencesKeys.FACEBOOK_MY_PROFILE, jsonMyProfile);
-        editor.apply();
     }
 
     @Override

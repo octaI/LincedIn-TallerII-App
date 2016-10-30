@@ -16,6 +16,7 @@
     <string name="email">E-mail&#8230;</string>
     <string name="password">Contraseña&#8230;</string>
     <string name="or">ó</string>
+    <string name="login_has_account_question">¿No tienes una cuenta?</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>
