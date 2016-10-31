@@ -22,6 +22,7 @@
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
     <string name="signup_submit_button">Crear cuenta</string>
+    <string name="signup_field_is_required">El campo es requerido</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
