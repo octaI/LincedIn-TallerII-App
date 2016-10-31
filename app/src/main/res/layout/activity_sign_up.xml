@@ -96,13 +96,13 @@
                 android:hint="@string/password"/>
 
             <EditText
-                android:id="@+id/signup_repeat_password_edittext"
+                android:id="@+id/signup_confirmation_password_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/LogInEditText"
                 android:inputType="textPassword"
                 android:fontFamily="sans-serif"
-                android:hint="@string/repeat_password"/>
+                android:hint="@string/confirm_password"/>
 
             <Button style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/signup_submit_button"

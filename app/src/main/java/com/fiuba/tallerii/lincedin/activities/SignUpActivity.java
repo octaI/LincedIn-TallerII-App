@@ -1,8 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
-import android.content.Intent;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,22 +9,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
 import com.fiuba.tallerii.lincedin.fragments.DatePickerDialogFragment;
-import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.text.StringCharacterIterator;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -97,10 +89,11 @@ public class SignUpActivity extends AppCompatActivity {
         EditText dateOfBirthEditText = (EditText) findViewById(R.id.signup_date_of_birth_edittext);
         EditText emailEditText = (EditText) findViewById(R.id.signup_email_edittext);
         EditText passwordEditText = (EditText) findViewById(R.id.signup_password_edittext);
-        EditText repeatPasswordEditText = (EditText) findViewById(R.id.signup_repeat_password_edittext);
+        EditText confirmationPasswordEditText = (EditText) findViewById(R.id.signup_confirmation_password_edittext);
 
-        return validateThatAllFieldsAreFilled(firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, repeatPasswordEditText)
-                && validateEmail(emailEditText);
+        return validateThatAllFieldsAreFilled(firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, confirmationPasswordEditText)
+                && validateEmail(emailEditText)
+                && validatePasswords(passwordEditText, confirmationPasswordEditText);
     }
 
     private void createUserAccount() {
@@ -114,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
             if (field.getText() == null || field.getText().toString().equals("")) {
                 field.requestFocus();
                 field.setError(getString(R.string.field_is_required));
-                Log.e(TAG, "'" + field.getHint().toString() + "'" + " cannot be empty. User account creation was cancelled.");
+                Log.e(TAG, "'" + field.getHint().toString() + "'" + " cannot be empty. Cannot create user account.");
                 allFieldsAreFilled = false;
                 break;
             }
@@ -129,9 +122,22 @@ public class SignUpActivity extends AppCompatActivity {
         if (!pattern.matcher(email).matches()) {
             emailField.requestFocus();
             emailField.setError(getString(R.string.invalid_email));
-            Log.e(TAG, "The user e-mail " + email + " does not match the RFC822 pattern for valid e-mails. User account creation was cancelled.");
+            Log.e(TAG, "The user e-mail " + email + " does not match the pattern for valid e-mails. Cannot create user account.");
             return false;
         } else {
+            Log.d(TAG, "E-mail is valid.");
+            return true;
+        }
+    }
+
+    private boolean validatePasswords(EditText passwordField, EditText repeatPasswordField) {
+        if (!passwordField.getText().toString().equals(repeatPasswordField.getText().toString())) {
+            repeatPasswordField.requestFocus();
+            repeatPasswordField.setError(getString(R.string.passwords_do_not_match));
+            Log.e(TAG, "The password and confirmation password do not match. Cannot create user account.");
+            return false;
+        } else {
+            Log.d(TAG, "Password and confirmation password do match.");
             return true;
         }
     }
