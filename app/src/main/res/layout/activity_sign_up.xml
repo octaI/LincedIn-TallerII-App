@@ -39,21 +39,45 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp">
 
-            <EditText
-                android:id="@+id/signup_first_name_edittext"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/LogInEditText"
-                android:inputType="textPersonName"
-                android:hint="@string/first_name"/>
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/signup_last_name_edittext"
+                <EditText
+                    android:id="@+id/signup_first_name_edittext"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    style="@style/LogInEditText"
+                    android:inputType="textPersonName"
+                    android:hint="@string/first_name"/>
+
+                <View
+                    style="@style/LightThinHorizontalSeparator"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"/>
+
+                <EditText
+                    android:id="@+id/signup_last_name_edittext"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    style="@style/LogInEditText"
+                    android:inputType="textPersonName"
+                    android:hint="@string/last_name"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/signup_date_of_birth_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/LogInEditText"
-                android:inputType="textPersonName"
-                android:hint="@string/last_name"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/date_of_birth"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="18sp"/>
 
             <EditText
                 android:id="@+id/signup_email_edittext"

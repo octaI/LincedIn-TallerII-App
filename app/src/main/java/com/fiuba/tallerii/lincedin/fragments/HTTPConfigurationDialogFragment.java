@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -20,9 +19,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.activities.HomeActivity;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
-import com.fiuba.tallerii.lincedin.activities.MessageEvent;
+import com.fiuba.tallerii.lincedin.events.MessageEvent;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,9 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class HTTPConfigurationDialogFragment extends DialogFragment {

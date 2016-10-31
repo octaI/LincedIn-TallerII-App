@@ -1,4 +1,4 @@
-package com.fiuba.tallerii.lincedin.activities;
+package com.fiuba.tallerii.lincedin.events;
 
 public class MessageEvent {
     public String message;

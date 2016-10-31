@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.events.MessageEvent;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
 

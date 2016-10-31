@@ -13,11 +13,12 @@
     <string name="login_title">Inicio de sesión</string>
     <string name="login_with_lincedin_account">Inicia sesión con tu cuenta de LincedIn</string>
     <string name="login">Iniciar sesión</string>
-    <string name="email">E-mail&#8230;</string>
-    <string name="password">Contraseña&#8230;</string>
-    <string name="first_name">Nombre&#8230;</string>
-    <string name="last_name">Apellido&#8230;</string>
-    <string name="repeat_password">Repite la contraseña&#8230;</string>
+    <string name="email">E-mail</string>
+    <string name="password">Contraseña</string>
+    <string name="first_name">Nombre</string>
+    <string name="last_name">Apellido</string>
+    <string name="date_of_birth">Fecha de nacimiento</string>
+    <string name="repeat_password">Repite la contraseña</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
     <string name="signup_submit_button">Crear cuenta</string>
@@ -27,4 +28,7 @@
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
     <string name="http_configuration_dialog_saved_toast">La configuración ha sido guardada</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
