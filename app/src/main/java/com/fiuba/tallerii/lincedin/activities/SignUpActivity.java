@@ -15,6 +15,7 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
 import com.fiuba.tallerii.lincedin.fragments.DatePickerDialogFragment;
 import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
+import com.fiuba.tallerii.lincedin.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,21 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void onDatePicked(DatePickedEvent event) {
         TextView birthdayTextView = (TextView) findViewById(R.id.signup_date_of_birth_textview);
         if (birthdayTextView != null) {
-            String day = event.day >= 10 ? String.valueOf(event.day) : "0" + String.valueOf(event.day);
-            String month = event.month >= 10 ? String.valueOf(event.month) : "0" + String.valueOf(event.month);
-            String year = String.valueOf(event.year);
-
-            String dateOfBirth = day + "/" + month + "/" + year;
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                Date date = sdf.parse(dateOfBirth);
-                java.text.DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
-                dateOfBirth = dateFormat.format(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            String dateOfBirth = DateUtils.parseToLocalDate(this, event.day, event.month, event.year);
             birthdayTextView.setText(dateOfBirth);
             birthdayTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
         }
