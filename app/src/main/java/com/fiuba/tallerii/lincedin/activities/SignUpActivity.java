@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
@@ -54,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setBirthdayFieldListener() {
-        findViewById(R.id.signup_date_of_birth_textview).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.signup_date_of_birth_edittext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openBirthdayDatePickerDialog();
@@ -64,11 +65,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDatePicked(DatePickedEvent event) {
-        TextView birthdayTextView = (TextView) findViewById(R.id.signup_date_of_birth_textview);
+        EditText birthdayTextView = (EditText) findViewById(R.id.signup_date_of_birth_edittext);
         if (birthdayTextView != null) {
             String dateOfBirth = DateUtils.parseToLocalDate(this, event.day, event.month, event.year);
             birthdayTextView.setText(dateOfBirth);
-            birthdayTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
+            //birthdayTextView.setTextColor(ContextCompat.getColor(this, R.color.white));
         }
     }
 
@@ -88,6 +89,13 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void validateUserInput() {
+        EditText firstNameEditText = (EditText) findViewById(R.id.signup_first_name_edittext);
+        EditText lastNameEditText = (EditText) findViewById(R.id.signup_last_name_edittext);
+        EditText birthdayTextView = (EditText) findViewById(R.id.signup_date_of_birth_edittext);
+        EditText emailEditText = (EditText) findViewById(R.id.signup_email_edittext);
+        EditText passwordEditText = (EditText) findViewById(R.id.signup_password_edittext);
+        EditText repeatPasswordEditText = (EditText) findViewById(R.id.signup_repeat_password_edittext);
+
 
     }
 
