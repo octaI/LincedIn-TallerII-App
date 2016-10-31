@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -98,8 +99,8 @@ public class SignUpActivity extends AppCompatActivity {
         EditText passwordEditText = (EditText) findViewById(R.id.signup_password_edittext);
         EditText repeatPasswordEditText = (EditText) findViewById(R.id.signup_repeat_password_edittext);
 
-        boolean userInputOK = validateThatAllFieldsAreFilled(firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, repeatPasswordEditText);
-        return userInputOK;
+        return validateThatAllFieldsAreFilled(firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, repeatPasswordEditText)
+                && validateEmail(emailEditText);
     }
 
     private void createUserAccount() {
@@ -109,15 +110,30 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean validateThatAllFieldsAreFilled(EditText... fields) {
         boolean allFieldsAreFilled = true;
         for (EditText field : fields) {
-            field.setError(null);   // Clear error icon. Fixes date of birth bug.
+            field.setError(null);   // Clears error icon. Fixes date of birth bug.
             if (field.getText() == null || field.getText().toString().equals("")) {
-                field.setError(getString(R.string.signup_field_is_required));
-                Log.e(TAG, field.getHint().toString() + " cannot be empty. User account creation was cancelled.");
+                field.requestFocus();
+                field.setError(getString(R.string.field_is_required));
+                Log.e(TAG, "'" + field.getHint().toString() + "'" + " cannot be empty. User account creation was cancelled.");
                 allFieldsAreFilled = false;
                 break;
             }
         }
         return allFieldsAreFilled;
+    }
+
+    private boolean validateEmail(EditText emailField) {
+        // See http://stackoverflow.com/questions/8204680/java-regex-email for pattern reference
+        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        String email = emailField.getText().toString();
+        if (!pattern.matcher(email).matches()) {
+            emailField.requestFocus();
+            emailField.setError(getString(R.string.invalid_email));
+            Log.e(TAG, "The user e-mail " + email + " does not match the RFC822 pattern for valid e-mails. User account creation was cancelled.");
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
