@@ -14,11 +14,16 @@
     <string name="login_with_lincedin_account">Inicia sesión con tu cuenta de LincedIn</string>
     <string name="login">Iniciar sesión</string>
     <string name="email">E-mail</string>
+    <string name="user">Usuario</string>
+    <string name="description">Descripción</string>
     <string name="password">Contraseña</string>
     <string name="first_name">Nombre</string>
     <string name="last_name">Apellido</string>
     <string name="date_of_birth">Fecha de nacimiento</string>
     <string name="confirm_password">Confirma la contraseña</string>
+    <string name="company">Compañía</string>
+    <string name="position">Posición</string>
+    <string name="since_date">Desde :1</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
     <string name="signup_submit_button">Crear cuenta</string>
@@ -26,6 +31,7 @@
     <string name="invalid_email">El e-mail es inválido</string>
     <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
+    <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>

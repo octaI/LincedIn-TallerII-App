@@ -53,14 +53,15 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayAdapter mSkillsAdapter;
     private ArrayList<String> listSkills = new ArrayList<>();
 
-    public ArrayList<String> getArrayList(){
+    public ArrayList<String> getArrayList() {
         return listSkills;
     }
-    public ArrayAdapter getArrayAdapter(){
+
+    public ArrayAdapter getArrayAdapter() {
         return mSkillsAdapter;
     }
 
-    public void setArrayAdapter(ArrayAdapter adapter){
+    public void setArrayAdapter(ArrayAdapter adapter) {
         mSkillsAdapter = adapter;
     }
 
@@ -98,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                            openHTTPConfigurationDialog();
+                                        openHTTPConfigurationDialog();
 
                                     }
                                 }
@@ -116,8 +117,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
-    public void addskillsTolist(String string){
+    public void addskillsTolist(String string) {
         //ListView listView = (ListView) findViewById(R.id.list_skills);
         //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
         //adapter.add("adeentroo...");
@@ -132,6 +132,7 @@ public class HomeActivity extends AppCompatActivity {
         httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
     }
 
+    @Deprecated
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onHTTPResponseReceived(MessageEvent event) {
         Toast.makeText(this, event.message, Toast.LENGTH_LONG).show();
