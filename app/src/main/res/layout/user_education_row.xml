@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="wrap_content" android:layout_width="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_education_row_company_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="@string/company"/>
+
+            <TextView
+                android:id="@+id/user_job_row_position_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="@string/position"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/user_job_row_date_range_textview"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/since_date_to_date"/>
+
+    </LinearLayout>
+
+</FrameLayout>

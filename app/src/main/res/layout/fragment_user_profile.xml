@@ -18,256 +18,337 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/lightestGrey"
                     app:cardElevation="4dp"
                     app:cardUseCompatPadding="true"
-                    android:layout_margin="12dp">
+                    android:layout_margin="8dp">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/user_profile_picture_imageview"
-                            android:layout_width="92dp"
-                            android:layout_height="92dp"
-                            android:layout_gravity="center"
-                            android:padding="1dp"
-                            android:layout_marginTop="24dp"
-                            android:background="@color/lightGrey" />
-
-                        <TextView
-                            android:id="@+id/user_profile_username_textview"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginRight="24dp"
-                            android:layout_marginLeft="24dp"
-                            android:textSize="24sp"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textStyle="bold"
-                            android:text="@string/user"
-                            />
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/user_profile_user_description_textview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_marginRight="24dp"
-                            android:layout_marginLeft="24dp"
-                            android:textSize="16sp"
-                            android:textAlignment="center"
-                            android:textColor="@color/grey"
-                            android:text="@string/description"
-                            />
+                            <ImageView
+                                android:id="@+id/user_profile_picture_imageview"
+                                android:layout_width="92dp"
+                                android:layout_height="92dp"
+                                android:layout_gravity="center"
+                                android:padding="2dp"
+                                android:layout_marginTop="24dp"
+                                android:background="@color/lightGrey" />
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/user_profile_current_job_cardview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/colorPrimary"
-                            app:cardElevation="2dp"
-                            android:layout_margin="12dp">
+                            <TextView
+                                android:id="@+id/user_profile_username_textview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginRight="24dp"
+                                android:layout_marginLeft="24dp"
+                                android:textSize="24sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textStyle="bold"
+                                android:text="@string/user"
+                                />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:padding="16dp">
+                            <TextView
+                                android:id="@+id/user_profile_user_description_textview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginRight="24dp"
+                                android:layout_marginLeft="24dp"
+                                android:textSize="16sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/grey"
+                                android:text="@string/description"
+                                />
 
-                                    <ImageView
-                                        android:layout_width="36dp"
-                                        android:layout_height="36dp"
-                                        android:layout_marginRight="16dp"
-                                        android:layout_gravity="center"
-                                        android:background="@drawable/ic_work"
-                                        android:contentDescription="User picture" />
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/user_profile_current_job_cardview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardBackgroundColor="@color/colorPrimary"
+                                app:cardElevation="2dp"
+                                android:layout_margin="8dp">
 
                                     <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="vertical">
+                                        android:orientation="horizontal"
+                                        android:padding="16dp">
 
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold"
-                                            android:textColor="@color/white"
-                                            android:text="@string/user_profile_currently_works_at"/>
+                                        <ImageView
+                                            android:layout_width="36dp"
+                                            android:layout_height="36dp"
+                                            android:layout_marginRight="16dp"
+                                            android:layout_gravity="center"
+                                            android:background="@drawable/ic_work"
+                                            android:contentDescription="User picture" />
 
-                                        <TextView
-                                            android:id="@+id/user_profile_current_job_company_textview"
-                                            android:layout_width="match_parent"
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_weight="1"
                                             android:layout_height="wrap_content"
-                                            android:textSize="14sp"
-                                            android:textColor="@color/colorPrimaryLight"
-                                            android:text="@string/company"/>
+                                            android:orientation="vertical">
 
-                                        <TextView
-                                            android:id="@+id/user_profile_current_job_position_textview"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:textSize="14sp"
-                                            android:textColor="@color/white"
-                                            android:text="@string/position"/>
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="16sp"
+                                                android:textStyle="bold"
+                                                android:textColor="@color/white"
+                                                android:text="@string/user_profile_currently_works_at"/>
+
+                                            <TextView
+                                                android:id="@+id/user_profile_current_job_company_textview"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="14sp"
+                                                android:textColor="@color/colorPrimaryLight"
+                                                android:text="@string/company"/>
+
+                                            <TextView
+                                                android:id="@+id/user_profile_current_job_position_textview"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:textSize="14sp"
+                                                android:textColor="@color/white"
+                                                android:text="@string/position"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
-                                </LinearLayout>
+                                <TextView
+                                    android:id="@+id/user_profile_current_job_since_date_textview"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="bottom|end"
+                                    android:layout_margin="4dp"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/colorPrimaryLight"
+                                    android:text="@string/since_date"/>
 
-                            <TextView
-                                android:id="@+id/user_profile_current_job_since_date_textview"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom|end"
-                                android:layout_margin="4dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/colorPrimaryLight"
-                                android:text="@string/since_date"/>
+                            </android.support.v7.widget.CardView>
 
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardElevation="2dp"
-                            app:cardUseCompatPadding="true"
-                            android:layout_marginBottom="12dp"
-                            android:layout_marginRight="12dp"
-                            android:layout_marginLeft="12dp">
-
-                            <LinearLayout
+                            <android.support.v7.widget.CardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="16sp"
-                                    android:text="@string/biography"/>
-
-                                <View
-                                    style="@style/ThinVerticalSeparator" />
-
-                                <TextView
-                                    android:id="@+id/user_profile_biography_fullname_textview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:layout_marginBottom="8dp"
-                                    android:textSize="14sp"
-                                    android:text="@string/user"/>
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginLeft="8dp">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_marginBottom="8dp">
+                                    android:orientation="vertical"
+                                    android:padding="8dp">
 
                                     <TextView
-                                        android:id="@+id/user_profile_biography_age_textview"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginRight="16dp"
-                                        android:layout_marginEnd="16dp"
-                                        android:textSize="14sp"
-                                        android:text="@string/age"/>
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="16sp"
+                                        android:text="@string/biography"/>
+
+                                    <View
+                                        style="@style/ThinVerticalSeparator" />
 
                                     <TextView
-                                        android:id="@+id/user_profile_biography_date_of_birth_textview"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="end"
+                                        android:id="@+id/user_profile_biography_fullname_textview"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginBottom="8dp"
+                                        android:textSize="14sp"
+                                        android:text="@string/user"/>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:layout_marginBottom="8dp">
+
+                                        <TextView
+                                            android:id="@+id/user_profile_biography_age_textview"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginRight="16dp"
+                                            android:layout_marginEnd="16dp"
+                                            android:textSize="14sp"
+                                            android:text="@string/age"/>
+
+                                        <TextView
+                                            android:id="@+id/user_profile_biography_date_of_birth_textview"
+                                            android:layout_width="0dp"
+                                            android:layout_weight="1"
+                                            android:gravity="end"
+                                            android:layout_height="wrap_content"
+                                            android:textSize="14sp"
+                                            android:text="@string/date_of_birth"/>
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/user_profile_biography_email_textview"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:textSize="14sp"
+                                        android:textColor="@color/colorAccent"
+                                        android:text="@string/email"/>
+
+                                    <TextView
+                                        android:id="@+id/user_profile_biography_location_textview"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textSize="14sp"
-                                        android:text="@string/date_of_birth"/>
+                                        android:text="@string/location"/>
 
                                 </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/user_profile_biography_email_textview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="8dp"
-                                    android:textSize="14sp"
-                                    android:textColor="@color/colorAccent"
-                                    android:text="@string/email"/>
+                            </android.support.v7.widget.CardView>
 
-                                <TextView
-                                    android:id="@+id/user_profile_biography_location_textview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="14sp"
-                                    android:text="@string/location"/>
-
-                            </LinearLayout>
-
-                        </android.support.v7.widget.CardView>
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardElevation="2dp"
-                            app:cardUseCompatPadding="true"
-                            android:layout_marginBottom="12dp"
-                            android:layout_marginRight="12dp"
-                            android:layout_marginLeft="12dp">
-
-                            <LinearLayout
+                            <android.support.v7.widget.CardView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:paddingTop="8dp"
-                                android:paddingRight="8dp"
-                                android:paddingLeft="8dp">
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginLeft="8dp">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/colorPrimaryDark"
-                                    android:textSize="16sp"
-                                    android:text="@string/work_experience"/>
+                                    android:orientation="vertical"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp">
 
-                                <View
-                                    style="@style/ThinVerticalSeparator" />
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="16sp"
+                                        android:text="@string/work_experience"/>
 
-                                <include layout="@layout/user_job_row"
-                                    android:id="@+id/user_profile_work_experience_past_job_row_1"
+                                    <View
+                                        style="@style/ThinVerticalSeparator" />
+
+                                    <include layout="@layout/user_job_row"
+                                        android:id="@+id/user_profile_work_experience_past_job_row_1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"/>
+
+                                    <include layout="@layout/user_job_row"
+                                        android:id="@+id/user_profile_work_experience_past_job_row_2"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginBottom="8dp"/>
+
+                                    <View
+                                        style="@style/ThinVerticalSeparator" />
+
+                                    <Button style="@style/Widget.AppCompat.Button.Borderless"
+                                        android:id="@+id/user_profile_work_experience_see_more_button"
+                                        android:layout_gravity="center"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/see_more"
+                                        android:textColor="@color/colorAccent"/>
+
+                                </LinearLayout>
+
+                            </android.support.v7.widget.CardView>
+
+                            <android.support.v7.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true"
+                                android:layout_marginBottom="8dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_marginLeft="8dp">
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"/>
+                                    android:orientation="vertical"
+                                    android:paddingTop="8dp"
+                                    android:paddingRight="8dp"
+                                    android:paddingLeft="8dp">
 
-                                <include layout="@layout/user_job_row"
-                                    android:id="@+id/user_profile_work_experience_past_job_row_2"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:layout_marginBottom="8dp"/>
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/colorPrimaryDark"
+                                        android:textSize="16sp"
+                                        android:text="@string/education"/>
 
-                                <View
-                                    style="@style/ThinVerticalSeparator" />
+                                    <View
+                                        style="@style/ThinVerticalSeparator" />
 
-                                <Button style="@style/Widget.AppCompat.Button.Borderless"
-                                    android:id="@+id/user_profile_work_experience_see_more_button"
-                                    android:layout_gravity="center"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/see_more"
-                                    android:textColor="@color/colorAccent"/>
+                                    <include layout="@layout/user_job_row"
+                                        android:id="@+id/user_profile_education_row"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginBottom="8dp"/>
 
-                            </LinearLayout>
+                                    <View
+                                        style="@style/ThinVerticalSeparator" />
 
-                        </android.support.v7.widget.CardView>
+                                    <Button style="@style/Widget.AppCompat.Button.Borderless"
+                                        android:id="@+id/user_profile_education_see_more_button"
+                                        android:layout_gravity="center"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/see_more"
+                                        android:textColor="@color/colorAccent"/>
 
-                    </LinearLayout>
+                                </LinearLayout>
+
+                            </android.support.v7.widget.CardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/user_profile_public_buttons_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+                            <ImageButton
+                                android:id="@+id/user_profile_add_user_button"
+                                android:layout_width="42dp"
+                                android:layout_height="42dp"
+                                android:src="@drawable/ic_person_add"
+                                android:tint="@color/colorAccent"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                            <ImageButton
+                                android:id="@+id/user_profile_chat_user_button"
+                                android:layout_width="42dp"
+                                android:layout_height="42dp"
+                                android:src="@drawable/ic_chat"
+                                android:tint="@color/colorAccent"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                        </LinearLayout>
+
+                    </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
 
