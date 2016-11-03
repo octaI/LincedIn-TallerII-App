@@ -22,6 +22,8 @@
     <string name="date_of_birth">Fecha de nacimiento</string>
     <string name="confirm_password">Confirma la contraseña</string>
     <string name="company">Compañía</string>
+    <string name="institute">Instituto</string>
+    <string name="degree">Título</string>
     <string name="position">Posición</string>
     <string name="since_date">desde :1</string>
     <string name="since_date_to_date">desde :1 hasta :2</string>
@@ -30,7 +32,11 @@
     <string name="location">Locación</string>
     <string name="work_experience">Experiencia laboral</string>
     <string name="education">Educación</string>
+    <string name="skills">Aptitudes</string>
+    <string name="name">Nombre</string>
+    <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
+    <string name="user_profile_see_recomendations">Ver recomendaciones</string>
     <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>

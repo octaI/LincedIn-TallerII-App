@@ -17,7 +17,7 @@
                 android:id="@+id/user_job_row_company_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:text="@string/company"/>
 
