@@ -24,19 +24,13 @@
             android:text="@string/work_experience"/>
 
         <View
-            style="@style/ThinVerticalSeparator" />
+            style="@style/ThinVerticalSeparator"
+            android:layout_marginBottom="8dp"/>
 
-        <include layout="@layout/user_job_row"
-            android:id="@+id/user_profile_work_experience_past_job_row_1"
+        <ListView
+            android:id="@+id/user_profile_work_experience_jobs_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
-
-        <include layout="@layout/user_job_row"
-            android:id="@+id/user_profile_work_experience_past_job_row_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="wrap_content" />
 
         <Button style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/user_profile_work_experience_see_more_button"

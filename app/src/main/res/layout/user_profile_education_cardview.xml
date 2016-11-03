@@ -25,13 +25,13 @@
             android:text="@string/education"/>
 
         <View
-            style="@style/ThinVerticalSeparator" />
+            style="@style/ThinVerticalSeparator"
+            android:layout_marginBottom="8dp"/>
 
-        <include layout="@layout/user_education_row"
-            android:id="@+id/user_profile_education_row"
+        <ListView
+            android:id="@+id/user_profile_education_degrees_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="wrap_content" />
 
         <Button style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/user_profile_education_see_more_button"
