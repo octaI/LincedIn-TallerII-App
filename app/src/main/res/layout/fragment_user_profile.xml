@@ -6,140 +6,143 @@
     android:background="@color/lightGrey"
     tools:context="com.fiuba.tallerii.lincedin.fragments.UserProfileFragment">
 
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fillViewport="true">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/user_profile_main_container_nestedscrollview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/lighterGrey"
-                    app:cardElevation="4dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_margin="8dp">
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:visibility="invisible">
 
-                    <RelativeLayout
+                    <android.support.v7.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/lighterGrey"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true"
+                        android:layout_margin="8dp">
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:id="@+id/user_profile_picture_imageview"
-                                android:layout_width="92dp"
-                                android:layout_height="92dp"
-                                android:layout_gravity="center"
-                                android:padding="2dp"
-                                android:layout_marginTop="24dp"
-                                android:background="@color/lightGrey" />
-
-                            <TextView
-                                android:id="@+id/user_profile_username_textview"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginRight="24dp"
-                                android:layout_marginLeft="24dp"
-                                android:textSize="24sp"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textStyle="bold"
-                                android:text="@string/user"
-                                />
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/user_profile_user_description_textview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:layout_marginRight="24dp"
-                                android:layout_marginLeft="24dp"
-                                android:textSize="16sp"
-                                android:textAlignment="center"
-                                android:textColor="@color/grey"
-                                android:text="@string/description"
-                                />
-
-                            <include layout="@layout/user_profile_current_job_cardview"
-                                android:id="@+id/user_profile_current_job_cardview"/>
-
-                            <include layout="@layout/user_profile_biography_cardview" />
-
-                            <include layout="@layout/user_profile_work_experience_cardview" />
-
-                            <include layout="@layout/user_profile_education_cardview" />
-
-                            <android.support.v7.widget.CardView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:cardElevation="2dp"
-                                app:cardUseCompatPadding="true"
-                                android:layout_marginBottom="8dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginLeft="8dp" >
-
-                                <Button style="@style/Widget.AppCompat.Button.Borderless"
-                                    android:id="@+id/user_profile_see_recommendations_button"
+                                <ImageView
+                                    android:id="@+id/user_profile_picture_imageview"
+                                    android:layout_width="92dp"
+                                    android:layout_height="92dp"
                                     android:layout_gravity="center"
+                                    android:padding="2dp"
+                                    android:layout_marginTop="24dp"
+                                    android:background="@color/lightGrey" />
+
+                                <TextView
+                                    android:id="@+id/user_profile_username_textview"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/user_profile_see_recomendations"
-                                    android:textColor="@color/colorAccent"/>
+                                    android:gravity="center"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginRight="24dp"
+                                    android:layout_marginLeft="24dp"
+                                    android:textSize="24sp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textStyle="bold"
+                                    android:text="@string/user"
+                                    />
 
-                            </android.support.v7.widget.CardView>
+                                <TextView
+                                    android:id="@+id/user_profile_user_description_textview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:layout_marginRight="24dp"
+                                    android:layout_marginLeft="24dp"
+                                    android:textSize="16sp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/grey"
+                                    android:text="@string/description"
+                                    />
 
-                            <include layout="@layout/user_profile_skills_cardview" />
+                                <include layout="@layout/user_profile_current_job_cardview"
+                                    android:id="@+id/user_profile_current_job_cardview"/>
 
-                        </LinearLayout>
+                                <include layout="@layout/user_profile_biography_cardview" />
 
-                        <LinearLayout
-                            android:id="@+id/user_profile_public_buttons_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="8dp"
-                            android:orientation="vertical">
-                            <ImageButton
-                                android:id="@+id/user_profile_add_user_button"
-                                android:layout_width="42dp"
-                                android:layout_height="42dp"
-                                android:src="@drawable/ic_person_add"
-                                android:tint="@color/colorAccent"
-                                android:background="?attr/selectableItemBackgroundBorderless"/>
-                            <ImageButton
-                                android:id="@+id/user_profile_chat_user_button"
-                                android:layout_width="42dp"
-                                android:layout_height="42dp"
-                                android:src="@drawable/ic_chat"
-                                android:tint="@color/colorAccent"
-                                android:background="?attr/selectableItemBackgroundBorderless"/>
-                        </LinearLayout>
+                                <include layout="@layout/user_profile_work_experience_cardview" />
 
-                    </RelativeLayout>
+                                <include layout="@layout/user_profile_education_cardview" />
 
-                </android.support.v7.widget.CardView>
+                                <android.support.v7.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:cardElevation="2dp"
+                                    app:cardUseCompatPadding="true"
+                                    android:layout_marginBottom="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_marginLeft="8dp" >
 
-            <ProgressBar
-                android:id="@+id/user_profile_loading_circular_progress"
-                android:theme="@style/CircularProgress"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone"/>
+                                    <Button style="@style/Widget.AppCompat.Button.Borderless"
+                                        android:id="@+id/user_profile_see_recommendations_button"
+                                        android:layout_gravity="center"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/user_profile_see_recomendations"
+                                        android:textColor="@color/colorAccent"/>
 
-        </RelativeLayout>
+                                </android.support.v7.widget.CardView>
 
-    </android.support.v4.widget.NestedScrollView>
+                                <include layout="@layout/user_profile_skills_cardview" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/user_profile_public_buttons_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+                                <ImageButton
+                                    android:id="@+id/user_profile_add_user_button"
+                                    android:layout_width="42dp"
+                                    android:layout_height="42dp"
+                                    android:src="@drawable/ic_person_add"
+                                    android:tint="@color/colorAccent"
+                                    android:background="?attr/selectableItemBackgroundBorderless"/>
+                                <ImageButton
+                                    android:id="@+id/user_profile_chat_user_button"
+                                    android:layout_width="42dp"
+                                    android:layout_height="42dp"
+                                    android:src="@drawable/ic_chat"
+                                    android:tint="@color/colorAccent"
+                                    android:background="?attr/selectableItemBackgroundBorderless"/>
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </android.support.v7.widget.CardView>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/user_profile_loading_circular_progress"
+            android:theme="@style/CircularProgress"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
 </FrameLayout>
