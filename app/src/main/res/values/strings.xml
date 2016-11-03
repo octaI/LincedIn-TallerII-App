@@ -23,7 +23,14 @@
     <string name="confirm_password">Confirma la contraseña</string>
     <string name="company">Compañía</string>
     <string name="position">Posición</string>
-    <string name="since_date">Desde :1</string>
+    <string name="since_date">desde :1</string>
+    <string name="since_date_to_date">desde :1 hasta :2</string>
+    <string name="biography">Biografía</string>
+    <string name="age">:1 años</string>
+    <string name="location">Locación</string>
+    <string name="work_experience">Experiencia laboral</string>
+    <string name="see_more">Ver más</string>
+    <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
     <string name="signup_submit_button">Crear cuenta</string>
@@ -31,7 +38,6 @@
     <string name="invalid_email">El e-mail es inválido</string>
     <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
-    <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>

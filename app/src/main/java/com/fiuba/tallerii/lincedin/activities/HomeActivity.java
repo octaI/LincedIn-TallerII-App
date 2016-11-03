@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.MessageEvent;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -236,6 +237,9 @@ public class HomeActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            if (position == 0) {
+                return new UserProfileFragment();
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
