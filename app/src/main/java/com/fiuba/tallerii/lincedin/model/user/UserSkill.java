@@ -1,4 +1,6 @@
-package com.fiuba.tallerii.lincedin.model;
+package com.fiuba.tallerii.lincedin.model.user;
+
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 
@@ -58,5 +60,10 @@ public class UserSkill implements Serializable {
         result = 31 * result + category.hashCode();
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

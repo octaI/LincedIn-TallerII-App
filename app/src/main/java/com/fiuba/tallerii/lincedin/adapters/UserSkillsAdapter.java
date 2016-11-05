@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.model.UserSkill;
+import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 
 import java.util.ArrayList;
 import java.util.List;

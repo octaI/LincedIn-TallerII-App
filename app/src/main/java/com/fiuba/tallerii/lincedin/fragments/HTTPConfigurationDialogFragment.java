@@ -35,8 +35,8 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
 
     private static final String TAG = HTTPConfigurationDialogFragment.class.getName();
 
-    private static final String DEFAULT_SERVER_IP = "192.168.1.19";
-    private static final String DEFAULT_PORT_EXPOSED = "8080";
+    public static final String DEFAULT_SERVER_IP = "192.168.0.14";
+    public static final String DEFAULT_PORT_EXPOSED = "8081";
 
     private ArrayAdapter adapter;
 
