@@ -55,9 +55,9 @@ public class UserSkillsAdapter extends BaseAdapter {
 
         UserSkill currentSkill = (UserSkill) getItem(position);
         if (currentSkill != null) {
-            ((TextView) convertView.findViewById(R.id.user_skill_row_name_textview)).setText(currentSkill.getName());
-            ((TextView) convertView.findViewById(R.id.user_skill_row_category_textview)).setText(currentSkill.getCategory());
-            ((TextView) convertView.findViewById(R.id.user_skill_row_description_textview)).setText(currentSkill.getDescription());
+            ((TextView) convertView.findViewById(R.id.user_skill_row_name_textview)).setText(currentSkill.name);
+            ((TextView) convertView.findViewById(R.id.user_skill_row_category_textview)).setText(currentSkill.category);
+            ((TextView) convertView.findViewById(R.id.user_skill_row_description_textview)).setText(currentSkill.description);
         }
 
         return convertView;
