@@ -18,27 +18,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
-import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
-import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 import org.json.JSONObject;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UserProfileFragment extends Fragment {
 
     private static final String TAG = "UserProfile";
 
-    private User user;
-
     private UserJobsAdapter userJobsAdapter;
+    private UserEducationAdapter userEducationAdapter;
     private UserSkillsAdapter userSkillsAdapter;
 
     @Override
@@ -47,6 +43,7 @@ public class UserProfileFragment extends Fragment {
 
         userSkillsAdapter = new UserSkillsAdapter(getContext());
         userJobsAdapter = new UserJobsAdapter(getContext());
+        userEducationAdapter = new UserEducationAdapter(getContext());
     }
 
     @Override
@@ -57,17 +54,6 @@ public class UserProfileFragment extends Fragment {
         requestUserProfile(v);
 
         return v;
-    }
-
-    // TODO: 03/11/16 Delete this!
-    @Deprecated
-    private void setDummySkill(View v) {
-        UserSkill dummySkill = new UserSkill();
-        List<UserSkill> skills = new ArrayList<>();
-        skills.add(dummySkill);
-        userSkillsAdapter.setDataset(skills);
-        userSkillsAdapter.notifyDataSetChanged();
-        ((ListView) v.findViewById(R.id.user_profile_skills_listview)).setAdapter(userSkillsAdapter);
     }
 
     private void requestUserProfile(final View v) {
@@ -108,9 +94,9 @@ public class UserProfileFragment extends Fragment {
         populateCurrentWork(v, user);
         populateBiography(v, user);
         populateWorkExperience(v, user);
-        /*populateEducation(user);
-        populateRecommendations(user);
-        populateSkills(user);*/
+        populateEducation(v, user);
+        //populateRecommendations(user);
+        populateSkills(v, user);
     }
 
     private void populateBasicInfo(View v, User user) {
@@ -143,6 +129,18 @@ public class UserProfileFragment extends Fragment {
 
     private void populateCurrentWork(View v, User user) {
         // TODO: 05/11/16 Implement
+    }
+
+    private void populateEducation(View v, User user) {
+        userEducationAdapter.setDataset(user.education);
+        userEducationAdapter.notifyDataSetChanged();
+        ((ListView) v.findViewById(R.id.user_profile_education_degrees_listview)).setAdapter(userEducationAdapter);
+    }
+
+    private void populateSkills(View v, User user) {
+        userSkillsAdapter.setDataset(user.skills);
+        userSkillsAdapter.notifyDataSetChanged();
+        ((ListView) v.findViewById(R.id.user_profile_skills_listview)).setAdapter(userSkillsAdapter);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
