@@ -71,7 +71,7 @@
                                     />
 
                                 <include layout="@layout/user_profile_current_job_cardview"
-                                    android:id="@+id/user_profile_current_job_cardview"/>
+                                    android:id="@+id/user_profile_current_job_cardview" />
 
                                 <include layout="@layout/user_profile_biography_cardview" />
 

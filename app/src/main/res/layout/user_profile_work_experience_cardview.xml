@@ -28,7 +28,7 @@
             android:layout_marginBottom="8dp"/>
 
         <ListView
-            android:id="@+id/user_profile_work_experience_jobs_listview"
+            android:id="@+id/user_profile_work_experience_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

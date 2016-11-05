@@ -29,9 +29,9 @@
             android:layout_marginBottom="8dp"/>
 
         <ListView
-            android:id="@+id/user_profile_education_degrees_listview"
+            android:id="@+id/user_profile_education_listview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <Button style="@style/Widget.AppCompat.Button.Borderless"
             android:id="@+id/user_profile_education_see_more_button"

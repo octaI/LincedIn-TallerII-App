@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.model.user;
 
+import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -33,4 +34,26 @@ public class User {
     public List<UserRecommendation> recommendationsReceived;
 
     public List<UserSkill> skills;
+
+    public boolean isCurrentlyWorking() {
+        if (jobs != null && !jobs.isEmpty()) {
+            for (UserJob job : jobs) {
+                if (job.to == null || job.to.equals("")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public UserJob getCurrentWork() {
+        if (isCurrentlyWorking()) {
+            for (UserJob job : jobs) {
+                if (job.to == null || job.to.equals("")) {
+                    return job;
+                }
+            }
+        }
+        return null;
+    }
 }

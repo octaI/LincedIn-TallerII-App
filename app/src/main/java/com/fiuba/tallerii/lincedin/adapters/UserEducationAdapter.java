@@ -12,6 +12,8 @@ import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserEducationAdapter extends BaseAdapter {
@@ -24,11 +26,12 @@ public class UserEducationAdapter extends BaseAdapter {
 
     public UserEducationAdapter(Context context, List<UserEducation> dataset) {
         this.context = context;
-        this.dataset = dataset;
+        setDataset(dataset);
     }
 
     public void setDataset(List<UserEducation> dataset) {
         this.dataset = dataset;
+        Collections.sort(this.dataset, new EducationComparator());
     }
 
     @Override
@@ -66,5 +69,14 @@ public class UserEducationAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    private class EducationComparator implements Comparator<UserEducation> {
+
+        @Override
+        public int compare(UserEducation education1, UserEducation education2) {
+            return -1 * ( Integer.valueOf(DateUtils.extractYearFromDatetime(education1.startDate))
+                    .compareTo(Integer.valueOf(DateUtils.extractYearFromDatetime(education2.startDate))) );
+        }
     }
 }

@@ -29,6 +29,11 @@ public class DateUtils {
         return localDate;
     }
 
+    public static String getActualDatetime() {
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        return df.format(new Date());
+    }
+
     public static String extractYearFromDatetime(String datetime) {
         final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         final Calendar c = Calendar.getInstance();

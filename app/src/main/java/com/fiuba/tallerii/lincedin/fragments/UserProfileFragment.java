@@ -22,11 +22,15 @@ import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
+import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.utils.DateUtils;
+import com.fiuba.tallerii.lincedin.utils.ListViewUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserProfileFragment extends Fragment {
@@ -52,6 +56,7 @@ public class UserProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         requestUserProfile(v);
+        setAdapters(v);
 
         return v;
     }
@@ -74,6 +79,7 @@ public class UserProfileFragment extends Fragment {
 
                         User user = gson.fromJson(response.toString(), User.class);
                         populateProfile(v, user);
+                        setListeners(v, user);
                         refreshLoadingIndicator(v, false);
                     }
                 },
@@ -89,14 +95,23 @@ public class UserProfileFragment extends Fragment {
         );
     }
 
+    private void setAdapters(View v) {
+        ((ListView) v.findViewById(R.id.user_profile_work_experience_listview)).setAdapter(userJobsAdapter);
+        ((ListView) v.findViewById(R.id.user_profile_education_listview)).setAdapter(userEducationAdapter);
+        ((ListView) v.findViewById(R.id.user_profile_skills_listview)).setAdapter(userSkillsAdapter);
+    }
+
     private void populateProfile(View v, User user) {
         populateBasicInfo(v, user);
         populateCurrentWork(v, user);
         populateBiography(v, user);
-        populateWorkExperience(v, user);
-        populateEducation(v, user);
-        //populateRecommendations(user);
-        populateSkills(v, user);
+        populateWorkExperience(user);
+        populateEducation(user);
+        populateSkills(user);
+    }
+
+    private void setListeners(View v, User user) {
+        // TODO: 05/11/16 Implement logic for 'show more' buttons.
     }
 
     private void populateBasicInfo(View v, User user) {
@@ -121,26 +136,39 @@ public class UserProfileFragment extends Fragment {
         // TODO: 05/11/16 Set location when API supports it.
     }
 
-    private void populateWorkExperience(View v, User user) {
-        userJobsAdapter.setDataset(user.jobs);
+    private void populateWorkExperience(User user) {
+        List<UserJob> jobsToShow = user.jobs.subList(0, user.jobs.size() - 1);
+        if (user.isCurrentlyWorking()) {
+            jobsToShow.remove(user.getCurrentWork());
+        }
+        userJobsAdapter.setDataset(jobsToShow);
         userJobsAdapter.notifyDataSetChanged();
-        ((ListView) v.findViewById(R.id.user_profile_work_experience_jobs_listview)).setAdapter(userJobsAdapter);
     }
 
     private void populateCurrentWork(View v, User user) {
-        // TODO: 05/11/16 Implement
+        if (user.isCurrentlyWorking()) {
+            v.findViewById(R.id.user_profile_current_job_cardview).setVisibility(View.VISIBLE);
+
+            ((TextView) v.findViewById(R.id.user_profile_current_job_company_textview)).setText(user.getCurrentWork().company);
+            ((TextView) v.findViewById(R.id.user_profile_current_job_position_textview)).setText(user.getCurrentWork().position.name);
+            ((TextView) v.findViewById(R.id.user_profile_current_job_since_date_textview))
+                    .setText(
+                            ((TextView) v.findViewById(R.id.user_profile_current_job_since_date_textview)).getText().toString()
+                                    .replace(":1", DateUtils.extractYearFromDatetime(user.getCurrentWork().since))
+                    );
+        } else {
+            v.findViewById(R.id.user_profile_current_job_cardview).setVisibility(View.GONE);
+        }
     }
 
-    private void populateEducation(View v, User user) {
+    private void populateEducation(User user) {
         userEducationAdapter.setDataset(user.education);
         userEducationAdapter.notifyDataSetChanged();
-        ((ListView) v.findViewById(R.id.user_profile_education_degrees_listview)).setAdapter(userEducationAdapter);
     }
 
-    private void populateSkills(View v, User user) {
+    private void populateSkills(User user) {
         userSkillsAdapter.setDataset(user.skills);
         userSkillsAdapter.notifyDataSetChanged();
-        ((ListView) v.findViewById(R.id.user_profile_skills_listview)).setAdapter(userSkillsAdapter);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {

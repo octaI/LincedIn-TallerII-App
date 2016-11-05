@@ -12,6 +12,8 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserJobsAdapter extends BaseAdapter {
@@ -25,11 +27,12 @@ public class UserJobsAdapter extends BaseAdapter {
 
     public UserJobsAdapter(Context context, List<UserJob> dataset) {
         this.context = context;
-        this.dataset = dataset;
+        setDataset(dataset);
     }
 
     public void setDataset(List<UserJob> dataset) {
         this.dataset = dataset;
+        Collections.sort(this.dataset, new JobComparator());
     }
 
     @Override
@@ -62,10 +65,23 @@ public class UserJobsAdapter extends BaseAdapter {
                     .setText(
                             ((TextView) convertView.findViewById(R.id.user_job_row_date_range_textview)).getText().toString()
                                     .replace(":1", DateUtils.extractYearFromDatetime(currentJob.since))
-                                    .replace(":2", DateUtils.extractYearFromDatetime(currentJob.to))
+                                    .replace(":2",
+                                            currentJob.to != null && !currentJob.to.equals("") ?
+                                                    DateUtils.extractYearFromDatetime(currentJob.to)
+                                                    : "now"
+                                    )
                     );
         }
 
         return convertView;
+    }
+
+    private class JobComparator implements Comparator<UserJob> {
+
+        @Override
+        public int compare(UserJob job1, UserJob job2) {
+            return -1 * ( Integer.valueOf(DateUtils.extractYearFromDatetime(job1.to))
+                    .compareTo(Integer.valueOf(DateUtils.extractYearFromDatetime(job2.to))) );
+        }
     }
 }
