@@ -29,6 +29,19 @@ public class DateUtils {
         return localDate;
     }
 
+    public static String extractYearFromDatetime(String datetime) {
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final Calendar c = Calendar.getInstance();
+        Integer ageInt = 0;
+        try {
+            c.setTime(df.parse(datetime));
+            ageInt = c.get(Calendar.YEAR);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ageInt.toString();
+    }
+
     public static String getAgeFromDatetime(String datetime) {
         final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         final Calendar c = Calendar.getInstance();

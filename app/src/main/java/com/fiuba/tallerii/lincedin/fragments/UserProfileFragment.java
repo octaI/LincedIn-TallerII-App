@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
@@ -37,6 +38,7 @@ public class UserProfileFragment extends Fragment {
 
     private User user;
 
+    private UserJobsAdapter userJobsAdapter;
     private UserSkillsAdapter userSkillsAdapter;
 
     @Override
@@ -44,14 +46,13 @@ public class UserProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         userSkillsAdapter = new UserSkillsAdapter(getContext());
+        userJobsAdapter = new UserJobsAdapter(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
-
-        setDummySkill(v);
 
         requestUserProfile(v);
 
@@ -104,10 +105,10 @@ public class UserProfileFragment extends Fragment {
 
     private void populateProfile(View v, User user) {
         populateBasicInfo(v, user);
-        //populateCurrentWork(v, user);
+        populateCurrentWork(v, user);
         populateBiography(v, user);
-        /*populateWorkExperience(user);
-        populateEducation(user);
+        populateWorkExperience(v, user);
+        /*populateEducation(user);
         populateRecommendations(user);
         populateSkills(user);*/
     }
@@ -132,6 +133,16 @@ public class UserProfileFragment extends Fragment {
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
 
         // TODO: 05/11/16 Set location when API supports it.
+    }
+
+    private void populateWorkExperience(View v, User user) {
+        userJobsAdapter.setDataset(user.jobs);
+        userJobsAdapter.notifyDataSetChanged();
+        ((ListView) v.findViewById(R.id.user_profile_work_experience_jobs_listview)).setAdapter(userJobsAdapter);
+    }
+
+    private void populateCurrentWork(View v, User user) {
+        // TODO: 05/11/16 Implement
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
