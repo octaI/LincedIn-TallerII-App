@@ -150,8 +150,14 @@ public class UserProfileFragment extends Fragment {
     private void populateBiography(View v, User user) {
         ((TextView) v.findViewById(R.id.user_profile_biography_fullname_textview)).setText(user.fullName);
 
-        //((TextView) v.findViewById(R.id.user_profile_biography_age_textview)).setText(DateUtils.getAgeFromDatetime(user.dateOfBirth));
-        ((TextView) v.findViewById(R.id.user_profile_biography_date_of_birth_textview)).setText(user.dateOfBirth);
+        ((TextView) v.findViewById(R.id.user_profile_biography_date_of_birth_textview))
+                .setText(DateUtils.extractYearFromDatetime(user.dateOfBirth));
+
+        ((TextView) v.findViewById(R.id.user_profile_biography_age_textview))
+                .setText(
+                        ((TextView) v.findViewById(R.id.user_profile_biography_age_textview)).getText().toString()
+                        .replace(":1", DateUtils.getAgeFromDatetime(user.dateOfBirth))
+                );
 
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
 

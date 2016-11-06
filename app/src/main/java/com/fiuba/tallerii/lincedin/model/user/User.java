@@ -1,6 +1,5 @@
 package com.fiuba.tallerii.lincedin.model.user;
 
-import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -18,7 +17,8 @@ public class User {
 
     public String description;
 
-    @SerializedName("date_of_birth")
+    @SerializedName("date_of_birth\u200E")
+    // TODO: 06/11/16 Remove special character when API corrects it.
     public String dateOfBirth;
 
     public String email;
