@@ -21,16 +21,14 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <service
-            android:name=".services.LincedInFirebaseMessagingService">
+        <service android:name=".services.LincedInFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".services.LincedInFirebaseInstanceIdService">
+        <service android:name=".services.LincedInFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
@@ -85,7 +83,20 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.LogInActivity" />></activity>
+                android:value=".activities.LogInActivity" />
+            >
+        </activity>
+        <activity
+            android:name=".activities.WorkExperienceActivity"
+            android:label="@string/work_experience"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.HomeActivity" />
+        >
+        </activity>
     </application>
 
 </manifest>

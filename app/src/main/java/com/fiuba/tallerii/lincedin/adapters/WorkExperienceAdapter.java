@@ -16,19 +16,18 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.fiuba.tallerii.lincedin.utils.DateUtils.extractYearFromDatetime;
-import static com.fiuba.tallerii.lincedin.utils.DateUtils.getActualDatetime;
+import static com.fiuba.tallerii.lincedin.utils.DateUtils.*;
 
-public class UserJobsAdapter extends BaseAdapter {
+public class WorkExperienceAdapter extends BaseAdapter {
 
     private final Context context;
     private List<UserJob> dataset = new ArrayList<>();
 
-    public UserJobsAdapter(Context context) {
+    public WorkExperienceAdapter(Context context) {
         this.context = context;
     }
 
-    public UserJobsAdapter(Context context, List<UserJob> dataset) {
+    public WorkExperienceAdapter(Context context, List<UserJob> dataset) {
         this.context = context;
         setDataset(dataset);
     }
@@ -57,20 +56,22 @@ public class UserJobsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).
-                    inflate(R.layout.user_job_row, parent, false);
+                    inflate(R.layout.work_experience_row, parent, false);
         }
 
         UserJob currentJob = (UserJob) getItem(position);
         if (currentJob != null) {
-            ((TextView) convertView.findViewById(R.id.user_job_row_company_textview)).setText(currentJob.company);
-            ((TextView) convertView.findViewById(R.id.user_job_row_position_textview)).setText(currentJob.position.name);
-            ((TextView) convertView.findViewById(R.id.user_job_row_date_range_textview))
+            ((TextView) convertView.findViewById(R.id.work_experience_row_company_textview)).setText(currentJob.company);
+            ((TextView) convertView.findViewById(R.id.work_experience_row_position_name_textview)).setText(currentJob.position.name);
+            ((TextView) convertView.findViewById(R.id.work_experience_row_position_category_textview)).setText(currentJob.position.category);
+            ((TextView) convertView.findViewById(R.id.work_experience_row_position_description_textview)).setText(currentJob.position.description);
+            ((TextView) convertView.findViewById(R.id.work_experience_row_date_range_textview))
                     .setText(
-                            ((TextView) convertView.findViewById(R.id.user_job_row_date_range_textview)).getText().toString()
-                                    .replace(":1", DateUtils.extractYearFromDatetime(currentJob.since))
+                            ((TextView) convertView.findViewById(R.id.work_experience_row_date_range_textview)).getText().toString()
+                                    .replace(":1", extractYearFromDatetime(currentJob.since))
                                     .replace(":2",
                                             currentJob.to != null && !currentJob.to.equals("") ?
-                                                    DateUtils.extractYearFromDatetime(currentJob.to)
+                                                    extractYearFromDatetime(currentJob.to)
                                                     : "now"
                                     )
                     );

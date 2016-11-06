@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
@@ -37,6 +39,8 @@ public class UserProfileFragment extends Fragment {
     private static final String TAG = "UserProfile";
 
     private static final String ARG_USER_ID = "USER_ID";
+
+    private User user;
 
     private UserJobsAdapter userJobsAdapter;
     private UserEducationAdapter userEducationAdapter;
@@ -67,10 +71,26 @@ public class UserProfileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         setAdapters(v);
+        setButtonsListeners(v);
         setButtonsVisibility(v);
         requestUserProfile(v);
 
         return v;
+    }
+
+    private void setButtonsListeners(final View parentView) {
+        parentView.findViewById(R.id.user_profile_work_experience_see_more_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserWorkExperience();
+            }
+        });
+    }
+
+    private void openUserWorkExperience() {
+        Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
+        workExperienceIntent.putExtra(WorkExperienceActivity.ARG_JOBS, new Gson().toJson(user.jobs));
+        startActivity(workExperienceIntent);
     }
 
     private void setButtonsVisibility(View v) {
@@ -99,7 +119,7 @@ public class UserProfileFragment extends Fragment {
                         Gson gson = new Gson();
                         Log.d(TAG, gson.toJson(response));
 
-                        User user = gson.fromJson(response.toString(), User.class);
+                        user = gson.fromJson(response.toString(), User.class);
                         populateProfile(v, user);
                         setListeners(v, user);
                         refreshLoadingIndicator(v, false);
@@ -151,7 +171,7 @@ public class UserProfileFragment extends Fragment {
         ((TextView) v.findViewById(R.id.user_profile_biography_fullname_textview)).setText(user.fullName);
 
         ((TextView) v.findViewById(R.id.user_profile_biography_date_of_birth_textview))
-                .setText(DateUtils.extractYearFromDatetime(user.dateOfBirth));
+                .setText("(" + DateUtils.parseDatetimeToLocalDate(getContext(), user.dateOfBirth) + ")");
 
         ((TextView) v.findViewById(R.id.user_profile_biography_age_textview))
                 .setText(
