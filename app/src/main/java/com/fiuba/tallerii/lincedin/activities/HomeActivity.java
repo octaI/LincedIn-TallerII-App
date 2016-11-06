@@ -238,7 +238,7 @@ public class HomeActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return new UserProfileFragment();
+                return UserProfileFragment.newInstance(null);
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

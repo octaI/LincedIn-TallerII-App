@@ -25,7 +25,6 @@ import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
-import com.fiuba.tallerii.lincedin.utils.ListViewUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 import org.json.JSONObject;
@@ -37,9 +36,21 @@ public class UserProfileFragment extends Fragment {
 
     private static final String TAG = "UserProfile";
 
+    private static final String ARG_USER_ID = "USER_ID";
+
     private UserJobsAdapter userJobsAdapter;
     private UserEducationAdapter userEducationAdapter;
     private UserSkillsAdapter userSkillsAdapter;
+
+    public UserProfileFragment() {}
+
+    public static UserProfileFragment newInstance(String userId) {
+        UserProfileFragment fragment = new UserProfileFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_USER_ID, userId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +66,21 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        requestUserProfile(v);
         setAdapters(v);
+        setButtonsVisibility(v);
+        requestUserProfile(v);
 
         return v;
+    }
+
+    private void setButtonsVisibility(View v) {
+        if (getArguments() == null || getArguments().getString(ARG_USER_ID) == null) {    // Is own profile
+            v.findViewById(R.id.user_profile_public_buttons_layout).setVisibility(View.GONE);
+            v.findViewById(R.id.user_own_profile_edit_button).setVisibility(View.VISIBLE);
+        } else {
+            v.findViewById(R.id.user_profile_public_buttons_layout).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_own_profile_edit_button).setVisibility(View.GONE);
+        }
     }
 
     private void requestUserProfile(final View v) {
