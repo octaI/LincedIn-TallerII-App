@@ -41,6 +41,7 @@ public class UserProfileFragment extends Fragment {
     private static final String ARG_USER_ID = "USER_ID";
 
     private User user;
+    private boolean isOwnProfile;
 
     private UserJobsAdapter userJobsAdapter;
     private UserEducationAdapter userEducationAdapter;
@@ -60,6 +61,8 @@ public class UserProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setIsOwnProfileFlag();
+
         userSkillsAdapter = new UserSkillsAdapter(getContext());
         userJobsAdapter = new UserJobsAdapter(getContext());
         userEducationAdapter = new UserEducationAdapter(getContext());
@@ -78,6 +81,10 @@ public class UserProfileFragment extends Fragment {
         return v;
     }
 
+    private void setIsOwnProfileFlag() {
+        isOwnProfile = getArguments() == null || getArguments().getString(ARG_USER_ID) == null;
+    }
+
     private void setButtonsListeners(final View parentView) {
         parentView.findViewById(R.id.user_profile_work_experience_see_more_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,11 +97,12 @@ public class UserProfileFragment extends Fragment {
     private void openUserWorkExperience() {
         Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
         workExperienceIntent.putExtra(WorkExperienceActivity.ARG_JOBS, new Gson().toJson(user.jobs));
+        workExperienceIntent.putExtra(WorkExperienceActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
         startActivity(workExperienceIntent);
     }
 
     private void setButtonsVisibility(View v) {
-        if (getArguments() == null || getArguments().getString(ARG_USER_ID) == null) {    // Is own profile
+        if (isOwnProfile) {
             v.findViewById(R.id.user_profile_public_buttons_layout).setVisibility(View.GONE);
             v.findViewById(R.id.user_own_profile_edit_button).setVisibility(View.VISIBLE);
         } else {

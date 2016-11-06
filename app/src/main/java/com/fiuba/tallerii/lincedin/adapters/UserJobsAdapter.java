@@ -71,7 +71,7 @@ public class UserJobsAdapter extends BaseAdapter {
                                     .replace(":2",
                                             currentJob.to != null && !currentJob.to.equals("") ?
                                                     DateUtils.extractYearFromDatetime(currentJob.to)
-                                                    : "now"
+                                                    : context.getResources().getString(R.string.now).toLowerCase()
                                     )
                     );
         }
@@ -89,7 +89,8 @@ public class UserJobsAdapter extends BaseAdapter {
             Integer startDateJob2 = job2.to != null && !job2.to.equals("") ?
                     Integer.valueOf(extractYearFromDatetime(job2.to))
                     : Integer.valueOf(extractYearFromDatetime(getActualDatetime())) + 1;
-            return startDateJob2.compareTo(startDateJob1);
+            return startDateJob2.compareTo(startDateJob1) == 0 ?
+                    startDateJob2.compareTo(startDateJob1) : job2.since.compareTo(job1.since);
         }
     }
 }

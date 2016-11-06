@@ -10,6 +10,7 @@
     <string name="section_title_4">Mensajes</string>
     <string name="settings_title">Configuración</string>
     <string name="settings_http">Comunicación con servidor</string>
+    <string name="title">Título</string>
     <string name="login_title">Inicio de sesión</string>
     <string name="login_with_lincedin_account">Inicia sesión con tu cuenta de LincedIn</string>
     <string name="login">Iniciar sesión</string>
@@ -27,10 +28,13 @@
     <string name="position">Posición</string>
     <string name="since_date">desde :1</string>
     <string name="since_date_to_date">desde :1 hasta :2</string>
+    <string name="now">Ahora</string>
     <string name="biography">Biografía</string>
     <string name="age">:1 años</string>
     <string name="location">Ubicación</string>
     <string name="work_experience">Experiencia laboral</string>
+    <string name="edit_job">Editar cargo</string>
+    <string name="add_new_job">Agregar nuevo cargo</string>
     <string name="education">Educación</string>
     <string name="skills">Aptitudes</string>
     <string name="name">Nombre</string>

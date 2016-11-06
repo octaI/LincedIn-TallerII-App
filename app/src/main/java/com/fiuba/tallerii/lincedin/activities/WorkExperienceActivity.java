@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
@@ -21,6 +22,7 @@ public class WorkExperienceActivity extends AppCompatActivity {
     private static final String TAG = "WorkExperience";
 
     public static final String ARG_JOBS = "JOBS";
+    public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
     private WorkExperienceAdapter workExperienceAdapter;
 
@@ -29,8 +31,9 @@ public class WorkExperienceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_experience);
         setToolbar();
-        setListeners();
         setAdapter();
+        setButtonsVisibility();
+        setListeners();
     }
 
     @Override
@@ -54,6 +57,14 @@ public class WorkExperienceActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    private void setButtonsVisibility() {
+        if (getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false)) {
+            findViewById(R.id.work_experience_add_job_fab).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.work_experience_add_job_fab).setVisibility(View.GONE);
         }
     }
 
