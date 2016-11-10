@@ -1,5 +1,21 @@
-<ListView android:id="@+id/fragment_all_jobs_listview"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="72dp"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListView android:id="@+id/fragment_all_jobs_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/all_jobs_add_job_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@color/white"
+        />
+
+</FrameLayout>

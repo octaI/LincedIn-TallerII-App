@@ -62,8 +62,8 @@ public class SignUpActivity extends AppCompatActivity {
     public void onDatePicked(DatePickedEvent event) {
         EditText dateOfBirthEditText = (EditText) findViewById(R.id.signup_date_of_birth_edittext);
         if (dateOfBirthEditText != null) {
-            String dateOfBirth = DateUtils.parseToLocalDate(this, event.day, event.month, event.year);
-            dateOfBirthEditText.setText(dateOfBirth);
+            String dateOfBirth = DateUtils.parseToDatetime(event.day, event.month, event.year);
+            dateOfBirthEditText.setText(DateUtils.parseDatetimeToDateWithoutTime(dateOfBirth));
         }
     }
 

@@ -24,6 +24,10 @@ import java.util.List;
  */
 public class AllJobsFragment extends Fragment {
 
+    public interface AllJobsFragmentListener {
+        void onAddJobButtonPressed();
+    }
+
     private AllJobsAdapter allJobsAdapter;
 
     public AllJobsFragment() {}
@@ -41,6 +45,7 @@ public class AllJobsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_all_jobs, container, false);
         setAdapter(v);
+        setAddJobButtonListener(v);
         return v;
     }
 
@@ -56,6 +61,15 @@ public class AllJobsFragment extends Fragment {
             allJobsAdapter = new AllJobsAdapter(getContext(), jobs);
             ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setAdapter(allJobsAdapter);
         }
+    }
+
+    private void setAddJobButtonListener(View parentView) {
+        parentView.findViewById(R.id.all_jobs_add_job_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AllJobsFragmentListener) getActivity()).onAddJobButtonPressed();
+            }
+        });
     }
 
 }

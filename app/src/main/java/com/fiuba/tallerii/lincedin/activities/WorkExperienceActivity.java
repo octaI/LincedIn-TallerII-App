@@ -4,9 +4,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
@@ -19,7 +19,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkExperienceActivity extends AppCompatActivity {
+public class WorkExperienceActivity extends AppCompatActivity
+        implements AllJobsFragment.AllJobsFragmentListener, AddJobFragment.AddJobFragmentListener {
 
     private static final String TAG = "WorkExperience";
 
@@ -31,10 +32,7 @@ public class WorkExperienceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_experience);
         setToolbar();
-
         showAllJobsFragment();
-        setButtonsVisibility();
-        setListeners();
     }
 
     @Override
@@ -72,24 +70,6 @@ public class WorkExperienceActivity extends AppCompatActivity {
         return jobs;
     }
 
-    private void setButtonsVisibility() {
-        if (getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false)) {
-            findViewById(R.id.work_experience_add_job_fab).setVisibility(View.VISIBLE);
-        } else {
-            findViewById(R.id.work_experience_add_job_fab).setVisibility(View.GONE);
-        }
-    }
-
-    private void setListeners() {
-        // TODO: 09/11/16 onLongClickListener to edit job
-        findViewById(R.id.work_experience_add_job_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddJobFragment();
-            }
-        });
-    }
-
     private void showAllJobsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(getAllJobs()));
@@ -102,5 +82,17 @@ public class WorkExperienceActivity extends AppCompatActivity {
         transaction.replace(R.id.work_experience_container_framelayout, new AddJobFragment());
         transaction.addToBackStack("AddJobFragment");
         transaction.commit();
+    }
+
+    @Override
+    public void onAddJobButtonPressed() {
+        showAddJobFragment();
+    }
+
+    @Override
+    public void onApplyChangesButtonPressed(UserJob job) {
+        // TODO: 10/11/16 Save job!
+        Log.i(TAG, "Job to save to the user: " + new Gson().toJson(job));
+        showAllJobsFragment();
     }
 }

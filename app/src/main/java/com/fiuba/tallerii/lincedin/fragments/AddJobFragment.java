@@ -12,6 +12,8 @@ import android.widget.EditText;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
+import com.fiuba.tallerii.lincedin.model.user.UserJob;
+import com.fiuba.tallerii.lincedin.model.user.UserJobPosition;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -19,6 +21,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class AddJobFragment extends Fragment {
+
+    public interface AddJobFragmentListener {
+        void onApplyChangesButtonPressed(UserJob job);
+    }
 
     private static final String TAG = AddJobFragment.class.getName();
 
@@ -45,10 +51,11 @@ public class AddJobFragment extends Fragment {
     private void setListeners(View v) {
         setDatePickersListeners(v);
         setCheckboxListener(v);
+        setApplyChangesButtonListener(v);
     }
 
     private void setDatePickersListeners(View v) {
-        v.findViewById(R.id.dialog_edit_job_since_date_edittext).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.edit_job_since_date_edittext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lastDatePickerClicked = SINCE_DATE;
@@ -56,7 +63,7 @@ public class AddJobFragment extends Fragment {
             }
         });
 
-        v.findViewById(R.id.dialog_edit_job_until_date_edittext).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.edit_job_until_date_edittext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lastDatePickerClicked = UNTIL_DATE;
@@ -66,14 +73,24 @@ public class AddJobFragment extends Fragment {
     }
 
     private void setCheckboxListener(final View parentView) {
-        parentView.findViewById(R.id.dialog_edit_job_current_work_checkbox).setOnClickListener(new View.OnClickListener() {
+        parentView.findViewById(R.id.edit_job_current_work_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) {
-                    parentView.findViewById(R.id.dialog_edit_job_until_date_edittext).setVisibility(View.GONE);
+                    parentView.findViewById(R.id.edit_job_until_date_edittext).setVisibility(View.GONE);
                 } else {
-                    parentView.findViewById(R.id.dialog_edit_job_until_date_edittext).setVisibility(View.VISIBLE);
+                    parentView.findViewById(R.id.edit_job_until_date_edittext).setVisibility(View.VISIBLE);
                 }
+            }
+        });
+    }
+
+    private void setApplyChangesButtonListener(final View parentView) {
+        parentView.findViewById(R.id.edit_job_apply_changes_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserJob job = buildJobFromInput(parentView);
+                ((AddJobFragmentListener) getActivity()).onApplyChangesButtonPressed(job);
             }
         });
     }
@@ -83,23 +100,35 @@ public class AddJobFragment extends Fragment {
         datePickerDialog.show(getActivity().getSupportFragmentManager(), "DatePickerDialogFragment");
     }
 
+    private UserJob buildJobFromInput(View v) {
+        UserJob job = new UserJob();
+
+        job.company = ((EditText) v.findViewById(R.id.edit_job_company_edittext)).getText().toString();
+
+        job.position = (UserJobPosition) ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getSelectedItem();
+
+        job.since = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_since_date_edittext)).getText().toString());
+        job.to = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_until_date_edittext)).getText().toString());
+
+        return job;
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDatePicked(DatePickedEvent event) {
         if (lastDatePickerClicked != null) {
             if (lastDatePickerClicked.equals(SINCE_DATE)) {
-                EditText sinceDateEditText = (EditText) getView().findViewById(R.id.dialog_edit_job_since_date_edittext);
+                EditText sinceDateEditText = (EditText) getView().findViewById(R.id.edit_job_since_date_edittext);
                 if (sinceDateEditText != null) {
-                    String sinceDate = DateUtils.parseToLocalDate(getContext(), event.day, event.month, event.year);
-                    sinceDateEditText.setText(sinceDate);
+                    String sinceDate = DateUtils.parseToDatetime(event.day, event.month, event.year);
+                    sinceDateEditText.setText(DateUtils.parseDatetimeToDateWithoutTime(sinceDate));
                 }
             } else if (lastDatePickerClicked.equals(UNTIL_DATE)) {
-                EditText untilDateEditText = (EditText) getView().findViewById(R.id.dialog_edit_job_until_date_edittext);
+                EditText untilDateEditText = (EditText) getView().findViewById(R.id.edit_job_until_date_edittext);
                 if (untilDateEditText != null) {
-                    String untilDate = DateUtils.parseToLocalDate(getContext(), event.day, event.month, event.year);
-                    untilDateEditText.setText(untilDate);
+                    String untilDate = DateUtils.parseToDatetime( event.day, event.month, event.year);
+                    untilDateEditText.setText(DateUtils.parseDatetimeToDateWithoutTime(untilDate));
                 }
             }
         }
-
     }
 }

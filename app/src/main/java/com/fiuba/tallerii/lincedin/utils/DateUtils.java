@@ -10,6 +10,14 @@ import java.util.Date;
 
 public class DateUtils {
 
+    public static String parseToDatetime(int dayNumber, int monthNumber, int yearNumber) {
+        String day = dayNumber >= 10 ? String.valueOf(dayNumber) : "0" + String.valueOf(dayNumber);
+        String month = monthNumber >= 10 ? String.valueOf(monthNumber) : "0" + String.valueOf(monthNumber);
+        String year = String.valueOf(yearNumber);
+
+        return year + "-" + month + "-" + day + " 00:00:00";
+    }
+
     public static String parseToLocalDate(Context context, int dayNumber, int monthNumber, int yearNumber) {
         String day = dayNumber >= 10 ? String.valueOf(dayNumber) : "0" + String.valueOf(dayNumber);
         String month = monthNumber >= 10 ? String.valueOf(monthNumber) : "0" + String.valueOf(monthNumber);
@@ -45,6 +53,10 @@ public class DateUtils {
 
     public static String parseDatetimeToDateWithoutTime(String datetime) {
         return datetime.replaceAll(" .*", "");
+    }
+
+    public static String parseDateWithoutTimeToDatetime(String dateWithoutTime) {
+        return dateWithoutTime + " 00:00:00";
     }
 
     public static String extractYearFromDatetime(String datetime) {
