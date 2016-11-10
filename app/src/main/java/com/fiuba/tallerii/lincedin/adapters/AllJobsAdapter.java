@@ -17,16 +17,16 @@ import java.util.List;
 
 import static com.fiuba.tallerii.lincedin.utils.DateUtils.*;
 
-public class WorkExperienceAdapter extends BaseAdapter {
+public class AllJobsAdapter extends BaseAdapter {
 
     private final Context context;
     private List<UserJob> dataset = new ArrayList<>();
 
-    public WorkExperienceAdapter(Context context) {
+    public AllJobsAdapter(Context context) {
         this.context = context;
     }
 
-    public WorkExperienceAdapter(Context context, List<UserJob> dataset) {
+    public AllJobsAdapter(Context context, List<UserJob> dataset) {
         this.context = context;
         setDataset(dataset);
     }

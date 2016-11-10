@@ -7,11 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.adapters.WorkExperienceAdapter;
 import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
+import com.fiuba.tallerii.lincedin.fragments.AllJobsFragment;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,14 +26,13 @@ public class WorkExperienceActivity extends AppCompatActivity {
     public static final String ARG_JOBS = "JOBS";
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
-    private WorkExperienceAdapter workExperienceAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_experience);
         setToolbar();
-        setAdapter();
+
+        showAllJobsFragment();
         setButtonsVisibility();
         setListeners();
     }
@@ -63,6 +61,17 @@ public class WorkExperienceActivity extends AppCompatActivity {
         }
     }
 
+    private List<UserJob> getAllJobs() {
+        String jobsJson = getIntent().getStringExtra(ARG_JOBS);
+        Type jobListType = new TypeToken<List<UserJob>>() {
+        }.getType();
+        List<UserJob> jobs = new ArrayList<>();
+        if (jobsJson != null) {
+            jobs = new Gson().fromJson(jobsJson, jobListType);
+        }
+        return jobs;
+    }
+
     private void setButtonsVisibility() {
         if (getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false)) {
             findViewById(R.id.work_experience_add_job_fab).setVisibility(View.VISIBLE);
@@ -76,25 +85,22 @@ public class WorkExperienceActivity extends AppCompatActivity {
         findViewById(R.id.work_experience_add_job_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddJobFragment();
+                showAddJobFragment();
             }
         });
     }
 
-    private void setAdapter() {
-        String jobsJson = getIntent().getStringExtra(ARG_JOBS);
-        Type jobListType = new TypeToken<List<UserJob>>(){}.getType();
-        List<UserJob> jobs = new ArrayList<>();
-        if (jobsJson != null) {
-            jobs = new Gson().fromJson(jobsJson, jobListType);
-        }
-        workExperienceAdapter = new WorkExperienceAdapter(this, jobs);
-        ((ListView) findViewById(R.id.work_experience_listview)).setAdapter(workExperienceAdapter);
+    private void showAllJobsFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(getAllJobs()));
+        transaction.addToBackStack("AllJobsFragment");
+        transaction.commit();
     }
 
-    private void openAddJobFragment() {
+    private void showAddJobFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.work_experience_container_framelayout, new AddJobFragment());
+        transaction.replace(R.id.work_experience_container_framelayout, new AddJobFragment());
+        transaction.addToBackStack("AddJobFragment");
         transaction.commit();
     }
 }
