@@ -75,9 +75,12 @@ public class JobPositionsSpinnerAdapter extends BaseAdapter implements SpinnerAd
             ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_category_textview)).setText(currentPosition.category);
 
             // For default option
-            if (position == 0) {
+            if (currentPosition.equals(dataset.get(0))) {
                 convertView.findViewById(R.id.user_job_position_spinner_row_hyphen_divider_textview).setVisibility(View.GONE);
                 ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+            } else {
+                convertView.findViewById(R.id.user_job_position_spinner_row_hyphen_divider_textview).setVisibility(View.VISIBLE);
+                ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             }
         }
 

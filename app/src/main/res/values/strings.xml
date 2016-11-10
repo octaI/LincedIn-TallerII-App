@@ -30,6 +30,7 @@
     <string name="until">Hasta</string>
     <string name="since_date">desde :1</string>
     <string name="since_date_to_date">desde :1 hasta :2</string>
+    <string name="start_date_after_end_date">La fecha de inicio es mayor a la fecha de finalización</string>
     <string name="current_work">Trabajo actual</string>
     <string name="now">Ahora</string>
     <string name="biography">Biografía</string>
@@ -38,6 +39,7 @@
     <string name="work_experience">Experiencia laboral</string>
     <string name="edit_job">Editar cargo</string>
     <string name="add_new_job">Agregar nuevo cargo</string>
+    <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
     <string name="education">Educación</string>
     <string name="skills">Aptitudes</string>
     <string name="name">Nombre</string>

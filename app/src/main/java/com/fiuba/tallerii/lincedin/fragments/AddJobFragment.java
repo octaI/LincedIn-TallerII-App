@@ -2,12 +2,15 @@ package com.fiuba.tallerii.lincedin.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -113,9 +116,33 @@ public class AddJobFragment extends Fragment {
     }
 
     private void setListeners(View v) {
+        setJobPositionsSpinnerListeners(v);
         setDatePickersListeners(v);
         setCheckboxListener(v);
         setApplyChangesButtonListener(v);
+    }
+
+    private void setJobPositionsSpinnerListeners(final View v) {
+        ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown))
+                .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position == 0) {
+                    v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.GONE);
+                } else {
+                    v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.VISIBLE);
+
+                    ((TextView) v.findViewById(R.id.edit_job_position_description_textview))
+                            .setText(
+                                    ((UserJobPosition) ((AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getAdapter().getItem(position)).description
+                            );
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+
+        });
     }
 
     private void setDatePickersListeners(View v) {
@@ -155,8 +182,10 @@ public class AddJobFragment extends Fragment {
         parentView.findViewById(R.id.edit_job_apply_changes_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserJob job = buildJobFromInput(parentView);
-                ((AddJobFragmentListener) getActivity()).onApplyChangesButtonPressed(job);
+                if (validateInput(parentView)) {
+                    UserJob job = buildJobFromInput(parentView);
+                    ((AddJobFragmentListener) getActivity()).onApplyChangesButtonPressed(job);
+                }
             }
         });
     }
@@ -164,6 +193,48 @@ public class AddJobFragment extends Fragment {
     private void openDatePickerDialog() {
         DialogFragment datePickerDialog = new DatePickerDialogFragment();
         datePickerDialog.show(getActivity().getSupportFragmentManager(), "DatePickerDialogFragment");
+    }
+
+    private boolean validateInput(View v) {
+        if (((EditText) v.findViewById(R.id.edit_job_company_edittext)).getText().toString().equals("")) {
+            v.findViewById(R.id.edit_job_company_edittext).requestFocus();
+            ((EditText) v.findViewById(R.id.edit_job_company_edittext)).setError(getString(R.string.field_is_required));
+            return false;
+        }
+
+        if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getSelectedItemPosition() == 0) {
+            Snackbar.make(v, getString(R.string.must_select_job_position), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return validateInputDates(v);
+    }
+
+    private boolean validateInputDates(View v) {
+        EditText sinceDateEditText = ((EditText) v.findViewById(R.id.edit_job_since_date_edittext));
+        EditText untilDateEditText = ((EditText) v.findViewById(R.id.edit_job_until_date_edittext));
+
+        if (sinceDateEditText.getText().toString().equals("")) {
+            sinceDateEditText.requestFocus();
+            sinceDateEditText.setError(getString(R.string.field_is_required));
+            return false;
+        }
+
+        if ( !((CheckBox) v.findViewById(R.id.edit_job_current_work_checkbox)).isChecked() ) {
+            if (untilDateEditText.getText().toString().equals("")) {
+                untilDateEditText.requestFocus();
+                untilDateEditText.setError(getString(R.string.field_is_required));
+                return false;
+            }
+
+            if (sinceDateEditText.getText().toString().compareTo(untilDateEditText.getText().toString()) > 0) {
+                sinceDateEditText.requestFocus();
+                Snackbar.make(v, getString(R.string.start_date_after_end_date), Snackbar.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private UserJob buildJobFromInput(View v) {
@@ -174,7 +245,9 @@ public class AddJobFragment extends Fragment {
         job.position = (UserJobPosition) ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getSelectedItem();
 
         job.since = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_since_date_edittext)).getText().toString());
-        job.to = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_until_date_edittext)).getText().toString());
+        job.to = ((CheckBox) v.findViewById(R.id.edit_job_current_work_checkbox)).isChecked() ?
+                ""
+                : DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_until_date_edittext)).getText().toString());
 
         return job;
     }
