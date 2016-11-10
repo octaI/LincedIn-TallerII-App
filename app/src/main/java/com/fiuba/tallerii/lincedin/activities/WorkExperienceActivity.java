@@ -27,11 +27,14 @@ public class WorkExperienceActivity extends AppCompatActivity
     public static final String ARG_JOBS = "JOBS";
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
+    private List<UserJob> jobs = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_experience);
         setToolbar();
+        getAllJobsFromIntent();
         showAllJobsFragment();
     }
 
@@ -59,11 +62,9 @@ public class WorkExperienceActivity extends AppCompatActivity
         }
     }
 
-    private List<UserJob> getAllJobs() {
+    private List<UserJob> getAllJobsFromIntent() {
         String jobsJson = getIntent().getStringExtra(ARG_JOBS);
-        Type jobListType = new TypeToken<List<UserJob>>() {
-        }.getType();
-        List<UserJob> jobs = new ArrayList<>();
+        Type jobListType = new TypeToken<List<UserJob>>() {}.getType();
         if (jobsJson != null) {
             jobs = new Gson().fromJson(jobsJson, jobListType);
         }
@@ -72,7 +73,7 @@ public class WorkExperienceActivity extends AppCompatActivity
 
     private void showAllJobsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(getAllJobs()));
+        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(jobs));
         transaction.addToBackStack("AllJobsFragment");
         transaction.commit();
     }
@@ -91,8 +92,9 @@ public class WorkExperienceActivity extends AppCompatActivity
 
     @Override
     public void onApplyChangesButtonPressed(UserJob job) {
-        // TODO: 10/11/16 Save job!
-        Log.i(TAG, "Job to save to the user: " + new Gson().toJson(job));
+        // TODO: 10/11/16 Make PUT request!
+        Log.i(TAG, "User job to save: " + new Gson().toJson(job));
+        jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
         showAllJobsFragment();
     }
 }

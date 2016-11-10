@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,9 +47,8 @@
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/edit_job_positions_dropdown"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:popupElevation="2dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
         </android.support.v7.widget.AppCompatSpinner>
 
@@ -77,11 +77,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_gravity="center">
 
             <EditText
                 android:id="@+id/edit_job_since_date_edittext"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:textColor="@color/colorAccent"
@@ -91,12 +93,18 @@
                 android:hint="@string/since"
                 android:focusableInTouchMode="false"/>
 
+            <View
+                android:id="@+id/edit_job_since_to_dates_separator"
+                style="@style/ThinHorizontalSeparator"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="18dp"/>
+
             <EditText
                 android:id="@+id/edit_job_until_date_edittext"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
-                android:layout_marginStart="32dp"
+                android:gravity="center"
                 android:inputType="date"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent"

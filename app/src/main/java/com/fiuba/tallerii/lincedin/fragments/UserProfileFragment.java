@@ -28,11 +28,14 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
 import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class UserProfileFragment extends Fragment {
 
@@ -116,8 +119,8 @@ public class UserProfileFragment extends Fragment {
     private void requestUserProfile(final View v) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = "http://"
-                + getStringFromSharedPreferences(SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                + ":" + getStringFromSharedPreferences(SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
+                + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
+                + ":" + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
                 + "/user"
                 + "/me";
         HttpRequestHelper.get(
@@ -237,11 +240,6 @@ public class UserProfileFragment extends Fragment {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.GONE);
         }
-    }
-
-    private String getStringFromSharedPreferences(String key, String defaultValue) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        return sharedPreferences.getString(key, defaultValue);
     }
 
 }
