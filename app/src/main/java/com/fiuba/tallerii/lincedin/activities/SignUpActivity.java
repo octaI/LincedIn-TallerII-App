@@ -68,8 +68,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void openBirthdayDatePickerDialog() {
-        DialogFragment httpDialog = new DatePickerDialogFragment();
-        httpDialog.show(getSupportFragmentManager(), "DatePickerDialogFragment");
+        DialogFragment datePickerDialog = new DatePickerDialogFragment();
+        datePickerDialog.show(getSupportFragmentManager(), "DatePickerDialogFragment");
     }
 
     private void setSubmitButtonListener() {

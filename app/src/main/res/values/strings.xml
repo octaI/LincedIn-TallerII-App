@@ -26,8 +26,11 @@
     <string name="institute">Instituto</string>
     <string name="degree">Título</string>
     <string name="position">Posición</string>
+    <string name="since">Desde</string>
+    <string name="until">Hasta</string>
     <string name="since_date">desde :1</string>
     <string name="since_date_to_date">desde :1 hasta :2</string>
+    <string name="current_work">Trabajo actual</string>
     <string name="now">Ahora</string>
     <string name="biography">Biografía</string>
     <string name="age">:1 años</string>

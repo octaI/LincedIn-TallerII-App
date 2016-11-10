@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,11 +11,13 @@ import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.adapters.WorkExperienceAdapter;
+import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkExperienceActivity extends AppCompatActivity {
@@ -69,14 +72,29 @@ public class WorkExperienceActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        // TODO: 06/11/16 Implement dialog to add new job to work experience.
+        // TODO: 09/11/16 onLongClickListener to edit job
+        findViewById(R.id.work_experience_add_job_fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddJobFragment();
+            }
+        });
     }
 
     private void setAdapter() {
         String jobsJson = getIntent().getStringExtra(ARG_JOBS);
         Type jobListType = new TypeToken<List<UserJob>>(){}.getType();
-        List<UserJob> jobs = new Gson().fromJson(jobsJson, jobListType);
+        List<UserJob> jobs = new ArrayList<>();
+        if (jobsJson != null) {
+            jobs = new Gson().fromJson(jobsJson, jobListType);
+        }
         workExperienceAdapter = new WorkExperienceAdapter(this, jobs);
         ((ListView) findViewById(R.id.work_experience_listview)).setAdapter(workExperienceAdapter);
+    }
+
+    private void openAddJobFragment() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.work_experience_container_framelayout, new AddJobFragment());
+        transaction.commit();
     }
 }
