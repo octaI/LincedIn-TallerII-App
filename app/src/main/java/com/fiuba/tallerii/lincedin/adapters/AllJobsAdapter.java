@@ -42,7 +42,7 @@ public class AllJobsAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public UserJob getItem(int position) {
         return dataset.get(position);
     }
 

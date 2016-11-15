@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.AllJobsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.google.gson.Gson;
@@ -26,9 +26,12 @@ public class AllJobsFragment extends Fragment {
 
     public interface AllJobsFragmentListener {
         void onAddJobButtonPressed();
+        void onJobRowClicked(UserJob job);
     }
 
     private static final String ARG_JOBS = "JOBS";
+
+    private AllJobsAdapter allJobsAdapter;
 
     public AllJobsFragment() {}
 
@@ -45,7 +48,7 @@ public class AllJobsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_all_jobs, container, false);
         setAdapter(v);
-        setAddJobButtonListener(v);
+        setListeners(v);
         return v;
     }
 
@@ -58,9 +61,14 @@ public class AllJobsFragment extends Fragment {
             if (jobsJson != null) {
                 jobs = new Gson().fromJson(jobsJson, jobListType);
             }
-            AllJobsAdapter allJobsAdapter = new AllJobsAdapter(getContext(), jobs);
+            allJobsAdapter = new AllJobsAdapter(getContext(), jobs);
             ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setAdapter(allJobsAdapter);
         }
+    }
+
+    private void setListeners(View v) {
+        setAddJobButtonListener(v);
+        setJobRowOnLongClickListener(v);
     }
 
     private void setAddJobButtonListener(View parentView) {
@@ -68,6 +76,15 @@ public class AllJobsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ((AllJobsFragmentListener) getActivity()).onAddJobButtonPressed();
+            }
+        });
+    }
+
+    private void setJobRowOnLongClickListener(View v) {
+        ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((AllJobsFragmentListener) getActivity()).onJobRowClicked(allJobsAdapter.getItem(position));
             }
         });
     }
