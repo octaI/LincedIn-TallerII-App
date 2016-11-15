@@ -1,7 +1,11 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -156,6 +160,33 @@ public class WorkExperienceActivity extends AppCompatActivity
 
     @Override
     public void onJobDeleted(final UserJob job) {
+        showDeleteJobConfirmationDialog(job);
+    }
+
+    private void showDeleteJobConfirmationDialog(final UserJob job) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.are_you_sure_you_want_to_delete_job))
+                .setMessage(getString(R.string.this_change_cannot_be_reverted))
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        confirmJobDeletion(job);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            }
+        });
+        dialog.show();
+    }
+
+    private void confirmJobDeletion(final UserJob job) {
         Log.d(TAG, "User job to delete: " + new Gson().toJson(job));
         user.jobs.remove(job);
         requestUserProfileEdition(
