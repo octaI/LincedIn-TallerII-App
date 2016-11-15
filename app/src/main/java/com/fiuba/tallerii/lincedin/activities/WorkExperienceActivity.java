@@ -8,33 +8,46 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
 import com.fiuba.tallerii.lincedin.fragments.AllJobsFragment;
+import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
+import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class WorkExperienceActivity extends AppCompatActivity
         implements AllJobsFragment.AllJobsFragmentListener, AddJobFragment.AddJobFragmentListener {
 
     private static final String TAG = "WorkExperience";
 
-    public static final String ARG_JOBS = "JOBS";
+    public static final String ARG_USER = "USER";
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
-    private List<UserJob> jobs = new ArrayList<>();
+    private User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_experience);
         setToolbar();
-        getAllJobsFromIntent();
+        getUserFromIntent();
         showAllJobsFragment();
     }
 
@@ -62,18 +75,17 @@ public class WorkExperienceActivity extends AppCompatActivity
         }
     }
 
-    private List<UserJob> getAllJobsFromIntent() {
-        String jobsJson = getIntent().getStringExtra(ARG_JOBS);
-        Type jobListType = new TypeToken<List<UserJob>>() {}.getType();
+    private User getUserFromIntent() {
+        String jobsJson = getIntent().getStringExtra(ARG_USER);
         if (jobsJson != null) {
-            jobs = new Gson().fromJson(jobsJson, jobListType);
+            user = new Gson().fromJson(jobsJson, User.class);
         }
-        return jobs;
+        return user;
     }
 
     private void showAllJobsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(jobs));
+        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(user.jobs));
         transaction.addToBackStack("AllJobsFragment");
         transaction.commit();
     }
@@ -92,9 +104,38 @@ public class WorkExperienceActivity extends AppCompatActivity
 
     @Override
     public void onApplyChangesButtonPressed(UserJob job) {
-        // TODO: 10/11/16 Make PUT request!
         Log.i(TAG, "User job to save: " + new Gson().toJson(job));
-        jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
-        showAllJobsFragment();
+        user.jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
+
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = "http://"
+                + getStringFromSharedPreferences(this, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
+                + ":" + getStringFromSharedPreferences(this, SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
+                + "/user"
+                + "/me";
+
+        try {
+            HttpRequestHelper.put(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(user)),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            showAllJobsFragment();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                            showAllJobsFragment();
+                        }
+                    },
+                    "EditUserProfile"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

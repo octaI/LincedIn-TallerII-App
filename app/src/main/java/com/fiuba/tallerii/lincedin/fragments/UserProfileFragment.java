@@ -100,7 +100,7 @@ public class UserProfileFragment extends Fragment {
     private void openUserWorkExperience() {
         Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
         if (user != null) {
-            workExperienceIntent.putExtra(WorkExperienceActivity.ARG_JOBS, new Gson().toJson(user.jobs));
+            workExperienceIntent.putExtra(WorkExperienceActivity.ARG_USER, new Gson().toJson(user));
         }
         workExperienceIntent.putExtra(WorkExperienceActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
         startActivity(workExperienceIntent);

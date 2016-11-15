@@ -28,6 +28,8 @@ public class AllJobsFragment extends Fragment {
         void onAddJobButtonPressed();
     }
 
+    private static final String ARG_JOBS = "JOBS";
+
     private AllJobsAdapter allJobsAdapter;
 
     public AllJobsFragment() {}
@@ -35,7 +37,7 @@ public class AllJobsFragment extends Fragment {
     public static AllJobsFragment newInstance(List<UserJob> jobs) {
         AllJobsFragment fragment = new AllJobsFragment();
         Bundle args = new Bundle();
-        args.putString(WorkExperienceActivity.ARG_JOBS, new Gson().toJson(jobs));
+        args.putString(ARG_JOBS, new Gson().toJson(jobs));
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,7 +53,7 @@ public class AllJobsFragment extends Fragment {
 
     private void setAdapter(View v) {
         if (getArguments() != null) {
-            String jobsJson = getArguments().getString(WorkExperienceActivity.ARG_JOBS);
+            String jobsJson = getArguments().getString(ARG_JOBS);
             Type jobListType = new TypeToken<List<UserJob>>() {
             }.getType();
             List<UserJob> jobs = new ArrayList<>();
