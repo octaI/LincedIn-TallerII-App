@@ -30,8 +30,6 @@ public class AllJobsFragment extends Fragment {
 
     private static final String ARG_JOBS = "JOBS";
 
-    private AllJobsAdapter allJobsAdapter;
-
     public AllJobsFragment() {}
 
     public static AllJobsFragment newInstance(List<UserJob> jobs) {
@@ -60,7 +58,7 @@ public class AllJobsFragment extends Fragment {
             if (jobsJson != null) {
                 jobs = new Gson().fromJson(jobsJson, jobListType);
             }
-            allJobsAdapter = new AllJobsAdapter(getContext(), jobs);
+            AllJobsAdapter allJobsAdapter = new AllJobsAdapter(getContext(), jobs);
             ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setAdapter(allJobsAdapter);
         }
     }

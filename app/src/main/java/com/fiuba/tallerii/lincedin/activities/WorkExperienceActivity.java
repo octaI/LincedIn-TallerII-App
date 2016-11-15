@@ -19,15 +19,11 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
@@ -103,9 +99,8 @@ public class WorkExperienceActivity extends AppCompatActivity
     }
 
     @Override
-    public void onApplyChangesButtonPressed(UserJob job) {
+    public void onApplyChangesButtonPressed(final UserJob job) {
         Log.i(TAG, "User job to save: " + new Gson().toJson(job));
-        user.jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
 
         final Map<String, String> requestParams = new HashMap<>();
         final String url = "http://"
@@ -122,6 +117,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            user.jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
                             showAllJobsFragment();
                         }
                     },
