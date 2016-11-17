@@ -1,6 +1,5 @@
 package com.fiuba.tallerii.lincedin.activities;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;

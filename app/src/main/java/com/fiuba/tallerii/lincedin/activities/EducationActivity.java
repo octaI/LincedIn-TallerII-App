@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.fragments.AllEducationFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -22,7 +23,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-public class EducationActivity extends AppCompatActivity {
+public class EducationActivity extends AppCompatActivity
+        implements AllEducationFragment.AllEducationFragmentListener {
 
     private static final String TAG = "Education";
 

@@ -99,7 +99,7 @@
         </activity>
         <activity
             android:name=".activities.EducationActivity"
-            android:label="@string/work_experience"
+            android:label="@string/education"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
