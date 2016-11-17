@@ -92,11 +92,12 @@
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".activities.HomeActivity" />
-        >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+            >
         </activity>
+        <activity android:name=".activities.EducationActivity"></activity>
     </application>
 
 </manifest>

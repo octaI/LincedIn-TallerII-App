@@ -22,6 +22,7 @@ import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 
@@ -112,7 +113,9 @@ public class WorkExperienceActivity extends AppCompatActivity
     public void onNewJobAdded(final UserJob job) {
         Log.d(TAG, "User job to add: " + new Gson().toJson(job));
         user.jobs.add(job);
-        requestUserProfileEdition(
+        LincedInRequester.editUserProfile(
+                user,
+                this,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -137,7 +140,9 @@ public class WorkExperienceActivity extends AppCompatActivity
         Log.d(TAG, "User job to edit: from " + new Gson().toJson(previousJob) + " to " + new Gson().toJson(updatedJob));
         user.jobs.remove(previousJob);
         user.jobs.add(updatedJob);
-        requestUserProfileEdition(
+        LincedInRequester.editUserProfile(
+                user,
+                this,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -189,7 +194,9 @@ public class WorkExperienceActivity extends AppCompatActivity
     private void confirmJobDeletion(final UserJob job) {
         Log.d(TAG, "User job to delete: " + new Gson().toJson(job));
         user.jobs.remove(job);
-        requestUserProfileEdition(
+        LincedInRequester.editUserProfile(
+                user,
+                this,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -207,27 +214,5 @@ public class WorkExperienceActivity extends AppCompatActivity
                     }
                 }
         );
-    }
-
-    private void requestUserProfileEdition(Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
-        final Map<String, String> requestParams = new HashMap<>();
-        final String url = "http://"
-                + getStringFromSharedPreferences(this, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                + ":" + getStringFromSharedPreferences(this, SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
-                + "/user"
-                + "/me";
-
-        try {
-            HttpRequestHelper.put(
-                    url,
-                    requestParams,
-                    new JSONObject(new Gson().toJson(user)),
-                    successListener,
-                    errorListener,
-                    "EditUserProfile"
-            );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 }
