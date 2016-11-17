@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.AllJobsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.google.gson.Gson;
@@ -30,15 +31,17 @@ public class AllJobsFragment extends Fragment {
     }
 
     private static final String ARG_JOBS = "JOBS";
+    private static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
     private AllJobsAdapter allJobsAdapter;
 
     public AllJobsFragment() {}
 
-    public static AllJobsFragment newInstance(List<UserJob> jobs) {
+    public static AllJobsFragment newInstance(List<UserJob> jobs, boolean isOwnProfile) {
         AllJobsFragment fragment = new AllJobsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_JOBS, new Gson().toJson(jobs));
+        args.putBoolean(ARG_IS_OWN_PROFILE, isOwnProfile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +52,7 @@ public class AllJobsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_all_jobs, container, false);
         setAdapter(v);
         setListeners(v);
+        setButtonVisibility(v);
         return v;
     }
 
@@ -71,6 +75,14 @@ public class AllJobsFragment extends Fragment {
         setJobRowOnLongClickListener(v);
     }
 
+    private void setButtonVisibility(View v) {
+        if (getArguments() != null) {
+            if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
+                v.findViewById(R.id.all_jobs_add_job_fab).setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void setAddJobButtonListener(View parentView) {
         parentView.findViewById(R.id.all_jobs_add_job_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,12 +93,16 @@ public class AllJobsFragment extends Fragment {
     }
 
     private void setJobRowOnLongClickListener(View v) {
-        ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((AllJobsFragmentListener) getActivity()).onJobRowClicked(allJobsAdapter.getItem(position));
+        if (getArguments() != null) {
+            if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
+                ((ListView) v.findViewById(R.id.fragment_all_jobs_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ((AllJobsFragmentListener) getActivity()).onJobRowClicked(allJobsAdapter.getItem(position));
+                    }
+                });
             }
-        });
+        }
     }
 
 }

@@ -37,7 +37,7 @@ public class EducationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_education);
         setToolbar();
         getUserFromIntent();
-        showAllJobsFragment();
+        showAllEducationFragment();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class EducationActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private void showAddJEducationFragment(@Nullable UserEducation educationSelected) {
+    private void showAddEducationFragment(@Nullable UserEducation educationSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.work_experience_container_framelayout, AddEducationFragment.newInstance(educationSelected));
         transaction.addToBackStack("AddEducationFragment");
@@ -189,7 +189,7 @@ public class EducationActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The education was deleted successfully!");
-                        showAlEducationFragment();
+                        showAllEducationFragment();
                     }
                 },
                 new Response.ErrorListener() {

@@ -34,6 +34,7 @@ public class WorkExperienceActivity extends AppCompatActivity
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
     private User user = new User();
+    private boolean isOwnProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +74,13 @@ public class WorkExperienceActivity extends AppCompatActivity
         if (userJson != null) {
             user = new Gson().fromJson(userJson, User.class);
         }
+        isOwnProfile = getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false);
         return user;
     }
 
     private void showAllJobsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(user.jobs));
+        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(user.jobs, isOwnProfile));
         transaction.addToBackStack("AllJobsFragment");
         transaction.commit();
     }
