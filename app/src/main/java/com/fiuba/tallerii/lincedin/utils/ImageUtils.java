@@ -23,4 +23,9 @@ public class ImageUtils {
         byte[] decodedString = Base64.decode(encString,Base64.DEFAULT);
         return decodedString;
     }
+
+    public static String encodeByteArrayToBase64(byte[] byteArrayImage){
+        String encodedString = Base64.encodeToString(byteArrayImage,Base64.DEFAULT);
+        return encodedString;
+    }
 }
