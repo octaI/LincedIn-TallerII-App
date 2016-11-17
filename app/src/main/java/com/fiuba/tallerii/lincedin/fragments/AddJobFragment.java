@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -45,19 +46,47 @@ import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getString
 public class AddJobFragment extends Fragment {
 
     public interface AddJobFragmentListener {
-        void onApplyChangesButtonPressed(UserJob job);
+        void onNewJobAdded(UserJob job);
+        void onJobEdited(UserJob previousJob, UserJob updatedJob);
+        void onJobDeleted(UserJob job);
     }
 
     private static final String TAG = AddJobFragment.class.getName();
+
+    public static final String ARG_SELECTED_JOB = "SELECTED_JOB";
+    private UserJob selectedJob = null;
 
     private static final String SINCE_DATE = "sinceDate";
     private static final String UNTIL_DATE = "untilDate";
     private String lastDatePickerClicked;
 
+    public AddJobFragment() {}
+
+    public static AddJobFragment newInstance(UserJob job) {
+        AddJobFragment fragment = new AddJobFragment();
+        if (job != null) {
+            Bundle args = new Bundle();
+            args.putString(ARG_SELECTED_JOB, new Gson().toJson(job));
+            fragment.setArguments(args);
+        }
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+
+        retrieveSelectedJob();
+    }
+
+    private void retrieveSelectedJob() {
+        if (getArguments() != null) {
+            String jobJson = getArguments().getString(ARG_SELECTED_JOB);
+            if (jobJson != null) {
+                selectedJob = new Gson().fromJson(jobJson, UserJob.class);
+            }
+        }
     }
 
     @Nullable
@@ -65,7 +94,13 @@ public class AddJobFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit_job, container, false);
 
-        ((TextView) v.findViewById(R.id.edit_job_title_textview)).setText(getString(R.string.add_new_job));
+        if (selectedJob != null) {
+            ((TextView) v.findViewById(R.id.edit_job_title_textview)).setText(getString(R.string.edit_job));
+            v.findViewById(R.id.edit_job_delete_button).setVisibility(View.VISIBLE);
+        } else {
+            ((TextView) v.findViewById(R.id.edit_job_title_textview)).setText(getString(R.string.add_new_job));
+            v.findViewById(R.id.edit_job_delete_button).setVisibility(View.GONE);
+        }
 
         populatePositionSpinner(v);
         setListeners(v);
@@ -116,10 +151,20 @@ public class AddJobFragment extends Fragment {
     }
 
     private void setListeners(View v) {
+        setDeleteJobButtonListener(v);
         setJobPositionsSpinnerListeners(v);
         setDatePickersListeners(v);
         setCheckboxListener(v);
         setApplyChangesButtonListener(v);
+    }
+
+    private void setDeleteJobButtonListener(View v) {
+        v.findViewById(R.id.edit_job_delete_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((AddJobFragmentListener) getActivity()).onJobDeleted(selectedJob);
+            }
+        });
     }
 
     private void setJobPositionsSpinnerListeners(final View v) {
@@ -179,15 +224,27 @@ public class AddJobFragment extends Fragment {
     }
 
     private void setApplyChangesButtonListener(final View parentView) {
-        parentView.findViewById(R.id.edit_job_apply_changes_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput(parentView)) {
-                    UserJob job = buildJobFromInput(parentView);
-                    ((AddJobFragmentListener) getActivity()).onApplyChangesButtonPressed(job);
+        if (selectedJob != null) {
+            parentView.findViewById(R.id.edit_job_apply_changes_fab).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validateInput(parentView)) {
+                        UserJob job = buildJobFromInput(parentView);
+                        ((AddJobFragmentListener) getActivity()).onJobEdited(selectedJob, job);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            parentView.findViewById(R.id.edit_job_apply_changes_fab).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validateInput(parentView)) {
+                        UserJob job = buildJobFromInput(parentView);
+                        ((AddJobFragmentListener) getActivity()).onNewJobAdded(job);
+                    }
+                }
+            });
+        }
     }
 
     private void openDatePickerDialog() {

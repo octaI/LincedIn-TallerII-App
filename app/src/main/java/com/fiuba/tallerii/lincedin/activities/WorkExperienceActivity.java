@@ -1,6 +1,11 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,15 +24,11 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
@@ -90,23 +91,125 @@ public class WorkExperienceActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    private void showAddJobFragment() {
+    private void showAddJobFragment(@Nullable UserJob jobSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, new AddJobFragment());
+        transaction.replace(R.id.work_experience_container_framelayout, AddJobFragment.newInstance(jobSelected));
         transaction.addToBackStack("AddJobFragment");
         transaction.commit();
     }
 
     @Override
     public void onAddJobButtonPressed() {
-        showAddJobFragment();
+        showAddJobFragment(null);
     }
 
     @Override
-    public void onApplyChangesButtonPressed(UserJob job) {
-        Log.i(TAG, "User job to save: " + new Gson().toJson(job));
-        user.jobs.add(job);  // TODO: 10/11/16 Find workaround for when the job is being edited, not created from scratch.
+    public void onJobRowClicked(UserJob job) {
+        showAddJobFragment(job);
+    }
 
+    @Override
+    public void onNewJobAdded(final UserJob job) {
+        Log.d(TAG, "User job to add: " + new Gson().toJson(job));
+        user.jobs.add(job);
+        requestUserProfileEdition(
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        Log.i(TAG, "The job was added successfully!");
+                        showAllJobsFragment();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        user.jobs.remove(job);
+                        showAllJobsFragment();
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onJobEdited(final UserJob previousJob, final UserJob updatedJob) {
+        Log.d(TAG, "User job to edit: from " + new Gson().toJson(previousJob) + " to " + new Gson().toJson(updatedJob));
+        user.jobs.remove(previousJob);
+        user.jobs.add(updatedJob);
+        requestUserProfileEdition(
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        Log.i(TAG, "The job was edited successfully!");
+                        showAllJobsFragment();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        user.jobs.remove(updatedJob);
+                        user.jobs.add(previousJob);
+                        showAllJobsFragment();
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onJobDeleted(final UserJob job) {
+        showDeleteJobConfirmationDialog(job);
+    }
+
+    private void showDeleteJobConfirmationDialog(final UserJob job) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.are_you_sure_you_want_to_delete_job))
+                .setMessage(getString(R.string.this_change_cannot_be_reverted))
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        confirmJobDeletion(job);
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+            }
+        });
+        dialog.show();
+    }
+
+    private void confirmJobDeletion(final UserJob job) {
+        Log.d(TAG, "User job to delete: " + new Gson().toJson(job));
+        user.jobs.remove(job);
+        requestUserProfileEdition(
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        Log.i(TAG, "The job was deleted successfully!");
+                        showAllJobsFragment();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        user.jobs.add(job);
+                        showAllJobsFragment();
+                    }
+                }
+        );
+    }
+
+    private void requestUserProfileEdition(Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = "http://"
                 + getStringFromSharedPreferences(this, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
@@ -119,19 +222,8 @@ public class WorkExperienceActivity extends AppCompatActivity
                     url,
                     requestParams,
                     new JSONObject(new Gson().toJson(user)),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            showAllJobsFragment();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                            showAllJobsFragment();
-                        }
-                    },
+                    successListener,
+                    errorListener,
                     "EditUserProfile"
             );
         } catch (JSONException e) {

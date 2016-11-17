@@ -43,6 +43,8 @@ public class UserProfileFragment extends Fragment {
 
     private static final String ARG_USER_ID = "USER_ID";
 
+    private View convertView;
+
     private User user;
     private boolean isOwnProfile;
 
@@ -72,16 +74,24 @@ public class UserProfileFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Profile could be updated from other activities, e.g. WorkExperience, Skills, etc.
+        requestUserProfile();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_user_profile, container, false);
+        convertView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
-        setAdapters(v);
-        setButtonsListeners(v);
-        setButtonsVisibility(v);
-        requestUserProfile(v);
+        setAdapters(convertView);
+        setButtonsListeners(convertView);
+        setButtonsVisibility(convertView);
+        requestUserProfile();
 
-        return v;
+        return convertView;
     }
 
     private void setIsOwnProfileFlag() {
@@ -116,38 +126,40 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private void requestUserProfile(final View v) {
-        final Map<String, String> requestParams = new HashMap<>();
-        final String url = "http://"
-                + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                + ":" + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
-                + "/user"
-                + "/me";
-        HttpRequestHelper.get(
-                url,
-                requestParams,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Log.d(TAG, gson.toJson(response));
+    private void requestUserProfile() {
+        if (convertView != null) {
+            final Map<String, String> requestParams = new HashMap<>();
+            final String url = "http://"
+                    + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
+                    + ":" + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
+                    + "/user"
+                    + "/me";
+            HttpRequestHelper.get(
+                    url,
+                    requestParams,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Gson gson = new Gson();
+                            Log.d(TAG, gson.toJson(response));
 
-                        user = gson.fromJson(response.toString(), User.class);
-                        populateProfile(v, user);
-                        setListeners(v, user);
-                        refreshLoadingIndicator(v, false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                        error.printStackTrace();
-                        refreshLoadingIndicator(v, false);
-                    }
-                },
-                "UserProfileRequest"
-        );
+                            user = gson.fromJson(response.toString(), User.class);
+                            populateProfile(convertView, user);
+                            setListeners(convertView, user);
+                            refreshLoadingIndicator(convertView, false);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, error.toString());
+                            error.printStackTrace();
+                            refreshLoadingIndicator(convertView, false);
+                        }
+                    },
+                    "UserProfileRequest"
+            );
+        }
     }
 
     private void setAdapters(View v) {
