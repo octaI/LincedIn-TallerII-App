@@ -30,6 +30,7 @@ public class EducationActivity extends AppCompatActivity {
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
     private User user = new User();
+    private boolean isOwnProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +70,20 @@ public class EducationActivity extends AppCompatActivity {
         if (userJson != null) {
             user = new Gson().fromJson(userJson, User.class);
         }
+        isOwnProfile = getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false);
         return user;
     }
 
     private void showAllEducationFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AllEducationFragment.newInstance(user.education));
+        transaction.replace(R.id.education_container_framelayout, AllEducationFragment.newInstance(user.education, isOwnProfile));
         transaction.addToBackStack("AllEducationFragment");
         transaction.commit();
     }
 
     private void showAddEducationFragment(@Nullable UserEducation educationSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AddEducationFragment.newInstance(educationSelected));
+        transaction.replace(R.id.education_container_framelayout, AddEducationFragment.newInstance(educationSelected));
         transaction.addToBackStack("AddEducationFragment");
         transaction.commit();
     }
