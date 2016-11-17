@@ -41,6 +41,7 @@
     <string name="add_new_job">Agregar nuevo cargo</string>
     <string name="delete_job">Eliminar cargo</string>
     <string name="are_you_sure_you_want_to_delete_job">¿Estás seguro de que quieres eliminar el cargo?</string>
+    <string name="are_you_sure_you_want_to_delete_education">¿Estás seguro de que quieres eliminar el curso?</string>
     <string name="this_change_cannot_be_reverted">Este cambio no puede ser revertido</string>
     <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
     <string name="education">Educación</string>

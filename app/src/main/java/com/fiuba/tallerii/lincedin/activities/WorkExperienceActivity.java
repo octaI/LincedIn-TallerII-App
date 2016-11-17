@@ -18,21 +18,12 @@ import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
 import com.fiuba.tallerii.lincedin.fragments.AllJobsFragment;
-import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
-import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
-import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class WorkExperienceActivity extends AppCompatActivity
         implements AllJobsFragment.AllJobsFragmentListener, AddJobFragment.AddJobFragmentListener {
@@ -78,9 +69,9 @@ public class WorkExperienceActivity extends AppCompatActivity
     }
 
     private User getUserFromIntent() {
-        String jobsJson = getIntent().getStringExtra(ARG_USER);
-        if (jobsJson != null) {
-            user = new Gson().fromJson(jobsJson, User.class);
+        String userJson = getIntent().getStringExtra(ARG_USER);
+        if (userJson != null) {
+            user = new Gson().fromJson(userJson, User.class);
         }
         return user;
     }
