@@ -78,6 +78,8 @@ public class AllJobsFragment extends Fragment {
     private void setButtonVisibility(View v) {
         if (getArguments() != null) {
             if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
+                v.findViewById(R.id.all_jobs_add_job_fab).setVisibility(View.VISIBLE);
+            } else {
                 v.findViewById(R.id.all_jobs_add_job_fab).setVisibility(View.GONE);
             }
         }

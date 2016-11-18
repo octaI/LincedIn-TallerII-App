@@ -78,6 +78,8 @@ public class AllEducationFragment extends Fragment {
     private void setButtonVisibility(View v) {
         if (getArguments() != null) {
             if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
+                v.findViewById(R.id.all_jobs_add_education_fab).setVisibility(View.VISIBLE);
+            } else {
                 v.findViewById(R.id.all_jobs_add_education_fab).setVisibility(View.GONE);
             }
         }

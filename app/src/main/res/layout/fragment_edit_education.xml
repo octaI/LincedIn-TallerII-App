@@ -33,57 +33,33 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="18sp"
-                android:text="@string/degree"/>
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/edit_education_degree_edittext"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                />
+                android:hint="@string/degree"/>
 
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="16sp"
-                android:text="@string/institute"/>
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/edit_education_school_edittext"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
-                />
+                android:hint="@string/institute"/>
 
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
         <CheckBox
             android:id="@+id/edit_education_current_education_checkbox"
@@ -103,19 +79,25 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
 
-            <EditText
-                android:id="@+id/edit_education_since_date_edittext"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:gravity="center"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorAccent"
-                android:background="@android:color/transparent"
-                android:textSize="18sp"
-                android:hint="@string/since"
-                android:focusableInTouchMode="false"/>
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_education_since_date_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:textColor="@color/colorAccent"
+                    android:background="@android:color/transparent"
+                    android:textSize="18sp"
+                    android:hint="@string/since"
+                    android:text="@string/date"
+                    android:focusableInTouchMode="false"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <View
                 android:id="@+id/edit_education_since_to_dates_separator"
@@ -123,19 +105,25 @@
                 android:layout_marginRight="18dp"
                 android:layout_marginLeft="18dp"/>
 
-            <EditText
-                android:id="@+id/edit_education_until_date_edittext"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
-                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:inputType="date"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorAccent"
-                android:background="@android:color/transparent"
-                android:textSize="18sp"
-                android:hint="@string/until"
-                android:focusableInTouchMode="false"/>
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_education_until_date_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:textColor="@color/colorAccent"
+                    android:background="@android:color/transparent"
+                    android:textSize="18sp"
+                    android:hint="@string/until"
+                    android:text="@string/date"
+                    android:focusableInTouchMode="false"/>
+
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 

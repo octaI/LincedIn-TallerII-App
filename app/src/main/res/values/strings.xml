@@ -28,6 +28,7 @@
     <string name="position">Posición</string>
     <string name="since">Desde</string>
     <string name="until">Hasta</string>
+    <string name="date">Fecha</string>
     <string name="since_date">desde :1</string>
     <string name="since_date_to_date">desde :1 hasta :2</string>
     <string name="start_date_after_end_date">La fecha de inicio es mayor a la fecha de finalización</string>
