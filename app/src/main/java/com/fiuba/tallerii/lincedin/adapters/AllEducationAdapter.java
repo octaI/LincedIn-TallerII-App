@@ -32,6 +32,9 @@ public class AllEducationAdapter extends BaseAdapter {
     }
 
     public void setDataset(List<UserEducation> dataset) {
+        if (dataset == null) {
+            dataset = new ArrayList<>();
+        }
         this.dataset = dataset;
         Collections.sort(this.dataset, new EducationComparator());
     }

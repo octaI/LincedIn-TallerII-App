@@ -32,6 +32,9 @@ public class AllJobsAdapter extends BaseAdapter {
     }
 
     public void setDataset(List<UserJob> dataset) {
+        if (dataset == null) {
+            dataset = new ArrayList<>();
+        }
         this.dataset = dataset;
         Collections.sort(this.dataset, new JobComparator());
     }
