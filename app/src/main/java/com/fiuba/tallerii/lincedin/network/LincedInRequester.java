@@ -1,8 +1,10 @@
 package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
@@ -42,5 +44,20 @@ public class LincedInRequester {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void getJobPositions(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/shared"
+                + "/job_positions";
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetJobPositions"
+        );
     }
 }

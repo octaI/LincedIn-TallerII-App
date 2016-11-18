@@ -23,6 +23,7 @@ import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.model.user.UserJobPosition;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
@@ -108,15 +109,8 @@ public class EditJobFragment extends Fragment {
     }
 
     private void populatePositionSpinner(final View v) {
-        final Map<String, String> requestParams = new HashMap<>();
-        final String url = "http://"
-                + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                + ":" + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
-                + "/shared"
-                + "/job_positions";
-        HttpRequestHelper.get(
-                url,
-                requestParams,
+        LincedInRequester.getJobPositions(
+                getContext(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -139,8 +133,7 @@ public class EditJobFragment extends Fragment {
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                     }
-                },
-                "UserJobPositionsRequest"
+                }
         );
     }
 
