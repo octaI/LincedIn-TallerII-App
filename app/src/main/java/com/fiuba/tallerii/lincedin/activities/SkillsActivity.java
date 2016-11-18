@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.fragments.AllSkillsFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -90,16 +91,21 @@ public class SkillsActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private void showAddSkillFragment() {
+    private void showEditSkillFragment(@Nullable UserSkill skillSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.skills_container_framelayout, new AddSkillFragment());
+        transaction.replace(R.id.skills_container_framelayout, EditSkillFragment.newInstance(skillSelected));
         transaction.addToBackStack("AddSkillFragment");
         transaction.commit();
     }
 
     @Override
     public void onAddSkillButtonPressed() {
-        showAddSkillFragment();
+        showEditSkillFragment(null);
+    }
+
+    @Override
+    public void onSkillRowClicked(UserSkill skill) {
+        showEditSkillFragment(skill);
     }
 
     @Override
@@ -122,6 +128,34 @@ public class SkillsActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                         user.skills.remove(skill);
+                        showAllSkillsFragment();
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onSkillEdited(final UserSkill previousSkill, final UserSkill updatedSkill) {
+        Log.d(TAG, "User skill to edit: from " + new Gson().toJson(previousSkill) + " to " + new Gson().toJson(updatedSkill));
+        user.skills.remove(previousSkill);
+        user.skills.add(updatedSkill);
+        LincedInRequester.editUserProfile(
+                user,
+                this,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        Log.i(TAG, "The skill was edited successfully!");
+                        showAllSkillsFragment();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        user.skills.remove(updatedSkill);
+                        user.skills.add(previousSkill);
                         showAllSkillsFragment();
                     }
                 }
