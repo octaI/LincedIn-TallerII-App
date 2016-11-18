@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.model.user.User;
+import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.google.gson.Gson;
 
@@ -23,7 +24,7 @@ import org.json.JSONObject;
 
 public class SkillsActivity extends AppCompatActivity {
 
-    private static final String TAG = "WorkExperience";
+    private static final String TAG = "Skills";
 
     public static final String ARG_USER = "USER";
     public static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
@@ -34,10 +35,10 @@ public class SkillsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_work_experience);
+        setContentView(R.layout.activity_skills);
         setToolbar();
         getUserFromIntent();
-        showAllJobsFragment();
+        showAllSkillsFragment();
     }
 
     @Override
@@ -57,15 +58,15 @@ public class SkillsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
     }
 
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_work_experience);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_skills);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -82,34 +83,29 @@ public class SkillsActivity extends AppCompatActivity {
         return user;
     }
 
-    private void showAllJobsFragment() {
+    private void showAllSkillsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AllJobsFragment.newInstance(user.jobs, isOwnProfile));
-        transaction.addToBackStack("AllJobsFragment");
+        transaction.replace(R.id.skills_container_framelayout, AllSkillsFragment.newInstance(user.skills, isOwnProfile));
+        transaction.addToBackStack("AllSkillsFragment");
         transaction.commit();
     }
 
-    private void showEditJobFragment(@Nullable UserJob jobSelected) {
+    private void showAddSkillFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, EditJobFragment.newInstance(jobSelected));
-        transaction.addToBackStack("EditJobFragment");
+        transaction.replace(R.id.skills_container_framelayout, new AddSkillFragment());
+        transaction.addToBackStack("AddSkillFragment");
         transaction.commit();
     }
 
     @Override
-    public void onAddJobButtonPressed() {
-        showEditJobFragment(null);
+    public void onAddSkillButtonPressed() {
+        showAddSkillFragment();
     }
 
     @Override
-    public void onJobRowClicked(UserJob job) {
-        showEditJobFragment(job);
-    }
-
-    @Override
-    public void onNewJobAdded(final UserJob job) {
-        Log.d(TAG, "User job to add: " + new Gson().toJson(job));
-        user.jobs.add(job);
+    public void onNewSkillAdded(final UserSkill skill) {
+        Log.d(TAG, "User skill to add: " + new Gson().toJson(skill));
+        user.skills.add(skill);
         LincedInRequester.editUserProfile(
                 user,
                 this,
@@ -117,62 +113,34 @@ public class SkillsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
-                        Log.i(TAG, "The job was added successfully!");
-                        showAllJobsFragment();
+                        Log.i(TAG, "The skill was added successfully!");
+                        showAllSkillsFragment();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        user.jobs.remove(job);
-                        showAllJobsFragment();
+                        user.skills.remove(skill);
+                        showAllSkillsFragment();
                     }
                 }
         );
     }
 
     @Override
-    public void onJobEdited(final UserJob previousJob, final UserJob updatedJob) {
-        Log.d(TAG, "User job to edit: from " + new Gson().toJson(previousJob) + " to " + new Gson().toJson(updatedJob));
-        user.jobs.remove(previousJob);
-        user.jobs.add(updatedJob);
-        LincedInRequester.editUserProfile(
-                user,
-                this,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-                        Log.i(TAG, "The job was edited successfully!");
-                        showAllJobsFragment();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                        user.jobs.remove(updatedJob);
-                        user.jobs.add(previousJob);
-                        showAllJobsFragment();
-                    }
-                }
-        );
+    public void onSkillDeleted(final UserSkill skill) {
+        showDeleteSkillConfirmationDialog(skill);
     }
 
-    @Override
-    public void onJobDeleted(final UserJob job) {
-        showDeleteJobConfirmationDialog(job);
-    }
-
-    private void showDeleteJobConfirmationDialog(final UserJob job) {
+    private void showDeleteSkillConfirmationDialog(final UserSkill skill) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.are_you_sure_you_want_to_delete_job))
+        builder.setTitle(getString(R.string.are_you_sure_you_want_to_delete_skill))
                 .setMessage(getString(R.string.this_change_cannot_be_reverted))
                 .setCancelable(true)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        confirmJobDeletion(job);
+                        confirmSkillDeletion(skill);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null);
@@ -188,9 +156,9 @@ public class SkillsActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void confirmJobDeletion(final UserJob job) {
-        Log.d(TAG, "User job to delete: " + new Gson().toJson(job));
-        user.jobs.remove(job);
+    private void confirmSkillDeletion(final UserSkill skill) {
+        Log.d(TAG, "User skill to delete: " + new Gson().toJson(skill));
+        user.skills.remove(skill);
         LincedInRequester.editUserProfile(
                 user,
                 this,
@@ -198,16 +166,16 @@ public class SkillsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
-                        Log.i(TAG, "The job was deleted successfully!");
-                        showAllJobsFragment();
+                        Log.i(TAG, "The skill was deleted successfully!");
+                        showAllSkillsFragment();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        user.jobs.add(job);
-                        showAllJobsFragment();
+                        user.skills.add(skill);
+                        showAllSkillsFragment();
                     }
                 }
         );
