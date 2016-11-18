@@ -46,7 +46,7 @@ public class LincedInRequester {
         }
     }
 
-    public static void getJobPositions(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void getAllJobPositions(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
                 + "/shared"
@@ -57,7 +57,22 @@ public class LincedInRequester {
                 requestParams,
                 successListener,
                 errorListener,
-                "GetJobPositions"
+                "GetAllJobPositions"
+        );
+    }
+
+    public static void getAllSkills(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/shared"
+                + "/skills";
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetAllSkills"
         );
     }
 }

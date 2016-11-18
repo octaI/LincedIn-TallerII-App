@@ -41,8 +41,10 @@
     <string name="location">Ubicación</string>
     <string name="work_experience">Experiencia laboral</string>
     <string name="edit_job">Editar cargo</string>
+    <string name="edit_skill">Editar aptitud</string>
     <string name="edit_education">Editar curso</string>
     <string name="add_new_job">Agregar nuevo cargo</string>
+    <string name="add_new_skill">Agregar nueva aptitud</string>
     <string name="add_new_education">Agregar nuevo curso</string>
     <string name="delete_job">Eliminar cargo</string>
     <string name="delete_education">Eliminar curso</string>

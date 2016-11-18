@@ -22,10 +22,8 @@ import com.fiuba.tallerii.lincedin.adapters.JobPositionsSpinnerAdapter;
 import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.model.user.UserJobPosition;
-import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
-import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,11 +35,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class EditJobFragment extends Fragment {
 
@@ -109,7 +103,7 @@ public class EditJobFragment extends Fragment {
     }
 
     private void populatePositionSpinner(final View v) {
-        LincedInRequester.getJobPositions(
+        LincedInRequester.getAllJobPositions(
                 getContext(),
                 new Response.Listener<JSONObject>() {
                     @Override

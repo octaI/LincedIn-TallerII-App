@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.AllSkillsFragment;
+import com.fiuba.tallerii.lincedin.fragments.EditSkillFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -23,7 +24,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-public class SkillsActivity extends AppCompatActivity {
+public class SkillsActivity extends AppCompatActivity
+        implements AllSkillsFragment.AllSkillsFragmentListener, EditSkillFragment.EditSkillFragmentListener {
 
     private static final String TAG = "Skills";
 
