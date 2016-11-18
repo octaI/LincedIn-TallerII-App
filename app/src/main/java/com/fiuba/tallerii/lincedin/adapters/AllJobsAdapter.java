@@ -32,6 +32,9 @@ public class AllJobsAdapter extends BaseAdapter {
     }
 
     public void setDataset(List<UserJob> dataset) {
+        if (dataset == null) {
+            dataset = new ArrayList<>();
+        }
         this.dataset = dataset;
         Collections.sort(this.dataset, new JobComparator());
     }
@@ -78,8 +81,6 @@ public class AllJobsAdapter extends BaseAdapter {
 
         return convertView;
     }
-
-    // TODO: 09/11/16 onLongClickListener to edit job
 
     private class JobComparator implements Comparator<UserJob> {
 

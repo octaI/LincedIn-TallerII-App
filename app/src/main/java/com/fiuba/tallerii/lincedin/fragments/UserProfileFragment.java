@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.EducationActivity;
 import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
@@ -105,15 +106,13 @@ public class UserProfileFragment extends Fragment {
                 openUserWorkExperience();
             }
         });
-    }
 
-    private void openUserWorkExperience() {
-        Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
-        if (user != null) {
-            workExperienceIntent.putExtra(WorkExperienceActivity.ARG_USER, new Gson().toJson(user));
-        }
-        workExperienceIntent.putExtra(WorkExperienceActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
-        startActivity(workExperienceIntent);
+        parentView.findViewById(R.id.user_profile_education_see_more_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserEducation();
+            }
+        });
     }
 
     private void setButtonsVisibility(View v) {
@@ -145,7 +144,6 @@ public class UserProfileFragment extends Fragment {
 
                             user = gson.fromJson(response.toString(), User.class);
                             populateProfile(convertView, user);
-                            setListeners(convertView, user);
                             refreshLoadingIndicator(convertView, false);
                         }
                     },
@@ -175,10 +173,6 @@ public class UserProfileFragment extends Fragment {
         populateWorkExperience(user);
         populateEducation(user);
         populateSkills(user);
-    }
-
-    private void setListeners(View v, User user) {
-        // TODO: 05/11/16 Implement logic for 'show more' buttons.
     }
 
     private void populateBasicInfo(View v, User user) {
@@ -252,6 +246,24 @@ public class UserProfileFragment extends Fragment {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.GONE);
         }
+    }
+
+    private void openUserWorkExperience() {
+        Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
+        if (user != null) {
+            workExperienceIntent.putExtra(WorkExperienceActivity.ARG_USER, new Gson().toJson(user));
+        }
+        workExperienceIntent.putExtra(WorkExperienceActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
+        startActivity(workExperienceIntent);
+    }
+
+    private void openUserEducation() {
+        Intent educationIntent = new Intent(getContext(), EducationActivity.class);
+        if (user != null) {
+            educationIntent.putExtra(EducationActivity.ARG_USER, new Gson().toJson(user));
+        }
+        educationIntent.putExtra(EducationActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
+        startActivity(educationIntent);
     }
 
 }

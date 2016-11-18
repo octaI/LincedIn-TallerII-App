@@ -14,7 +14,7 @@
             android:layout_marginBottom="16dp">
 
             <TextView
-                android:id="@+id/edit_job_title_textview"
+                android:id="@+id/edit_education_title_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -24,7 +24,7 @@
                 android:text="@string/title"/>
 
             <ImageButton
-                android:id="@+id/edit_job_delete_button"
+                android:id="@+id/edit_education_delete_button"
                 style="@style/ImageButtonMaterialAccent"
                 android:src="@drawable/ic_delete_forever"
                 android:layout_centerVertical="true"
@@ -35,34 +35,34 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_height="wrap_content">
+
             <EditText
-                android:id="@+id/edit_job_company_edittext"
+                android:id="@+id/edit_education_degree_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:textSize="18sp"
-                android:hint="@string/company"/>
+                android:hint="@string/degree"/>
+
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/edit_job_positions_dropdown"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/edit_job_position_description_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:textColor="@color/grey"
-            android:text="@string/description"
-            android:visibility="gone"/>
+            <EditText
+                android:id="@+id/edit_education_school_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="18sp"
+                android:hint="@string/institute"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <CheckBox
-            android:id="@+id/edit_job_current_work_checkbox"
+            android:id="@+id/edit_education_current_education_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/edit_job_since_date_edittext"
+                    android:id="@+id/edit_education_since_date_edittext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="date"
@@ -100,7 +100,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <View
-                android:id="@+id/edit_job_since_to_dates_separator"
+                android:id="@+id/edit_education_since_to_dates_separator"
                 style="@style/ThinHorizontalSeparator"
                 android:layout_marginRight="18dp"
                 android:layout_marginLeft="18dp"/>
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/edit_job_until_date_edittext"
+                    android:id="@+id/edit_education_until_date_edittext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="date"
@@ -124,13 +124,13 @@
                     android:focusableInTouchMode="false"/>
 
             </android.support.design.widget.TextInputLayout>
-            
+
         </LinearLayout>
 
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/edit_job_apply_changes_fab"
+        android:id="@+id/edit_education_apply_changes_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"

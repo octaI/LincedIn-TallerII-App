@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -43,15 +42,15 @@ import java.util.Map;
 
 import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
-public class AddJobFragment extends Fragment {
+public class EditJobFragment extends Fragment {
 
-    public interface AddJobFragmentListener {
+    public interface EditJobFragmentListener {
         void onNewJobAdded(UserJob job);
         void onJobEdited(UserJob previousJob, UserJob updatedJob);
         void onJobDeleted(UserJob job);
     }
 
-    private static final String TAG = AddJobFragment.class.getName();
+    private static final String TAG = EditJobFragment.class.getName();
 
     public static final String ARG_SELECTED_JOB = "SELECTED_JOB";
     private UserJob selectedJob = null;
@@ -60,10 +59,10 @@ public class AddJobFragment extends Fragment {
     private static final String UNTIL_DATE = "untilDate";
     private String lastDatePickerClicked;
 
-    public AddJobFragment() {}
+    public EditJobFragment() {}
 
-    public static AddJobFragment newInstance(UserJob job) {
-        AddJobFragment fragment = new AddJobFragment();
+    public static EditJobFragment newInstance(UserJob job) {
+        EditJobFragment fragment = new EditJobFragment();
         if (job != null) {
             Bundle args = new Bundle();
             args.putString(ARG_SELECTED_JOB, new Gson().toJson(job));
@@ -162,7 +161,7 @@ public class AddJobFragment extends Fragment {
         v.findViewById(R.id.edit_job_delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((AddJobFragmentListener) getActivity()).onJobDeleted(selectedJob);
+                ((EditJobFragmentListener) getActivity()).onJobDeleted(selectedJob);
             }
         });
     }
@@ -230,7 +229,7 @@ public class AddJobFragment extends Fragment {
                 public void onClick(View v) {
                     if (validateInput(parentView)) {
                         UserJob job = buildJobFromInput(parentView);
-                        ((AddJobFragmentListener) getActivity()).onJobEdited(selectedJob, job);
+                        ((EditJobFragmentListener) getActivity()).onJobEdited(selectedJob, job);
                     }
                 }
             });
@@ -240,7 +239,7 @@ public class AddJobFragment extends Fragment {
                 public void onClick(View v) {
                     if (validateInput(parentView)) {
                         UserJob job = buildJobFromInput(parentView);
-                        ((AddJobFragmentListener) getActivity()).onNewJobAdded(job);
+                        ((EditJobFragmentListener) getActivity()).onNewJobAdded(job);
                     }
                 }
             });
@@ -271,16 +270,16 @@ public class AddJobFragment extends Fragment {
         EditText sinceDateEditText = ((EditText) v.findViewById(R.id.edit_job_since_date_edittext));
         EditText untilDateEditText = ((EditText) v.findViewById(R.id.edit_job_until_date_edittext));
 
-        if (sinceDateEditText.getText().toString().equals("")) {
-            sinceDateEditText.requestFocus();
-            sinceDateEditText.setError(getString(R.string.field_is_required));
+        if (sinceDateEditText.getText().toString().equals(getString(R.string.date)) ||
+                sinceDateEditText.getText().toString().equals("")) {
+            Snackbar.make(v, getString(R.string.must_spicify_start_date), Snackbar.LENGTH_SHORT).show();
             return false;
         }
 
         if ( !((CheckBox) v.findViewById(R.id.edit_job_current_work_checkbox)).isChecked() ) {
-            if (untilDateEditText.getText().toString().equals("")) {
-                untilDateEditText.requestFocus();
-                untilDateEditText.setError(getString(R.string.field_is_required));
+            if (untilDateEditText.getText().toString().equals(getString(R.string.date)) ||
+                    untilDateEditText.getText().toString().equals("")) {
+                Snackbar.make(v, getString(R.string.must_spicify_end_date), Snackbar.LENGTH_SHORT).show();
                 return false;
             }
 
