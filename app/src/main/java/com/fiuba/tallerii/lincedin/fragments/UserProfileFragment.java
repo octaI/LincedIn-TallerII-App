@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.EducationActivity;
+import com.fiuba.tallerii.lincedin.activities.SkillsActivity;
 import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
@@ -111,6 +112,13 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openUserEducation();
+            }
+        });
+
+        parentView.findViewById(R.id.user_profile_skills_see_more_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserSkills();
             }
         });
     }
@@ -264,6 +272,15 @@ public class UserProfileFragment extends Fragment {
         }
         educationIntent.putExtra(EducationActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
         startActivity(educationIntent);
+    }
+
+    private void openUserSkills() {
+        Intent skillsIntent = new Intent(getContext(), SkillsActivity.class);
+        if (user != null) {
+            skillsIntent.putExtra(SkillsActivity.ARG_USER, new Gson().toJson(user));
+        }
+        skillsIntent.putExtra(SkillsActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
+        startActivity(skillsIntent);
     }
 
 }

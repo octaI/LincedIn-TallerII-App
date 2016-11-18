@@ -61,9 +61,9 @@ public class AllSkillsAdapter extends BaseAdapter {
 
         UserSkill currentSkill = getItem(position);
         if (currentSkill != null) {
-            ((TextView) convertView.findViewById(R.id.work_experience_row_position_name_textview)).setText(currentSkill.name);
-            ((TextView) convertView.findViewById(R.id.work_experience_row_position_category_textview)).setText(currentSkill.category);
-            ((TextView) convertView.findViewById(R.id.work_experience_row_position_description_textview)).setText(currentSkill.description);
+            ((TextView) convertView.findViewById(R.id.skills_row_name_textview)).setText(currentSkill.name);
+            ((TextView) convertView.findViewById(R.id.skills_row_category_textview)).setText(currentSkill.category);
+            ((TextView) convertView.findViewById(R.id.skills_row_description_textview)).setText(currentSkill.description);
         }
 
         return convertView;

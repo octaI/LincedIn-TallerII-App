@@ -50,7 +50,7 @@
     <string name="delete_education">Eliminar curso</string>
     <string name="are_you_sure_you_want_to_delete_job">¿Estás seguro de que quieres eliminar este cargo?</string>
     <string name="are_you_sure_you_want_to_delete_education">¿Estás seguro de que quieres eliminar este curso?</string>
-    <string name="are_you_sure_you_want_to_delete_skill">¿Estás seguro de que quieres eliminar esta habilidad?</string>
+    <string name="are_you_sure_you_want_to_delete_skill">¿Estás seguro de que quieres eliminar esta aptitud?</string>
     <string name="this_change_cannot_be_reverted">Este cambio no puede ser revertido</string>
     <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
     <string name="education">Educación</string>
