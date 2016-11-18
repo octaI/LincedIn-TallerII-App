@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.fragments.AddJobFragment;
+import com.fiuba.tallerii.lincedin.fragments.EditJobFragment;
 import com.fiuba.tallerii.lincedin.fragments.AllJobsFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 public class WorkExperienceActivity extends AppCompatActivity
-        implements AllJobsFragment.AllJobsFragmentListener, AddJobFragment.AddJobFragmentListener {
+        implements AllJobsFragment.AllJobsFragmentListener, EditJobFragment.EditJobFragmentListener {
 
     private static final String TAG = "WorkExperience";
 
@@ -84,21 +84,21 @@ public class WorkExperienceActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    private void showAddJobFragment(@Nullable UserJob jobSelected) {
+    private void showEditJobFragment(@Nullable UserJob jobSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.work_experience_container_framelayout, AddJobFragment.newInstance(jobSelected));
-        transaction.addToBackStack("AddJobFragment");
+        transaction.replace(R.id.work_experience_container_framelayout, EditJobFragment.newInstance(jobSelected));
+        transaction.addToBackStack("EditJobFragment");
         transaction.commit();
     }
 
     @Override
     public void onAddJobButtonPressed() {
-        showAddJobFragment(null);
+        showEditJobFragment(null);
     }
 
     @Override
     public void onJobRowClicked(UserJob job) {
-        showAddJobFragment(job);
+        showEditJobFragment(job);
     }
 
     @Override

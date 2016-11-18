@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.AllEducationFragment;
+import com.fiuba.tallerii.lincedin.fragments.EditEducationFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -24,7 +25,7 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 
 public class EducationActivity extends AppCompatActivity
-        implements AllEducationFragment.AllEducationFragmentListener {
+        implements AllEducationFragment.AllEducationFragmentListener, EditEducationFragment.EditEducationFragmentListener {
 
     private static final String TAG = "Education";
 
@@ -83,27 +84,27 @@ public class EducationActivity extends AppCompatActivity
         transaction.commit();
     }
 
-    private void showAddEducationFragment(@Nullable UserEducation educationSelected) {
+    private void showEditEducationFragment(@Nullable UserEducation educationSelected) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.education_container_framelayout, AddEducationFragment.newInstance(educationSelected));
-        transaction.addToBackStack("AddEducationFragment");
+        transaction.replace(R.id.education_container_framelayout, EditEducationFragment.newInstance(educationSelected));
+        transaction.addToBackStack("EditEducationFragment");
         transaction.commit();
     }
 
     @Override
     public void onAddEducationButtonPressed() {
-        showAddEducationFragment(null);
+        showEditEducationFragment(null);
     }
 
     @Override
     public void onEducationRowClicked(UserEducation education) {
-        showAddEducationFragment(education);
+        showEditEducationFragment(education);
     }
 
     @Override
     public void onNewEducationAdded(final UserEducation education) {
         Log.d(TAG, "User education to add: " + new Gson().toJson(education));
-        user.jobs.add(education);
+        user.education.add(education);
         LincedInRequester.editUserProfile(
                 user,
                 this,

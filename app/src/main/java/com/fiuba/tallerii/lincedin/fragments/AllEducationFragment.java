@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.adapters.AllEducationAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

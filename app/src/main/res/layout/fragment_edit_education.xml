@@ -1,0 +1,153 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/edit_education_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:textSize="24sp"
+                android:textColor="@color/darkGrey"
+                android:textStyle="bold"
+                android:text="@string/title"/>
+
+            <ImageButton
+                android:id="@+id/edit_education_delete_button"
+                style="@style/ImageButtonMaterialAccent"
+                android:src="@drawable/ic_delete_forever"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="18sp"
+                android:text="@string/degree"/>
+
+            <EditText
+                android:id="@+id/edit_education_degree_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="16sp"
+                android:text="@string/institute"/>
+
+            <EditText
+                android:id="@+id/edit_education_school_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/edit_education_current_education_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/current_work"
+            android:textSize="18sp"
+            android:checked="false"
+            style="@style/Theme.AppCompat.Dialog"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/edit_education_since_date_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:inputType="date"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorAccent"
+                android:background="@android:color/transparent"
+                android:textSize="18sp"
+                android:hint="@string/since"
+                android:focusableInTouchMode="false"/>
+
+            <View
+                android:id="@+id/edit_education_since_to_dates_separator"
+                style="@style/ThinHorizontalSeparator"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="18dp"/>
+
+            <EditText
+                android:id="@+id/edit_education_until_date_edittext"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="date"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorAccent"
+                android:background="@android:color/transparent"
+                android:textSize="18sp"
+                android:hint="@string/until"
+                android:focusableInTouchMode="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/edit_education_apply_changes_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_done"
+        />
+
+</FrameLayout>
