@@ -53,6 +53,7 @@
     <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
     <string name="education">Educación</string>
     <string name="skills">Aptitudes</string>
+    <string name="skill">Aptitud</string>
     <string name="name">Nombre</string>
     <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
