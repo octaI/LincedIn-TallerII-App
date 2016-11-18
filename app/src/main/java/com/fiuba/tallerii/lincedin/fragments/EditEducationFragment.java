@@ -189,13 +189,15 @@ public class EditEducationFragment extends Fragment {
         EditText sinceDateEditText = ((EditText) v.findViewById(R.id.edit_education_since_date_edittext));
         EditText untilDateEditText = ((EditText) v.findViewById(R.id.edit_education_until_date_edittext));
 
-        if (sinceDateEditText.getText().toString().equals("")) {
+        if (sinceDateEditText.getText().toString().equals(getString(R.string.date)) ||
+                sinceDateEditText.getText().toString().equals("")) {
             Snackbar.make(v, getString(R.string.must_spicify_start_date), Snackbar.LENGTH_SHORT).show();
             return false;
         }
 
         if ( !((CheckBox) v.findViewById(R.id.edit_education_current_education_checkbox)).isChecked() ) {
-            if (untilDateEditText.getText().toString().equals("")) {
+            if (untilDateEditText.getText().toString().equals(getString(R.string.date)) ||
+                    untilDateEditText.getText().toString().equals("")) {
                 Snackbar.make(v, getString(R.string.must_spicify_end_date), Snackbar.LENGTH_SHORT).show();
                 return false;
             }
