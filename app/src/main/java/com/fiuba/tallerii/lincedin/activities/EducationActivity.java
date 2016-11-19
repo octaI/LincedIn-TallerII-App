@@ -41,13 +41,22 @@ public class EducationActivity extends AppCompatActivity
         setContentView(R.layout.activity_education);
         setToolbar();
         getUserFromIntent();
-        showAllEducationFragment();
+        showInitialFragment();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_empty, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -75,6 +84,14 @@ public class EducationActivity extends AppCompatActivity
         }
         isOwnProfile = getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false);
         return user;
+    }
+
+    private void showInitialFragment() {
+        if (user.education != null && !user.education.isEmpty()) {
+            showAllEducationFragment();
+        } else {
+            showEditEducationFragment(null);
+        }
     }
 
     private void showAllEducationFragment() {
@@ -119,6 +136,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.remove(education);
                         showAllEducationFragment();
@@ -146,6 +164,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.remove(updatedEducation);
                         user.education.add(previousEducation);
@@ -200,6 +219,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.add(education);
                         showAllEducationFragment();

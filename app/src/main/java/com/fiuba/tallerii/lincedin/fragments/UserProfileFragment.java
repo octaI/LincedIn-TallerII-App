@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -184,9 +185,9 @@ public class UserProfileFragment extends Fragment {
         populateBasicInfo(v, user);
         populateCurrentWork(v, user);
         populateBiography(v, user);
-        populateWorkExperience(user);
-        populateEducation(user);
-        populateSkills(user);
+        populateWorkExperience(v, user);
+        populateEducation(v, user);
+        populateSkills(v, user);
     }
 
     private void populateBasicInfo(View v, User user) {
@@ -217,7 +218,7 @@ public class UserProfileFragment extends Fragment {
         // TODO: 05/11/16 Set location when API supports it.
     }
 
-    private void populateWorkExperience(User user) {
+    private void populateWorkExperience(View v, User user) {
         List<UserJob> jobsToShow = !user.jobs.isEmpty() ?
                 user.jobs.subList(0, user.jobs.size() - 1) : user.jobs;
         if (user.isCurrentlyWorking()) {
@@ -225,6 +226,10 @@ public class UserProfileFragment extends Fragment {
         }
         userJobsAdapter.setDataset(jobsToShow);
         userJobsAdapter.notifyDataSetChanged();
+
+        if (userJobsAdapter.isEmpty()) {
+            ((Button) v.findViewById(R.id.user_profile_work_experience_see_more_button)).setText(getString(R.string.add));
+        }
     }
 
     private void populateCurrentWork(View v, User user) {
@@ -243,14 +248,22 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private void populateEducation(User user) {
+    private void populateEducation(View v, User user) {
         userEducationAdapter.setDataset(user.education);
         userEducationAdapter.notifyDataSetChanged();
+
+        if (userEducationAdapter.isEmpty()) {
+            ((Button) v.findViewById(R.id.user_profile_education_see_more_button)).setText(getString(R.string.add));
+        }
     }
 
-    private void populateSkills(User user) {
+    private void populateSkills(View v, User user) {
         userSkillsAdapter.setDataset(user.skills);
         userSkillsAdapter.notifyDataSetChanged();
+
+        if (userSkillsAdapter.isEmpty()) {
+            ((Button) v.findViewById(R.id.user_profile_skills_see_more_button)).setText(getString(R.string.add));
+        }
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {

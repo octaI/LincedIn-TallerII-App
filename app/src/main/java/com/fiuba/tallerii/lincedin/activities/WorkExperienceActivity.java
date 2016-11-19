@@ -41,7 +41,7 @@ public class WorkExperienceActivity extends AppCompatActivity
         setContentView(R.layout.activity_work_experience);
         setToolbar();
         getUserFromIntent();
-        showAllJobsFragment();
+        showInitialFragment();
     }
 
     @Override
@@ -61,8 +61,8 @@ public class WorkExperienceActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
@@ -84,6 +84,14 @@ public class WorkExperienceActivity extends AppCompatActivity
         }
         isOwnProfile = getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false);
         return user;
+    }
+
+    private void showInitialFragment() {
+        if (user.jobs != null && !user.jobs.isEmpty()) {
+            showAllJobsFragment();
+        } else {
+            showEditJobFragment(null);
+        }
     }
 
     private void showAllJobsFragment() {
@@ -128,6 +136,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.remove(job);
                         showAllJobsFragment();
@@ -155,6 +164,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.remove(updatedJob);
                         user.jobs.add(previousJob);
@@ -209,6 +219,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.add(job);
                         showAllJobsFragment();

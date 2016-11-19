@@ -41,7 +41,7 @@
                 android:id="@+id/edit_education_degree_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:textSize="18sp"
                 android:hint="@string/degree"/>
 
@@ -55,7 +55,7 @@
                 android:id="@+id/edit_education_school_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:textSize="18sp"
                 android:hint="@string/institute"/>
 

@@ -34,17 +34,6 @@ public class SkillsSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
     public void setDataset(List<UserSkill> dataset) {
         this.dataset = dataset;
         Collections.sort(this.dataset, new UserSkillComparator());
-
-        mockDefaultOption();
-    }
-
-    private void mockDefaultOption() {
-        UserSkill defaultOption = new UserSkill();
-        defaultOption.name = "Position";
-        defaultOption.category = "";
-        defaultOption.description = "";
-
-        this.dataset.add(0, defaultOption);
     }
 
     @Override
@@ -73,15 +62,6 @@ public class SkillsSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         if (currentSkill != null) {
             ((TextView) convertView.findViewById(R.id.user_skill_spinner_row_name_textview)).setText(currentSkill.name);
             ((TextView) convertView.findViewById(R.id.user_skill_spinner_row_category_textview)).setText(currentSkill.category);
-
-            // For default option
-            if (currentSkill.equals(dataset.get(0))) {
-                convertView.findViewById(R.id.user_skill_spinner_row_hyphen_divider_textview).setVisibility(View.GONE);
-                ((TextView) convertView.findViewById(R.id.user_skill_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-            } else {
-                convertView.findViewById(R.id.user_skill_spinner_row_hyphen_divider_textview).setVisibility(View.VISIBLE);
-                ((TextView) convertView.findViewById(R.id.user_skill_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            }
         }
 
         return convertView;

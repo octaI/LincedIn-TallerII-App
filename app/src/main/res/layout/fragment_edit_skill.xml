@@ -33,6 +33,15 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textSize="12sp"
+            android:textColor="@color/colorAccent"
+            android:text="@string/position"/>
+
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/edit_skills_dropdown"
             android:layout_width="match_parent"
@@ -42,7 +51,8 @@
             android:id="@+id/edit_skill_description_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:textSize="16sp"
             android:textColor="@color/grey"
             android:text="@string/description"

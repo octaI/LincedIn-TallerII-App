@@ -41,7 +41,7 @@ public class SkillsActivity extends AppCompatActivity
         setContentView(R.layout.activity_skills);
         setToolbar();
         getUserFromIntent();
-        showAllSkillsFragment();
+        showInitialFragment();
     }
 
     @Override
@@ -86,6 +86,14 @@ public class SkillsActivity extends AppCompatActivity
         return user;
     }
 
+    private void showInitialFragment() {
+        if (user.skills != null && !user.skills.isEmpty()) {
+            showAllSkillsFragment();
+        } else {
+            showEditSkillFragment(null);
+        }
+    }
+
     private void showAllSkillsFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.skills_container_framelayout, AllSkillsFragment.newInstance(user.skills, isOwnProfile));
@@ -128,6 +136,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.remove(skill);
                         showAllSkillsFragment();
@@ -155,6 +164,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.remove(updatedSkill);
                         user.skills.add(previousSkill);
@@ -209,6 +219,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.add(skill);
                         showAllSkillsFragment();

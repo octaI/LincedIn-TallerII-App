@@ -34,17 +34,6 @@ public class JobPositionsSpinnerAdapter extends BaseAdapter implements SpinnerAd
     public void setDataset(List<UserJobPosition> dataset) {
         this.dataset = dataset;
         Collections.sort(this.dataset, new UserJobPositionComparator());
-
-        mockDefaultOption();
-    }
-
-    private void mockDefaultOption() {
-        UserJobPosition defaultOption = new UserJobPosition();
-        defaultOption.name = "Position";
-        defaultOption.category = "";
-        defaultOption.description = "";
-
-        this.dataset.add(0, defaultOption);
     }
 
     @Override
@@ -73,15 +62,6 @@ public class JobPositionsSpinnerAdapter extends BaseAdapter implements SpinnerAd
         if (currentPosition != null) {
             ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_name_textview)).setText(currentPosition.name);
             ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_category_textview)).setText(currentPosition.category);
-
-            // For default option
-            if (currentPosition.equals(dataset.get(0))) {
-                convertView.findViewById(R.id.user_job_position_spinner_row_hyphen_divider_textview).setVisibility(View.GONE);
-                ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
-            } else {
-                convertView.findViewById(R.id.user_job_position_spinner_row_hyphen_divider_textview).setVisibility(View.VISIBLE);
-                ((TextView) convertView.findViewById(R.id.user_job_position_spinner_row_name_textview)).setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            }
         }
 
         return convertView;

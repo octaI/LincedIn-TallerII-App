@@ -60,6 +60,7 @@
     <string name="name">Nombre</string>
     <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
+    <string name="add">Agregar</string>
     <string name="user_profile_user_not_logged">El usuario no ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
     <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
