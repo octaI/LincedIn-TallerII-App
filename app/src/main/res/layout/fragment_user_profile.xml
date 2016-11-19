@@ -142,9 +142,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="28sp"
+            android:layout_margin="8dp"
+            android:textSize="24sp"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
             android:text="@string/user_profile_user_not_logged"
             android:visibility="gone"/>
 

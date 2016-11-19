@@ -94,14 +94,14 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 Log.d(TAG, "Facebook login callback cancelled.");
-                // TODO: 15/10/16 Decide what to do here.
+                UserAuthenticationManager.deleteSessionToken(getApplicationContext());
             }
 
             @Override
             public void onError(FacebookException exception) {
                 Log.d(TAG, "Facebook login callback error!");
                 exception.printStackTrace();
-                // TODO: 15/10/16 Decide what to do here.
+                UserAuthenticationManager.deleteSessionToken(getApplicationContext());
             }
         });
     }
@@ -145,6 +145,9 @@ public class LogInActivity extends AppCompatActivity {
     private void updateSessionToken(AccessToken accessToken) {
         if (accessToken != null) {
             facebookAccessToken = accessToken.getToken();
+        } else {
+            facebookAccessToken = null;
+            UserAuthenticationManager.deleteSessionToken(this);
         }
     }
 
