@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.facebook.login.LoginManager;
 import com.fiuba.tallerii.lincedin.model.user.login.FacebookLogInUser;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
@@ -45,6 +46,7 @@ public class UserAuthenticationManager {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
+                        LoginManager.getInstance().logOut();
                     }
                 }
         );

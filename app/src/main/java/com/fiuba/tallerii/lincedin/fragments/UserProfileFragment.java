@@ -139,6 +139,7 @@ public class UserProfileFragment extends Fragment {
             boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
             refreshUserNotLoggedMessage(convertView, isUserLogged);
             if (isUserLogged) {
+                refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
                         getContext(),
                         new Response.Listener<JSONObject>() {
