@@ -28,6 +28,7 @@ import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
+import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -135,15 +136,8 @@ public class UserProfileFragment extends Fragment {
 
     private void requestUserProfile() {
         if (convertView != null) {
-            final Map<String, String> requestParams = new HashMap<>();
-            final String url = "http://"
-                    + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                    + ":" + getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED)
-                    + "/user"
-                    + "/me";
-            HttpRequestHelper.get(
-                    url,
-                    requestParams,
+            LincedInRequester.getUserProfile(
+                    getContext(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -162,8 +156,7 @@ public class UserProfileFragment extends Fragment {
                             error.printStackTrace();
                             refreshLoadingIndicator(convertView, false);
                         }
-                    },
-                    "UserProfileRequest"
+                    }
             );
         }
     }
