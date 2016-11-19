@@ -137,16 +137,34 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-        <TextView
-            android:id="@+id/user_profile_user_not_logged_textview"
+        <LinearLayout
+            android:id="@+id/user_profile_user_not_logged_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="8dp"
-            android:textSize="24sp"
-            android:textColor="@color/colorPrimary"
-            android:text="@string/user_profile_user_not_logged"
-            android:visibility="gone"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textSize="24sp"
+                android:text="@string/user_profile_user_not_logged"/>
+
+            <Button style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/user_profile_login_button"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/login"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+
 
         <ProgressBar
             android:id="@+id/user_profile_loading_circular_progress"

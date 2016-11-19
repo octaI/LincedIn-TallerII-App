@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.EducationActivity;
+import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.activities.SkillsActivity;
 import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
@@ -102,6 +103,13 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setButtonsListeners(final View parentView) {
+        parentView.findViewById(R.id.user_profile_login_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLogin();
+            }
+        });
+
         parentView.findViewById(R.id.user_profile_work_experience_see_more_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,11 +266,16 @@ public class UserProfileFragment extends Fragment {
     private void refreshUserNotLoggedMessage(View v, boolean isUserLogged) {
         if (isUserLogged) {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.user_profile_user_not_logged_textview).setVisibility(View.GONE);
+            v.findViewById(R.id.user_profile_user_not_logged_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
-            v.findViewById(R.id.user_profile_user_not_logged_textview).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_profile_user_not_logged_layout).setVisibility(View.VISIBLE);
         }
+    }
+
+    private void openLogin() {
+        Intent loginIntent = new Intent(getContext(), LogInActivity.class);
+        startActivity(loginIntent);
     }
 
     private void openUserWorkExperience() {
