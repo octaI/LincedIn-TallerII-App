@@ -2,7 +2,9 @@ package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.webkit.HttpAuthHandler;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
@@ -12,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,6 +23,7 @@ import java.util.Map;
 public class HttpRequestHelper {
 
     private static RequestQueue mRequestQueue;
+    private static Context context;
 
     /**
      * Creates RequestQueue{@link RequestQueue} for sending asynchronous HTTP requests with Volley.
@@ -28,6 +32,7 @@ public class HttpRequestHelper {
      */
     public static void initialize(Context appContext) {
         mRequestQueue = Volley.newRequestQueue(appContext);
+        context = appContext;
     }
 
     /**
@@ -50,6 +55,13 @@ public class HttpRequestHelper {
             @Override
             protected Map<String, String> getParams() {
                 return requestParams;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", UserAuthenticationManager.getSessionToken(context));
+                return headers;
             }
         };
         request.setTag(requestTag);

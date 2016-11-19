@@ -28,6 +28,7 @@ public class LogInActivity extends AppCompatActivity {
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private AccessTokenTracker accessTokenTracker;
+    private static String facebookAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class LogInActivity extends AppCompatActivity {
                                     Log.d(TAG, "Facebook profile Graph request success.");
                                     String jsonResult = new Gson().toJson(json);
                                     Log.d(TAG, jsonResult);
-                                    facebookLogInUser(json);
+                                    facebookLogInUser();
                                 }
                             }
                         });
@@ -119,8 +120,8 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(signUpIntent);
     }
 
-    private void facebookLogInUser(JSONObject fbUserInfo) {
-        UserAuthenticationManager.facebookLogIn(this, fbUserInfo);
+    private void facebookLogInUser() {
+        UserAuthenticationManager.facebookLogIn(this, facebookAccessToken);
     }
 
     private void setFacebookAccessTokenTracker() {
@@ -143,7 +144,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private void updateSessionToken(AccessToken accessToken) {
         if (accessToken != null) {
-            UserAuthenticationManager.saveSessionToken(this, accessToken.getToken());
+            facebookAccessToken = accessToken.getToken();
         }
     }
 

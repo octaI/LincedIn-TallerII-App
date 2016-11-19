@@ -7,6 +7,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
+import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 
@@ -22,9 +23,28 @@ public class LincedInRequester {
 
     private static String getAppServerBaseURL(Context context) {
         return "http://"
-                + "lincedin.ddns.net/";
+                + "lincedin.ddns.net";
                 //+ getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
                 //+ ":" + getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED);
+    }
+
+    public static void logIn(LogInUser logInUser, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/login";
+
+        try {
+            HttpRequestHelper.post(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(logInUser)),
+                    successListener,
+                    errorListener,
+                    "LogInUser"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void getUserProfile(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {

@@ -17,8 +17,7 @@ public class User {
 
     public String description;
 
-    @SerializedName("date_of_birth\u200E")
-    // TODO: 06/11/16 Remove special character when API corrects it.
+    @SerializedName("date_of_birth")
     public String dateOfBirth;
 
     public String email;
