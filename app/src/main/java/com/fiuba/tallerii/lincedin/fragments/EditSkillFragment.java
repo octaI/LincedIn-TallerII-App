@@ -193,7 +193,7 @@ public class EditSkillFragment extends Fragment {
     private boolean validateInput(View v) {
         if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getChildCount() == 0
                 || ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getSelectedItemPosition() == 0) {
-            Snackbar.make(v, getString(R.string.must_select_job_position), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(v, getString(R.string.must_select_skill), Snackbar.LENGTH_SHORT).show();
             return false;
         }
         return true;

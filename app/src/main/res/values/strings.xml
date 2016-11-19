@@ -53,6 +53,7 @@
     <string name="are_you_sure_you_want_to_delete_skill">¿Estás seguro de que quieres eliminar esta aptitud?</string>
     <string name="this_change_cannot_be_reverted">Este cambio no puede ser revertido</string>
     <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
+    <string name="must_select_skill">Debes seleccionar una aptitud</string>
     <string name="education">Educación</string>
     <string name="skills">Aptitudes</string>
     <string name="skill">Aptitud</string>
