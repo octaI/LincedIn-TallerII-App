@@ -10,4 +10,9 @@ public class SharedPreferencesUtils {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPreferences.getString(key, defaultValue);
     }
+
+    public static boolean getBooleanFromSharedPreferences(Context context, String key, boolean defaultValue) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getBoolean(key, defaultValue);
+    }
 }

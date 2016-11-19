@@ -2,9 +2,6 @@ package com.fiuba.tallerii.lincedin.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,18 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.events.MessageEvent;
-import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -71,8 +61,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        EventBus.getDefault().register(this);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_home);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -87,56 +75,12 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         setTabLayoutIcons(tabLayout);
 
-
-        // TODO: 06/09/16 Only for testing purposes. Remove this request!
-        // ------------------------------------------------------------->
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Testing...", Snackbar.LENGTH_LONG)
-                        .setAction(
-                                "Enviar request a AppServer",
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        openHTTPConfigurationDialog();
-
-                                    }
-                                }
-                        )
-                        .show();
-            }
-        });
-        // <-------------------------------------------------------------
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         GooglePlayServicesUtils.checkGooglePlayServicesAvailability(this);
-    }
-
-
-    public void addskillsTolist(String string) {
-        //ListView listView = (ListView) findViewById(R.id.list_skills);
-        //ArrayAdapter adapter = (ArrayAdapter) listView.getAdapter();
-        //adapter.add("adeentroo...");
-        //adapter.notifyDataSetChanged();
-        mSkillsAdapter.add(string);
-    }
-
-    private void openHTTPConfigurationDialog() {
-        DialogFragment httpDialog = new HTTPConfigurationDialogFragment();
-        HTTPConfigurationDialogFragment http = (HTTPConfigurationDialogFragment) httpDialog;
-        http.setAdapter(mSkillsAdapter);
-        httpDialog.show(getSupportFragmentManager(), "HTTPConfigurationDialogFragment");
-    }
-
-    @Deprecated
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onHTTPResponseReceived(MessageEvent event) {
-        Toast.makeText(this, event.message, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -200,21 +144,9 @@ public class HomeActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-            //TODO: 6/10/16 List for skills... only testing, remove.
-            // Instancia del ListView.
-            ListView mSkillsList = (ListView) rootView.findViewById(R.id.list_skills);
-            HomeActivity activity = (HomeActivity) getActivity();
-            ArrayList<String> listSkills = activity.getArrayList();
-            ArrayAdapter mSkillsAdapter;
-            mSkillsAdapter = new ArrayAdapter<>(
-                    getActivity(),
-                    android.R.layout.simple_list_item_1,
-                    listSkills);
-            activity.setArrayAdapter(mSkillsAdapter);
-            mSkillsList.setAdapter(mSkillsAdapter);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
             return rootView;
         }

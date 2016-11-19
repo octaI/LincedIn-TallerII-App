@@ -137,6 +137,17 @@
 
         </android.support.v4.widget.NestedScrollView>
 
+        <TextView
+            android:id="@+id/user_profile_user_not_logged_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="28sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:text="@string/user_profile_user_not_logged"
+            android:visibility="gone"/>
+
         <ProgressBar
             android:id="@+id/user_profile_loading_circular_progress"
             android:theme="@style/CircularProgress"

@@ -136,28 +136,32 @@ public class UserProfileFragment extends Fragment {
 
     private void requestUserProfile() {
         if (convertView != null) {
-            LincedInRequester.getUserProfile(
-                    getContext(),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Gson gson = new Gson();
-                            Log.d(TAG, gson.toJson(response));
+            boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
+            refreshUserNotLoggedMessage(convertView, isUserLogged);
+            if (isUserLogged) {
+                LincedInRequester.getUserProfile(
+                        getContext(),
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Gson gson = new Gson();
+                                Log.d(TAG, gson.toJson(response));
 
-                            user = gson.fromJson(response.toString(), User.class);
-                            populateProfile(convertView, user);
-                            refreshLoadingIndicator(convertView, false);
+                                user = gson.fromJson(response.toString(), User.class);
+                                populateProfile(convertView, user);
+                                refreshLoadingIndicator(convertView, false);
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e(TAG, error.toString());
+                                error.printStackTrace();
+                                refreshLoadingIndicator(convertView, false);
+                            }
                         }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, error.toString());
-                            error.printStackTrace();
-                            refreshLoadingIndicator(convertView, false);
-                        }
-                    }
-            );
+                );
+            }
         }
     }
 
@@ -247,6 +251,16 @@ public class UserProfileFragment extends Fragment {
         } else {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.GONE);
+        }
+    }
+
+    private void refreshUserNotLoggedMessage(View v, boolean isUserLogged) {
+        if (isUserLogged) {
+            v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_profile_user_not_logged_textview).setVisibility(View.GONE);
+        } else {
+            v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.user_profile_user_not_logged_textview).setVisibility(View.VISIBLE);
         }
     }
 
