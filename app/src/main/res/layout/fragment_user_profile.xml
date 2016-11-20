@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textSize="24sp"
-                android:text="@string/user_profile_user_not_logged"/>
+                android:text="@string/user_not_logged_in"/>
 
             <Button style="@style/Widget.AppCompat.Button.Colored"
                 android:id="@+id/user_profile_login_button"
@@ -163,8 +163,6 @@
                 android:textColor="@color/white"/>
 
         </LinearLayout>
-
-
 
         <ProgressBar
             android:id="@+id/user_profile_loading_circular_progress"

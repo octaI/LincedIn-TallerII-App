@@ -59,22 +59,31 @@
                     android:layout_marginBottom="8dp"
                     android:textAlignment="center"/>
 
-                <EditText
-                    android:id="@+id/login_email_edittext"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/LogInEditText"
-                    android:inputType="textEmailAddress"
-                    android:hint="@string/email"/>
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/login_email_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/LogInEditText"
+                        android:inputType="textEmailAddress"
+                        android:hint="@string/email"/>
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/login_password_edittext"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/LogInEditText"
-                    android:inputType="textPassword"
-                    android:fontFamily="sans-serif"
-                    android:hint="@string/password"/>
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/login_password_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/LogInEditText"
+                        android:inputType="textPassword"
+                        android:fontFamily="sans-serif"
+                        android:hint="@string/password"/>
+                </android.support.design.widget.TextInputLayout>
+
 
                 <Button style="@style/Widget.AppCompat.Button.Colored"
                     android:id="@+id/login_lincedin_button"
@@ -116,6 +125,21 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/login_loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translucentGrey"
+            android:visibility="gone">
+            <ProgressBar
+                android:theme="@style/CircularProgress"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
 
     </RelativeLayout>
 

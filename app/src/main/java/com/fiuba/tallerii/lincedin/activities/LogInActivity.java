@@ -1,11 +1,16 @@
 package com.fiuba.tallerii.lincedin.activities;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
@@ -13,13 +18,20 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
+import com.fiuba.tallerii.lincedin.utils.InputValidationUtils;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import static com.fiuba.tallerii.lincedin.network.UserAuthenticationManager.saveSessionToken;
+import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateEmail;
+import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateThatAllFieldsAreFilled;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -56,7 +68,56 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void setLincedInLogInButtonListener() {
-        // TODO: 30/10/16 Validate email and password and make log in request to app server.
+        findViewById(R.id.login_lincedin_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateInput() && validateUserIsNotAlreadyLoggedIn(v)) {
+                    String email = ((EditText) findViewById(R.id.login_email_edittext)).getText().toString();
+                    String password = ((EditText) findViewById(R.id.login_password_edittext)).getText().toString();
+                    LincedInLogInUser(email, password);
+                }
+            }
+        });
+    }
+
+    private void LincedInLogInUser(String email, String password) {
+        refreshLoadingIndicator(true);
+        UserAuthenticationManager.lincedInLogIn(
+                this,
+                email,
+                password,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onSuccessLincedInLogIn(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorLincedInLogIn(error);
+                    }
+                }
+        );
+    }
+
+    private void onSuccessLincedInLogIn(JSONObject response) {
+        refreshLoadingIndicator(false);
+        Log.d(TAG, new Gson().toJson(response));
+        try {
+            saveSessionToken(this, response.getString("token"));
+            finish();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onErrorLincedInLogIn(VolleyError error) {
+        refreshLoadingIndicator(false);
+        Log.e(TAG, error.toString());
+        error.printStackTrace();
+        Snackbar.make(findViewById(R.id.login_lincedin_button), getString(R.string.error_login), Snackbar.LENGTH_LONG)
+                .show();
     }
 
     private void setFacebookLogInButtonListener() {
@@ -106,6 +167,14 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
+    private void refreshLoadingIndicator(boolean loading) {
+        if (loading) {
+            findViewById(R.id.login_loading_layout).setVisibility(View.VISIBLE);
+        } else {
+            findViewById(R.id.login_loading_layout).setVisibility(View.GONE);
+        }
+    }
+
     private void setCreateAccountTextListener() {
         findViewById(R.id.login_has_account_textview).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +190,58 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void facebookLogInUser() {
-        UserAuthenticationManager.facebookLogIn(this, facebookAccessToken);
+        refreshLoadingIndicator(true);
+        UserAuthenticationManager.facebookLogIn(
+                this,
+                facebookAccessToken,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        onSuccessLincedInLogInWithFacebook(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        onErrorLincedInLogInWithFacebook(error);
+                    }
+                }
+        );
+    }
+
+    private void onSuccessLincedInLogInWithFacebook(JSONObject response) {
+        refreshLoadingIndicator(false);
+        Log.d(TAG, new Gson().toJson(response));
+        try {
+            saveSessionToken(this, response.getString("token"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onErrorLincedInLogInWithFacebook(VolleyError error) {
+        refreshLoadingIndicator(false);
+        Log.e(TAG, error.toString());
+        error.printStackTrace();
+        Snackbar.make(findViewById(R.id.login_facebook_button), getString(R.string.error_login), Snackbar.LENGTH_LONG)
+                .show();
+        LoginManager.getInstance().logOut();
+    }
+
+    private boolean validateUserIsNotAlreadyLoggedIn(View v) {
+        if (UserAuthenticationManager.isUserLoggedIn(this)) {
+            Snackbar.make(v, R.string.user_already_logged_in, Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateInput() {
+        EditText emailEditText = (EditText) findViewById(R.id.login_email_edittext);
+        EditText passwordEditText = (EditText) findViewById(R.id.login_password_edittext);
+
+        return validateThatAllFieldsAreFilled(this, emailEditText, passwordEditText)
+                && validateEmail(this, emailEditText);
     }
 
     private void setFacebookAccessTokenTracker() {

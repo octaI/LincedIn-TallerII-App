@@ -14,6 +14,7 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.DatePickedEvent;
 import com.fiuba.tallerii.lincedin.fragments.DatePickerDialogFragment;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
+import com.fiuba.tallerii.lincedin.utils.InputValidationUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -91,55 +92,13 @@ public class SignUpActivity extends AppCompatActivity {
         EditText passwordEditText = (EditText) findViewById(R.id.signup_password_edittext);
         EditText confirmationPasswordEditText = (EditText) findViewById(R.id.signup_confirmation_password_edittext);
 
-        return validateThatAllFieldsAreFilled(firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, confirmationPasswordEditText)
-                && validateEmail(emailEditText)
-                && validatePasswords(passwordEditText, confirmationPasswordEditText);
+        return InputValidationUtils.validateThatAllFieldsAreFilled(this, firstNameEditText, lastNameEditText, dateOfBirthEditText, emailEditText, passwordEditText, confirmationPasswordEditText)
+                && InputValidationUtils.validateEmail(this, emailEditText)
+                && InputValidationUtils.validatePasswords(this, passwordEditText, confirmationPasswordEditText);
     }
 
     private void createUserAccount() {
 
-    }
-
-    private boolean validateThatAllFieldsAreFilled(EditText... fields) {
-        boolean allFieldsAreFilled = true;
-        for (EditText field : fields) {
-            field.setError(null);   // Clears error icon. Fixes date of birth bug.
-            if (field.getText() == null || field.getText().toString().equals("")) {
-                field.requestFocus();
-                field.setError(getString(R.string.field_is_required));
-                Log.e(TAG, "'" + field.getHint().toString() + "'" + " cannot be empty. Cannot create user account.");
-                allFieldsAreFilled = false;
-                break;
-            }
-        }
-        return allFieldsAreFilled;
-    }
-
-    private boolean validateEmail(EditText emailField) {
-        // See http://stackoverflow.com/questions/8204680/java-regex-email for pattern reference
-        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        String email = emailField.getText().toString();
-        if (!pattern.matcher(email).matches()) {
-            emailField.requestFocus();
-            emailField.setError(getString(R.string.invalid_email));
-            Log.e(TAG, "The user e-mail " + email + " does not match the pattern for valid e-mails. Cannot create user account.");
-            return false;
-        } else {
-            Log.d(TAG, "E-mail is valid.");
-            return true;
-        }
-    }
-
-    private boolean validatePasswords(EditText passwordField, EditText repeatPasswordField) {
-        if (!passwordField.getText().toString().equals(repeatPasswordField.getText().toString())) {
-            repeatPasswordField.requestFocus();
-            repeatPasswordField.setError(getString(R.string.passwords_do_not_match));
-            Log.e(TAG, "The password and confirmation password do not match. Cannot create user account.");
-            return false;
-        } else {
-            Log.d(TAG, "Password and confirmation password do match.");
-            return true;
-        }
     }
 
     @Override

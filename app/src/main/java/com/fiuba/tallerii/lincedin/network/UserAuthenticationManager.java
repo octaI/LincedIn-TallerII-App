@@ -3,12 +3,16 @@ package com.fiuba.tallerii.lincedin.network;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.facebook.login.LoginManager;
+import com.facebook.login.widget.LoginButton;
+import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.model.user.login.FacebookLogInUser;
+import com.fiuba.tallerii.lincedin.model.user.login.LincedInLogInUser;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -25,36 +29,26 @@ public class UserAuthenticationManager {
         // TODO: 30/10/16 Request to app server and call saveUserToken on success.
     }
 
-    public static void facebookLogIn(final Context context, String facebookAccessToken) {
+    public static void facebookLogIn(final Context context, String facebookAccessToken,
+                                     Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         LogInUser logInUser = new FacebookLogInUser(facebookAccessToken);
         LincedInRequester.logIn(
                 logInUser,
                 context,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, new Gson().toJson(response));
-
-                        try {
-                            saveSessionToken(context, response.getString("token"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                        error.printStackTrace();
-                        LoginManager.getInstance().logOut();
-                    }
-                }
+                successListener,
+                errorListener
         );
     }
 
-    public static void lincedinLogIn(Context context, String password) {
-        // TODO: 30/10/16 Request to app server and call saveUserToken on success.
+    public static void lincedInLogIn(final Context context, String email, String password,
+                                     Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        LogInUser logInUser = new LincedInLogInUser(email, password);
+        LincedInRequester.logIn(
+                logInUser,
+                context,
+                successListener,
+                errorListener
+        );
     }
 
     public static void logOut(Context context) {

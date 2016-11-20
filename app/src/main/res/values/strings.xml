@@ -81,7 +81,8 @@
     <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
     <string name="add">Agregar</string>
-    <string name="user_profile_user_not_logged">El usuario no ha iniciado sesión</string>
+    <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
+    <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
     <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
     <string name="or">ó</string>
@@ -91,6 +92,7 @@
     <string name="invalid_email">El e-mail es inválido</string>
     <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
+    <string name="error_login">Hubo un error al iniciar sesión</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>

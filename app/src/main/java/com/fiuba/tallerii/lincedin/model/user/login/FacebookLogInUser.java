@@ -15,8 +15,4 @@ public class FacebookLogInUser extends LogInUser {
     public String getFbToken() {
         return fbToken;
     }
-
-    public void setFbToken(String fbToken) {
-        this.fbToken = fbToken;
-    }
 }
