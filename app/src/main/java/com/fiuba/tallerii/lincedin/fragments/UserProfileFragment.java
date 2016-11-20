@@ -203,7 +203,13 @@ public class UserProfileFragment extends Fragment {
 
         ((TextView) v.findViewById(R.id.user_profile_username_textview)).setText(user.fullName);
 
-        ((TextView) v.findViewById(R.id.user_profile_user_description_textview)).setText(user.description);
+        TextView descriptionTextView = (TextView) v.findViewById(R.id.user_profile_user_description_textview);
+        if (user.description != null && !user.description.equals("")) {
+            descriptionTextView.setVisibility(View.VISIBLE);
+            descriptionTextView.setText(user.description);
+        } else {
+            descriptionTextView.setVisibility(View.GONE);
+        }
     }
 
     private void populateBiography(View v, User user) {

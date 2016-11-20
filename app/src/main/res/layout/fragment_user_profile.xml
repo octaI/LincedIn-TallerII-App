@@ -55,7 +55,7 @@
                                     android:gravity="center"
                                     android:layout_marginRight="24dp"
                                     android:layout_marginLeft="24dp"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textAlignment="center"
                                     android:textColor="@color/grey"
                                     android:text="@string/description"
