@@ -210,21 +210,11 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void onSuccessLincedInLogInWithFacebook(JSONObject response) {
-        refreshLoadingIndicator(false);
-        Log.d(TAG, new Gson().toJson(response));
-        try {
-            saveSessionToken(this, response.getString("token"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        onSuccessLincedInLogIn(response);
     }
 
     private void onErrorLincedInLogInWithFacebook(VolleyError error) {
-        refreshLoadingIndicator(false);
-        Log.e(TAG, error.toString());
-        error.printStackTrace();
-        Snackbar.make(findViewById(R.id.login_facebook_button), getString(R.string.error_login), Snackbar.LENGTH_LONG)
-                .show();
+        onErrorLincedInLogIn(error);
         LoginManager.getInstance().logOut();
     }
 

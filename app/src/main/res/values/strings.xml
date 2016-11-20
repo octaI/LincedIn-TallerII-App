@@ -86,6 +86,7 @@
     <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
     <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
+    <string name="error_update_biography">Hubo un error al actualizar la biografía</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
     <string name="signup_submit_button">Crear cuenta</string>

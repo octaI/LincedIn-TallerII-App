@@ -35,6 +35,7 @@
             </android.support.design.widget.AppBarLayout>
 
             <ScrollView
+                android:id="@+id/biography_container_scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -80,7 +81,8 @@
                         android:layout_height="wrap_content"
                         android:textSize="18sp"
                         android:inputType="date"
-                        android:hint="@string/date_of_birth"/>
+                        android:hint="@string/date_of_birth"
+                        android:focusableInTouchMode="false"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -128,6 +130,15 @@
             android:src="@drawable/ic_done"
             android:tint="@color/white"
             />
+
+        <ProgressBar
+            android:id="@+id/biography_loading_circular_progress"
+            android:theme="@style/CircularProgress"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

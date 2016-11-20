@@ -98,7 +98,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void createUserAccount() {
-
+        // TODO: 20/11/16 Implement request to app server.
     }
 
     @Override
