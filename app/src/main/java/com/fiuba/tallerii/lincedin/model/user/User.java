@@ -29,9 +29,6 @@ public class User {
 
     public List<UserEducation> education;
 
-    @SerializedName("recommendatios_received")
-    public List<UserRecommendation> recommendationsReceived;
-
     public List<UserSkill> skills;
 
     public boolean isCurrentlyWorking() {
