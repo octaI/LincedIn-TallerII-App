@@ -8,9 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -19,7 +21,13 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         setToolbar();
-        setListeners();
+        setOptionsListeners();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setLoginButtonListener();
     }
 
     @Override
@@ -46,16 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private void setListeners() {
-        findViewById(R.id.settings_option_login_textview).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startLoginActivity();
-                    }
-                }
-        );
-
+    private void setOptionsListeners() {
         findViewById(R.id.settings_option_http_config_textview).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -64,6 +63,33 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void setLoginButtonListener() {
+        final Button loginButton = (Button) findViewById(R.id.settings_login_button);
+        if (loginButton != null) {
+            if (UserAuthenticationManager.isUserLoggedIn(this)) {
+                loginButton.setText(getString(R.string.logout));
+                loginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        logOut();
+                        finish();
+                    }
+                });
+            } else {
+                loginButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startLoginActivity();
+                    }
+                });
+            }
+        }
+    }
+
+    private void logOut() {
+        UserAuthenticationManager.logOut(this);
     }
 
     private void startLoginActivity() {

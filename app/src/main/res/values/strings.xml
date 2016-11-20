@@ -14,6 +14,7 @@
     <string name="login_title">Inicio de sesión</string>
     <string name="login_with_lincedin_account">Inicia sesión con tu cuenta de LincedIn</string>
     <string name="login">Iniciar sesión</string>
+    <string name="logout">Cerrar sesión</string>
     <string name="email">E-mail</string>
     <string name="user">Usuario</string>
     <string name="description">Descripción</string>

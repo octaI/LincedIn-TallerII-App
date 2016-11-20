@@ -11,6 +11,7 @@ import com.facebook.login.LoginManager;
 import com.fiuba.tallerii.lincedin.model.user.login.FacebookLogInUser;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -57,7 +58,17 @@ public class UserAuthenticationManager {
     }
 
     public static void logOut(Context context) {
-        // TODO: 30/10/16 Request to app server and call deleteSessionToken on success.
+        deleteSessionToken(context);    // TODO: 19/11/16 Call this only on success after log out request to app server
+
+        LoginManager.getInstance().logOut();
+    }
+
+    public static boolean isUserLoggedIn(Context context) {
+        return SharedPreferencesUtils.getBooleanFromSharedPreferences(
+                context,
+                SharedPreferencesKeys.USER_LOGGED_IN,
+                false
+        );
     }
 
     public static String getSessionToken(Context context) {
