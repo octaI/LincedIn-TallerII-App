@@ -42,7 +42,7 @@ public class BiographyActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_skills);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_biography);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
