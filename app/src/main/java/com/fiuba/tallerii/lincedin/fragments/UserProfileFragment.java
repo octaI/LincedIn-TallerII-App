@@ -209,19 +209,30 @@ public class UserProfileFragment extends Fragment {
     private void populateBiography(View v, User user) {
         ((TextView) v.findViewById(R.id.user_profile_biography_fullname_textview)).setText(user.fullName);
 
-        ((TextView) v.findViewById(R.id.user_profile_biography_date_of_birth_textview))
-                .setText("(" + DateUtils.parseDatetimeToLocalDate(getContext(), user.dateOfBirth) + ")");
-
-        ((TextView) v.findViewById(R.id.user_profile_biography_age_textview))
-                .setText(
-                        ((TextView) v.findViewById(R.id.user_profile_biography_age_textview)).getText().toString()
-                        .replace(":1", DateUtils.getAgeFromDatetime(user.dateOfBirth))
-                );
+        setDateOfBirthInfo(v, user);
 
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
         setEmailListeners(v);
 
         // TODO: 05/11/16 Set location when API supports it.
+    }
+
+    private void setDateOfBirthInfo(View v, User user) {
+        TextView dateOfBirhtTextView = (TextView) v.findViewById(R.id.user_profile_biography_date_of_birth_textview);
+        TextView ageTextView = (TextView) v.findViewById(R.id.user_profile_biography_age_textview);
+        if (user.dateOfBirth != null && !user.dateOfBirth.equals("")) {
+            dateOfBirhtTextView.setVisibility(View.VISIBLE);
+            dateOfBirhtTextView.setText("(" + DateUtils.parseDatetimeToLocalDate(getContext(), user.dateOfBirth) + ")");
+
+            ageTextView.setVisibility(View.VISIBLE);
+            ageTextView.setText(
+                    ((TextView) v.findViewById(R.id.user_profile_biography_age_textview)).getText().toString()
+                            .replace(":1", DateUtils.getAgeFromDatetime(user.dateOfBirth))
+            );
+        } else {
+            dateOfBirhtTextView.setVisibility(View.GONE);
+            ageTextView.setVisibility(View.GONE);
+        }
     }
 
     private void setEmailListeners(View v) {

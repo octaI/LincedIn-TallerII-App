@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
+import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseDateWithoutTimeToDatetime;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateEmail;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateThatAllFieldsAreFilled;
 
@@ -151,7 +152,7 @@ public class BiographyActivity extends AppCompatActivity {
     private void insertInputIntoUser() {
         user.firstName = ((EditText) findViewById(R.id.biography_firstname_edittext)).getText().toString();
         user.lastName = ((EditText) findViewById(R.id.biography_lastname_edittext)).getText().toString();
-        user.dateOfBirth = ((EditText) findViewById(R.id.biography_date_of_birth_edittext)).getText().toString();
+        user.dateOfBirth = parseDateWithoutTimeToDatetime(((EditText) findViewById(R.id.biography_date_of_birth_edittext)).getText().toString());
         user.email = ((EditText) findViewById(R.id.biography_email_edittext)).getText().toString();
         user.description = ((EditText) findViewById(R.id.biography_description_edittext)).getText().toString();
     }
