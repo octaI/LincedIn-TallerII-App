@@ -2,6 +2,7 @@ package com.fiuba.tallerii.lincedin.fragments;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -209,8 +210,24 @@ public class UserProfileFragment extends Fragment {
                         .replace(":1", DateUtils.getAgeFromDatetime(user.dateOfBirth))
                 );
 
+        ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
+        setEmailListeners(v);
+
+        // TODO: 05/11/16 Set location when API supports it.
+    }
+
+    private void setEmailListeners(View v) {
         final TextView emailTextView = (TextView) v.findViewById(R.id.user_profile_biography_email_textview);
-        emailTextView.setText(user.email);
+
+        emailTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto: " + emailTextView.getText().toString()));
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
+            }
+        });
+
         emailTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -219,8 +236,6 @@ public class UserProfileFragment extends Fragment {
                 return true;
             }
         });
-
-        // TODO: 05/11/16 Set location when API supports it.
     }
 
     private void populateWorkExperience(View v, User user) {
@@ -322,5 +337,4 @@ public class UserProfileFragment extends Fragment {
         skillsIntent.putExtra(SkillsActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
         startActivity(skillsIntent);
     }
-
 }

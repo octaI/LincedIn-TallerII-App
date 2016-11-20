@@ -97,5 +97,6 @@
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
     <string name="http_configuration_dialog_saved_toast">La configuración ha sido guardada</string>
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="send_email">Enviar e-mail</string>
 
 </resources>
