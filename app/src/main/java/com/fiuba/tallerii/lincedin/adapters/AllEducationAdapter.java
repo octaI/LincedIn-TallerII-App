@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.comparators.EducationComparator;
 import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 
 import java.util.ArrayList;
@@ -78,20 +79,5 @@ public class AllEducationAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    private class EducationComparator implements Comparator<UserEducation> {
-
-        @Override
-        public int compare(UserEducation education1, UserEducation education2) {
-            Integer startDateJob1 = education1.endDate != null && !education1.endDate.equals("") ?
-                    Integer.valueOf(extractYearFromDatetime(education1.endDate))
-                    : Integer.valueOf(extractYearFromDatetime(getActualDatetime())) + 1;
-            Integer startDateJob2 = education2.endDate != null && !education2.endDate.equals("") ?
-                    Integer.valueOf(extractYearFromDatetime(education2.endDate))
-                    : Integer.valueOf(extractYearFromDatetime(getActualDatetime())) + 1;
-            return startDateJob2.compareTo(startDateJob1) == 0 ?
-                    startDateJob2.compareTo(startDateJob1) : education2.startDate.compareTo(education1.startDate);
-        }
     }
 }

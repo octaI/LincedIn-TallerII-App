@@ -264,7 +264,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void populateWorkExperience(View v, User user) {
-        List<UserJob> jobsToShow = !user.jobs.isEmpty() ?
+        List<UserJob> jobsToShow = user.jobs != null && !user.jobs.isEmpty() ?
                 user.jobs.subList(0, user.jobs.size() - 1) : user.jobs;
         if (user.isCurrentlyWorking()) {
             jobsToShow.remove(user.getCurrentWork());

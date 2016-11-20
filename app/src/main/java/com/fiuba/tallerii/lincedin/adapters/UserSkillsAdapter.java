@@ -8,9 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.comparators.SkillComparator;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserSkillsAdapter extends BaseAdapter {
@@ -28,7 +32,11 @@ public class UserSkillsAdapter extends BaseAdapter {
     }
 
     public void setDataset(List<UserSkill> dataset) {
+        if (dataset == null) {
+            dataset = new ArrayList<>();
+        }
         this.dataset = dataset;
+        Collections.sort(this.dataset, new SkillComparator());
     }
 
     @Override

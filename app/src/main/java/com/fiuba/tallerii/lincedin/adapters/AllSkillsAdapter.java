@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.comparators.SkillComparator;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class AllSkillsAdapter extends BaseAdapter {
             dataset = new ArrayList<>();
         }
         this.dataset = dataset;
-        Collections.sort(this.dataset, new UserSkillComparator());
+        Collections.sort(this.dataset, new SkillComparator());
     }
 
     @Override
@@ -67,14 +68,5 @@ public class AllSkillsAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    private class UserSkillComparator implements Comparator<UserSkill> {
-
-        @Override
-        public int compare(UserSkill skill1, UserSkill skill2) {
-            return (skill1.category + skill1.name + skill1.description)
-                    .compareTo(skill2.category + skill2.name + skill2.description);
-        }
     }
 }

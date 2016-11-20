@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.comparators.JobComparator;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 
 import java.util.ArrayList;
@@ -80,20 +81,5 @@ public class AllJobsAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    private class JobComparator implements Comparator<UserJob> {
-
-        @Override
-        public int compare(UserJob job1, UserJob job2) {
-            Integer startDateJob1 = job1.to != null && !job1.to.equals("") ?
-                    Integer.valueOf(extractYearFromDatetime(job1.to))
-                    : Integer.valueOf(extractYearFromDatetime(getActualDatetime())) + 1;
-            Integer startDateJob2 = job2.to != null && !job2.to.equals("") ?
-                    Integer.valueOf(extractYearFromDatetime(job2.to))
-                    : Integer.valueOf(extractYearFromDatetime(getActualDatetime())) + 1;
-            return startDateJob2.compareTo(startDateJob1) == 0 ?
-                    startDateJob2.compareTo(startDateJob1) : job2.since.compareTo(job1.since);
-        }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.model.comparators.JobPositionComparator;
 import com.fiuba.tallerii.lincedin.model.user.UserJobPosition;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class JobPositionsSpinnerAdapter extends BaseAdapter implements SpinnerAd
 
     public void setDataset(List<UserJobPosition> dataset) {
         this.dataset = dataset;
-        Collections.sort(this.dataset, new UserJobPositionComparator());
+        Collections.sort(this.dataset, new JobPositionComparator());
     }
 
     @Override
@@ -65,14 +66,5 @@ public class JobPositionsSpinnerAdapter extends BaseAdapter implements SpinnerAd
         }
 
         return convertView;
-    }
-
-    private class UserJobPositionComparator implements Comparator<UserJobPosition> {
-
-        @Override
-        public int compare(UserJobPosition position1, UserJobPosition position2) {
-            return (position1.category + position1.name + position1.description)
-                    .compareTo(position2.category + position2.name + position2.description);
-        }
     }
 }
