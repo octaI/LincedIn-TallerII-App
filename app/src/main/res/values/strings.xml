@@ -82,10 +82,12 @@
     <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
     <string name="add">Agregar</string>
+    <string name="couldnt_retrieve_user_profile">No se pudo obtener el perfil de usuario</string>
     <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
     <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
     <string name="user_profile_currently_works_at">Trabaja actualmente en</string>
+    <string name="click_to_try_again">Clickea para intentar nuevamente</string>
     <string name="error_update_biography">Hubo un error al actualizar la biografía</string>
     <string name="or">ó</string>
     <string name="signup_title">Crea tu cuenta</string>
@@ -102,5 +104,6 @@
     <string name="http_configuration_dialog_saved_toast">La configuración ha sido guardada</string>
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
     <string name="send_email">Enviar e-mail</string>
+    <string name="check_your_network_connection">Chequea tu conexión a la red</string>
 
 </resources>

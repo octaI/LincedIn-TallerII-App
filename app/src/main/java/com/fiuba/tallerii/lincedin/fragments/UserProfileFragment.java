@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,6 +166,7 @@ public class UserProfileFragment extends Fragment {
                                 user = gson.fromJson(response.toString(), User.class);
                                 populateProfile(convertView, user);
                                 refreshLoadingIndicator(convertView, false);
+                                hideErrorScreen(convertView);
                             }
                         },
                         new Response.ErrorListener() {
@@ -173,6 +175,7 @@ public class UserProfileFragment extends Fragment {
                                 Log.e(TAG, error.toString());
                                 error.printStackTrace();
                                 refreshLoadingIndicator(convertView, false);
+                                setErrorScreen(convertView);
                             }
                         }
                 );
@@ -204,11 +207,8 @@ public class UserProfileFragment extends Fragment {
         ((TextView) v.findViewById(R.id.user_profile_username_textview)).setText(user.fullName);
 
         TextView descriptionTextView = (TextView) v.findViewById(R.id.user_profile_user_description_textview);
-        if (user.description != null && !user.description.equals("")) {
-            descriptionTextView.setVisibility(View.VISIBLE);
+        if (user.description != null) {
             descriptionTextView.setText(user.description);
-        } else {
-            descriptionTextView.setVisibility(View.GONE);
         }
     }
 
@@ -315,6 +315,7 @@ public class UserProfileFragment extends Fragment {
         if (loading) {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
             v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_profile_network_error_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.GONE);
@@ -328,7 +329,26 @@ public class UserProfileFragment extends Fragment {
         } else {
             v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
             v.findViewById(R.id.user_profile_user_not_logged_layout).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_profile_network_error_layout).setVisibility(View.GONE);
         }
+    }
+
+    private void setErrorScreen(final View parentView) {
+        parentView.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
+
+        RelativeLayout errorScreen = (RelativeLayout) parentView.findViewById(R.id.user_profile_network_error_layout);
+        errorScreen.setVisibility(View.VISIBLE);
+        errorScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideErrorScreen(parentView);
+                requestUserProfile();
+            }
+        });
+    }
+
+    private void hideErrorScreen(View v) {
+        v.findViewById(R.id.user_profile_network_error_layout).setVisibility(View.GONE);
     }
 
     private void openLogin() {
