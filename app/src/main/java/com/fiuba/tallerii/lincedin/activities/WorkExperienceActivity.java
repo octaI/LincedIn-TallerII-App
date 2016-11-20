@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,6 +21,7 @@ import com.fiuba.tallerii.lincedin.fragments.AllJobsFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -128,6 +130,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.job_was_added_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The job was added successfully!");
                         showAllJobsFragment();
@@ -136,6 +139,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_add_job), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.remove(job);
@@ -156,6 +160,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.job_was_edited_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The job was edited successfully!");
                         showAllJobsFragment();
@@ -164,6 +169,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_edit_job), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.remove(updatedJob);
@@ -211,6 +217,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.job_was_deleted_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The job was deleted successfully!");
                         showAllJobsFragment();
@@ -219,6 +226,7 @@ public class WorkExperienceActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_delete_job), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.jobs.add(job);
@@ -226,5 +234,9 @@ public class WorkExperienceActivity extends AppCompatActivity
                     }
                 }
         );
+    }
+
+    private void setToast(String message, int duration) {
+        ViewUtils.setToast(this, message, duration);
     }
 }

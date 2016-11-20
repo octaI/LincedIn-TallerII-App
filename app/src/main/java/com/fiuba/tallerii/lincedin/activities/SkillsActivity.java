@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,6 +21,7 @@ import com.fiuba.tallerii.lincedin.fragments.EditSkillFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserSkill;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -128,6 +130,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.skill_was_added_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The skill was added successfully!");
                         showAllSkillsFragment();
@@ -136,6 +139,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_add_skill), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.remove(skill);
@@ -156,6 +160,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.skill_was_edited_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The skill was edited successfully!");
                         showAllSkillsFragment();
@@ -164,6 +169,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_edit_skill), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.remove(updatedSkill);
@@ -211,6 +217,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.skill_was_deleted_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The skill was deleted successfully!");
                         showAllSkillsFragment();
@@ -219,6 +226,7 @@ public class SkillsActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_delete_skill), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.skills.add(skill);
@@ -226,5 +234,9 @@ public class SkillsActivity extends AppCompatActivity
                     }
                 }
         );
+    }
+
+    private void setToast(String message, int duration) {
+        ViewUtils.setToast(this, message, duration);
     }
 }

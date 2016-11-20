@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -20,6 +23,7 @@ import com.fiuba.tallerii.lincedin.fragments.EditEducationFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserEducation;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -128,6 +132,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.education_was_added_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The education was added successfully!");
                         showAllEducationFragment();
@@ -136,6 +141,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_add_education), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.remove(education);
@@ -156,6 +162,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.education_was_edited_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The education was edited successfully!");
                         showAllEducationFragment();
@@ -164,6 +171,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_edit_education), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.remove(updatedEducation);
@@ -211,6 +219,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        setToast(getString(R.string.education_was_deleted_successfully), Toast.LENGTH_SHORT);
                         Log.d(TAG, response.toString());
                         Log.i(TAG, "The education was deleted successfully!");
                         showAllEducationFragment();
@@ -219,6 +228,7 @@ public class EducationActivity extends AppCompatActivity
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        setToast(getString(R.string.error_delete_education), Toast.LENGTH_LONG);
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
                         user.education.add(education);
@@ -226,5 +236,9 @@ public class EducationActivity extends AppCompatActivity
                     }
                 }
         );
+    }
+
+    private void setToast(String message, int duration) {
+        ViewUtils.setToast(this, message, duration);
     }
 }
