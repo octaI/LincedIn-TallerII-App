@@ -124,8 +124,12 @@ public class EditSkillFragment extends Fragment {
     }
 
     private void setSkillsSpinnerAdapter(View v, List<UserSkill> skills) {
-        ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown))
-                .setAdapter(new SkillsSpinnerAdapter(getContext(), skills));
+        AppCompatSpinner skillsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown);
+        skillsSpinner.setAdapter(new SkillsSpinnerAdapter(getContext(), skills));
+
+        if (!skillsSpinner.getAdapter().isEmpty()) {
+            v.findViewById(R.id.edit_skill_description_textview).setVisibility(View.VISIBLE);
+        }
     }
 
     private void setListeners(View v) {
@@ -148,16 +152,10 @@ public class EditSkillFragment extends Fragment {
                 .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                        if (position == 0) {
-                            v.findViewById(R.id.edit_skill_description_textview).setVisibility(View.GONE);
-                        } else {
-                            v.findViewById(R.id.edit_skill_description_textview).setVisibility(View.VISIBLE);
-
-                            ((TextView) v.findViewById(R.id.edit_skill_description_textview))
-                                    .setText(
-                                            ((UserSkill) ((AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getAdapter().getItem(position)).description
-                                    );
-                        }
+                        ((TextView) v.findViewById(R.id.edit_skill_description_textview))
+                                .setText(
+                                        ((UserSkill) ((AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getAdapter().getItem(position)).description
+                                );
                     }
 
                     @Override
@@ -191,8 +189,7 @@ public class EditSkillFragment extends Fragment {
     }
 
     private boolean validateInput(View v) {
-        if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getChildCount() == 0
-                || ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getSelectedItemPosition() == 0) {
+        if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown)).getChildCount() == 0) {
             Snackbar.make(v, getString(R.string.must_select_skill), Snackbar.LENGTH_SHORT).show();
             return false;
         }

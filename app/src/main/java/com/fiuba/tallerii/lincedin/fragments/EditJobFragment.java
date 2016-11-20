@@ -132,8 +132,12 @@ public class EditJobFragment extends Fragment {
     }
 
     private void setJobPositionsSpinnerAdapter(View v, List<UserJobPosition> jobPositions) {
-        ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown))
-                .setAdapter(new JobPositionsSpinnerAdapter(getContext(), jobPositions));
+        AppCompatSpinner jobPositionsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown);
+        jobPositionsSpinner.setAdapter(new JobPositionsSpinnerAdapter(getContext(), jobPositions));
+
+        if (!jobPositionsSpinner.getAdapter().isEmpty()) {
+            v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.VISIBLE);
+        }
     }
 
     private void setListeners(View v) {
@@ -158,16 +162,10 @@ public class EditJobFragment extends Fragment {
                 .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == 0) {
-                    v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.GONE);
-                } else {
-                    v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.VISIBLE);
-
-                    ((TextView) v.findViewById(R.id.edit_job_position_description_textview))
-                            .setText(
-                                    ((UserJobPosition) ((AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getAdapter().getItem(position)).description
-                            );
-                }
+                ((TextView) v.findViewById(R.id.edit_job_position_description_textview))
+                        .setText(
+                                ((UserJobPosition) ((AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getAdapter().getItem(position)).description
+                        );
             }
 
             @Override
@@ -245,8 +243,7 @@ public class EditJobFragment extends Fragment {
             return false;
         }
 
-        if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getChildCount() == 0
-                || ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getSelectedItemPosition() == 0) {
+        if (((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getChildCount() == 0) {
             Snackbar.make(v, getString(R.string.must_select_job_position), Snackbar.LENGTH_SHORT).show();
             return false;
         }
