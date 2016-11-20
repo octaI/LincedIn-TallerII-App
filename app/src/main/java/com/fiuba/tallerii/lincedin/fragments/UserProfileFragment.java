@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.BiographyActivity;
 import com.fiuba.tallerii.lincedin.activities.EducationActivity;
 import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.activities.SkillsActivity;
@@ -105,6 +106,13 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openLogin();
+            }
+        });
+
+        parentView.findViewById(R.id.user_own_profile_edit_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserBiography();
             }
         });
 
@@ -309,6 +317,14 @@ public class UserProfileFragment extends Fragment {
     private void openLogin() {
         Intent loginIntent = new Intent(getContext(), LogInActivity.class);
         startActivity(loginIntent);
+    }
+
+    private void openUserBiography() {
+        Intent biographyIntent = new Intent(getContext(), BiographyActivity.class);
+        if (user != null) {
+            biographyIntent.putExtra(BiographyActivity.ARG_USER, new Gson().toJson(user));
+        }
+        startActivity(biographyIntent);
     }
 
     private void openUserWorkExperience() {
