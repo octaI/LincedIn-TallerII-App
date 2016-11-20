@@ -2,9 +2,7 @@ package com.fiuba.tallerii.lincedin.fragments;
 
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,18 +28,15 @@ import com.fiuba.tallerii.lincedin.adapters.UserJobsAdapter;
 import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
-import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.utils.ClipboardManager;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
+import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import org.json.JSONObject;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class UserProfileFragment extends Fragment {
 
@@ -213,7 +209,16 @@ public class UserProfileFragment extends Fragment {
                         .replace(":1", DateUtils.getAgeFromDatetime(user.dateOfBirth))
                 );
 
-        ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
+        final TextView emailTextView = (TextView) v.findViewById(R.id.user_profile_biography_email_textview);
+        emailTextView.setText(user.email);
+        emailTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager.copyToClipboard(getContext(), emailTextView.getText().toString(), getString(R.string.email));
+                ViewUtils.setToast(getContext(), getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT);
+                return true;
+            }
+        });
 
         // TODO: 05/11/16 Set location when API supports it.
     }

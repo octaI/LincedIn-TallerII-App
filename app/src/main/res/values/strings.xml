@@ -96,7 +96,6 @@
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>
     <string name="http_configuration_dialog_port_text_view">Puerto</string>
     <string name="http_configuration_dialog_saved_toast">La configuración ha sido guardada</string>
+    <string name="copied_to_clipboard">Copiado al portapapeles</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
