@@ -14,6 +14,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import org.json.JSONObject;
 
@@ -67,7 +69,13 @@ public class HttpRequestHelper {
                                 errorListener
                         );
                     } else if (UserAuthenticationManager.isUserLoggedInWithLincedInAccount(context)) {
-                        // TODO: 20/11/16 Check how to retrieve email and PASSWORD securely for this request.
+                        UserAuthenticationManager.lincedInLogIn(
+                                context,
+                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, null),
+                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
+                                successlistener,
+                                errorListener
+                        );
                     }
                 } else {
                     errorListener.onErrorResponse(error);
