@@ -20,7 +20,7 @@ public class DateUtils {
 
     public static String parseToLocalDate(Context context, int dayNumber, int monthNumber, int yearNumber) {
         String day = dayNumber >= 10 ? String.valueOf(dayNumber) : "0" + String.valueOf(dayNumber);
-        String month = monthNumber >= 10 ? String.valueOf(monthNumber) : "0" + String.valueOf(monthNumber);
+        String month = (monthNumber + 1) >= 10 ? String.valueOf(monthNumber + 1) : "0" + String.valueOf(monthNumber + 1);   // January = 0
         String year = String.valueOf(yearNumber);
 
         String localDate = day + "/" + month + "/" + year;

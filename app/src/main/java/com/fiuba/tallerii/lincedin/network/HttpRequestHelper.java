@@ -57,31 +57,7 @@ public class HttpRequestHelper {
         if (mRequestQueue == null)
             return null;
 
-        Response.ErrorListener errorListenerThatHandlesTokenExpiration = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.networkResponse != null && error.networkResponse.statusCode == LincedInHttpStatus.UNAUTHORIZED) {
-                    if (UserAuthenticationManager.isUserLoggedInWithFacebookAccount(context)) {
-                        UserAuthenticationManager.facebookLogIn(
-                                context,
-                                AccessToken.getCurrentAccessToken().getToken(),
-                                successListener,
-                                errorListener
-                        );
-                    } else if (UserAuthenticationManager.isUserLoggedInWithLincedInAccount(context)) {
-                        UserAuthenticationManager.lincedInLogIn(
-                                context,
-                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, null),
-                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
-                                successListener,
-                                errorListener
-                        );
-                    }
-                } else {
-                    errorListener.onErrorResponse(error);
-                }
-            }
-        };
+        Response.ErrorListener errorListenerThatHandlesTokenExpiration = extendErrorListenerForHandlingSessionTokenExpiration(successListener, errorListener);
 
         JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, successListener, errorListenerThatHandlesTokenExpiration) {
             @Override
@@ -111,6 +87,34 @@ public class HttpRequestHelper {
         };
         request.setTag(requestTag);
         return mRequestQueue.add(request);
+    }
+
+    private static Response.ErrorListener extendErrorListenerForHandlingSessionTokenExpiration(final Response.Listener<JSONObject> successListener, final Response.ErrorListener errorListener) {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse != null && error.networkResponse.statusCode == LincedInHttpStatus.UNAUTHORIZED) {
+                    if (UserAuthenticationManager.isUserLoggedInWithFacebookAccount(context)) {
+                        UserAuthenticationManager.facebookLogIn(
+                                context,
+                                AccessToken.getCurrentAccessToken().getToken(),
+                                successListener,
+                                errorListener
+                        );
+                    } else if (UserAuthenticationManager.isUserLoggedInWithLincedInAccount(context)) {
+                        UserAuthenticationManager.lincedInLogIn(
+                                context,
+                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, null),
+                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
+                                successListener,
+                                errorListener
+                        );
+                    }
+                } else {
+                    errorListener.onErrorResponse(error);
+                }
+            }
+        };
     }
 
     /**
