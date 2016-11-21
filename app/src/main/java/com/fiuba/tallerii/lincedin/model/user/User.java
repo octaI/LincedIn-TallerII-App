@@ -6,6 +6,8 @@ import java.util.List;
 
 public class User {
 
+    public String id;
+
     @SerializedName("full_name")
     public String fullName;
 
