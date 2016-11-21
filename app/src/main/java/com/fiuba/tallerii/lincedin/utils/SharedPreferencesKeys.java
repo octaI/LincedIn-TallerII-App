@@ -1,9 +1,13 @@
 package com.fiuba.tallerii.lincedin.utils;
 
-public class SharedPreferencesKeys {
-    public static final String SERVER_IP = "ServerIP";
-    public static final String SERVER_PORT = "ServerPort";
+public interface SharedPreferencesKeys {
+    String SERVER_IP = "ServerIP";
+    String SERVER_PORT = "ServerPort";
 
-    public static final String USER_LOGGED_IN = "UserLoggedIn";
-    public static final String SESSION_TOKEN = "SessionToken";
+    String USER_LOGGED_IN = "UserLoggedIn";
+    String SESSION_TOKEN = "SessionToken";
+    String USER_EMAIL = "UserEmail";
+    String USER_PASSWORD = "UserPassword";
+    String SESSION_TYPE = "SessionType";
+
 }

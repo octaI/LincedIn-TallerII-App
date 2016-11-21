@@ -2,15 +2,17 @@ package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.webkit.HttpAuthHandler;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONObject;
 
@@ -41,17 +43,37 @@ public class HttpRequestHelper {
      * @param url is the url pointed by the request
      * @param requestParams are the key-value parameters added to the url
      * @param jsonRequest is the JSON body of the request
-     * @param listener is the listener that triggers the actions to perform when the response is successful
+     * @param successlistener is the listener that triggers the actions to perform when the response is successful
      * @param errorListener is the listener that triggers the actions to perform when the response fails
      * @param requestTag the tag associated to the request to enqueue
      * @return the enqueued Request{@link Request} or null{@code null} if the RequestQueue couldn't be initialized.
      */
     private static Request<JSONObject> enqueue(int method, String url, @Nullable final Map<String, String> requestParams, JSONObject jsonRequest,
-                                               Response.Listener<JSONObject> listener, Response.ErrorListener errorListener, String requestTag) {
+                                               final Response.Listener<JSONObject> successlistener, final Response.ErrorListener errorListener, String requestTag) {
         if (mRequestQueue == null)
             return null;
 
-        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, listener, errorListener) {
+        Response.ErrorListener errorListenerThatHandlesTokenExpiration = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse != null && error.networkResponse.statusCode == LincedInHttpStatus.UNAUTHORIZED) {
+                    if (UserAuthenticationManager.isUserLoggedInWithFacebookAccount(context)) {
+                        UserAuthenticationManager.facebookLogIn(
+                                context,
+                                AccessToken.getCurrentAccessToken().getToken(),
+                                successlistener,
+                                errorListener
+                        );
+                    } else if (UserAuthenticationManager.isUserLoggedInWithLincedInAccount(context)) {
+                        // TODO: 20/11/16 Check how to retrieve email and PASSWORD securely for this request.
+                    }
+                } else {
+                    errorListener.onErrorResponse(error);
+                }
+            }
+        };
+
+        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, successlistener, errorListenerThatHandlesTokenExpiration) {
             @Override
             protected Map<String, String> getParams() {
                 return requestParams;

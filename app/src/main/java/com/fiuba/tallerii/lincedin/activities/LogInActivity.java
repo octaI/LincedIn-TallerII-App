@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,13 +22,12 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
-import com.fiuba.tallerii.lincedin.utils.InputValidationUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.fiuba.tallerii.lincedin.network.UserAuthenticationManager.saveSessionToken;
+import static com.fiuba.tallerii.lincedin.network.UserAuthenticationManager.saveUserAuthInfo;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateEmail;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateThatAllFieldsAreFilled;
 
@@ -40,7 +38,6 @@ public class LogInActivity extends AppCompatActivity {
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private AccessTokenTracker accessTokenTracker;
-    private static String facebookAccessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +77,7 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
-    private void LincedInLogInUser(String email, String password) {
+    private void LincedInLogInUser(final String email, final String password) {
         refreshLoadingIndicator(true);
         UserAuthenticationManager.lincedInLogIn(
                 this,
@@ -89,7 +86,7 @@ public class LogInActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        onSuccessLincedInLogIn(response);
+                        onSuccessLincedInLogIn(response, email, password);
                     }
                 },
                 new Response.ErrorListener() {
@@ -101,11 +98,11 @@ public class LogInActivity extends AppCompatActivity {
         );
     }
 
-    private void onSuccessLincedInLogIn(JSONObject response) {
+    private void onSuccessLincedInLogIn(JSONObject response, String email, String password) {
         refreshLoadingIndicator(false);
         Log.d(TAG, new Gson().toJson(response));
         try {
-            saveSessionToken(this, response.getString("token"));
+            saveUserAuthInfo(this, response.getString("token"), email, password);
             finish();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -142,7 +139,7 @@ public class LogInActivity extends AppCompatActivity {
                                     Log.d(TAG, "Facebook profile Graph request success.");
                                     String jsonResult = new Gson().toJson(json);
                                     Log.d(TAG, jsonResult);
-                                    facebookLogInUser();
+                                    facebookLogInUser(json);
                                 }
                             }
                         });
@@ -155,14 +152,14 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onCancel() {
                 Log.d(TAG, "Facebook login callback cancelled.");
-                UserAuthenticationManager.deleteSessionToken(getApplicationContext());
+                UserAuthenticationManager.deleteUserAuthInfo(getApplicationContext());
             }
 
             @Override
             public void onError(FacebookException exception) {
                 Log.d(TAG, "Facebook login callback error!");
                 exception.printStackTrace();
-                UserAuthenticationManager.deleteSessionToken(getApplicationContext());
+                UserAuthenticationManager.deleteUserAuthInfo(getApplicationContext());
             }
         });
     }
@@ -189,15 +186,21 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(signUpIntent);
     }
 
-    private void facebookLogInUser() {
+    private void facebookLogInUser(final JSONObject facebookResponse) {
         refreshLoadingIndicator(true);
         UserAuthenticationManager.facebookLogIn(
                 this,
-                facebookAccessToken,
+                AccessToken.getCurrentAccessToken().getToken(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        onSuccessLincedInLogInWithFacebook(response);
+                        try {
+                            onSuccessLincedInLogInWithFacebook(response, facebookResponse.getString("email"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "Couldn't parse email from Facebook log in response.");
+                            onSuccessLincedInLogInWithFacebook(response, null);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -209,8 +212,8 @@ public class LogInActivity extends AppCompatActivity {
         );
     }
 
-    private void onSuccessLincedInLogInWithFacebook(JSONObject response) {
-        onSuccessLincedInLogIn(response);
+    private void onSuccessLincedInLogInWithFacebook(JSONObject response, String email) {
+        onSuccessLincedInLogIn(response, email, null);
     }
 
     private void onErrorLincedInLogInWithFacebook(VolleyError error) {
@@ -253,11 +256,8 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     private void updateSessionToken(AccessToken accessToken) {
-        if (accessToken != null) {
-            facebookAccessToken = accessToken.getToken();
-        } else {
-            facebookAccessToken = null;
-            UserAuthenticationManager.deleteSessionToken(this);
+        if (accessToken == null) {
+            UserAuthenticationManager.deleteUserAuthInfo(this);
         }
     }
 
