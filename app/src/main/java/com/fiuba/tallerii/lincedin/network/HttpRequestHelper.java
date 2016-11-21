@@ -105,7 +105,7 @@ public class HttpRequestHelper {
                         UserAuthenticationManager.lincedInLogIn(
                                 context,
                                 SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, null),
-                                SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
+                                SharedPreferencesUtils.getDecryptedStringFromSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
                                 successListener,
                                 errorListener
                         );

@@ -20,7 +20,7 @@ public class UserAuthenticationManager {
     public static final String LOGIN_TYPE_NORMAL = "Normal";
 
     public static void signUp(Context context, String firstName, String lastName, String email, String birthday, String password) {
-        // TODO: 30/10/16 Request to app server and call saveUserToken on success.
+        // TODO: 30/10/16 Request to app server and call saveUserAuthInfo on success.
     }
 
     public static void facebookLogIn(final Context context, String facebookAccessToken,
@@ -90,14 +90,14 @@ public class UserAuthenticationManager {
         SharedPreferencesUtils.putBooleanToSharedPreferences(context, SharedPreferencesKeys.USER_LOGGED_IN, true);
         SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN, sessionToken);
         SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, email);
-        SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, password);
+        SharedPreferencesUtils.putEncryptedStringToSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD, password);
     }
 
     public static void deleteUserAuthInfo(Context context) {
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_LOGGED_IN);
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN);
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL);
-        SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD);
+        SharedPreferencesUtils.removeFromSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD);
 
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TYPE);
     }
