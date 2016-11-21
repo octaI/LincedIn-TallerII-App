@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
@@ -16,6 +17,7 @@ import com.facebook.login.LoginManager;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +86,19 @@ public class HttpRequestHelper {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", UserAuthenticationManager.getSessionToken(context));
                 return headers;
+            }
+
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                try {
+                    if (response.data.length == 0) {
+                        byte[] responseData = "{}".getBytes("UTF8");
+                        response = new NetworkResponse(response.statusCode, responseData, response.headers, response.notModified);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return super.parseNetworkResponse(response);
             }
         };
         request.setTag(requestTag);
