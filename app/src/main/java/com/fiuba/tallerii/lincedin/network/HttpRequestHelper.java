@@ -47,13 +47,13 @@ public class HttpRequestHelper {
      * @param url is the url pointed by the request
      * @param requestParams are the key-value parameters added to the url
      * @param jsonRequest is the JSON body of the request
-     * @param successlistener is the listener that triggers the actions to perform when the response is successful
+     * @param successListener is the listener that triggers the actions to perform when the response is successful
      * @param errorListener is the listener that triggers the actions to perform when the response fails
      * @param requestTag the tag associated to the request to enqueue
      * @return the enqueued Request{@link Request} or null{@code null} if the RequestQueue couldn't be initialized.
      */
     private static Request<JSONObject> enqueue(int method, String url, @Nullable final Map<String, String> requestParams, JSONObject jsonRequest,
-                                               final Response.Listener<JSONObject> successlistener, final Response.ErrorListener errorListener, String requestTag) {
+                                               final Response.Listener<JSONObject> successListener, final Response.ErrorListener errorListener, String requestTag) {
         if (mRequestQueue == null)
             return null;
 
@@ -65,7 +65,7 @@ public class HttpRequestHelper {
                         UserAuthenticationManager.facebookLogIn(
                                 context,
                                 AccessToken.getCurrentAccessToken().getToken(),
-                                successlistener,
+                                successListener,
                                 errorListener
                         );
                     } else if (UserAuthenticationManager.isUserLoggedInWithLincedInAccount(context)) {
@@ -73,7 +73,7 @@ public class HttpRequestHelper {
                                 context,
                                 SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, null),
                                 SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_PASSWORD, null),
-                                successlistener,
+                                successListener,
                                 errorListener
                         );
                     }
@@ -83,7 +83,7 @@ public class HttpRequestHelper {
             }
         };
 
-        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, successlistener, errorListenerThatHandlesTokenExpiration) {
+        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonRequest, successListener, errorListenerThatHandlesTokenExpiration) {
             @Override
             protected Map<String, String> getParams() {
                 return requestParams;
