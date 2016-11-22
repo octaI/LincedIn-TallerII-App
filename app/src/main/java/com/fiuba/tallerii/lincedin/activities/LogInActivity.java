@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,8 @@ import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateTha
 public class LogInActivity extends AppCompatActivity {
 
     private static final String TAG = "LogInActivity";
+
+    private static final int REQ_CREATE_ACCOUNT = 10;
 
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 
@@ -71,13 +74,13 @@ public class LogInActivity extends AppCompatActivity {
                 if (validateInput() && validateUserIsNotAlreadyLoggedIn(v)) {
                     String email = ((EditText) findViewById(R.id.login_email_edittext)).getText().toString();
                     String password = ((EditText) findViewById(R.id.login_password_edittext)).getText().toString();
-                    LincedInLogInUser(email, password);
+                    lincedInLogInUser(email, password);
                 }
             }
         });
     }
 
-    private void LincedInLogInUser(final String email, final String password) {
+    private void lincedInLogInUser(final String email, final String password) {
         refreshLoadingIndicator(true);
         UserAuthenticationManager.lincedInLogIn(
                 this,
@@ -183,7 +186,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private void openSignUpActivity() {
         Intent signUpIntent = new Intent(this, SignUpActivity.class);
-        startActivity(signUpIntent);
+        startActivityForResult(signUpIntent, REQ_CREATE_ACCOUNT);
     }
 
     private void facebookLogInUser(final JSONObject facebookResponse) {
@@ -263,6 +266,14 @@ public class LogInActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQ_CREATE_ACCOUNT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Snackbar.make(findViewById(R.id.login_lincedin_button), R.string.account_successfully_created, Snackbar.LENGTH_SHORT).show();
+                    ((EditText) findViewById(R.id.login_email_edittext)).setText(data.getStringExtra(SignUpActivity.EXTRA_EMAIL));
+                    ((EditText) findViewById(R.id.login_password_edittext)).setText(data.getStringExtra(SignUpActivity.EXTRA_PASSWORD));
+                }
+        }
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }

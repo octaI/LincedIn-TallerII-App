@@ -95,6 +95,8 @@
     <string name="field_is_required">El campo es requerido</string>
     <string name="invalid_email">El e-mail es inválido</string>
     <string name="passwords_do_not_match">Las contraseñas no coinciden</string>
+    <string name="error_create_account">Hubo un error al crear la cuenta de usuario</string>
+    <string name="account_successfully_created">La cuenta fue creada exitosamente</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
     <string name="error_login">Hubo un error al iniciar sesión</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>

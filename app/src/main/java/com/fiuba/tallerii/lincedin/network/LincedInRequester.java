@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
+import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.google.gson.Gson;
 
@@ -60,6 +61,25 @@ public class LincedInRequester {
                 errorListener,
                 "GetUserProfile"
         );
+    }
+
+    public static void createUser(SignUpUser user, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/user";
+
+        try {
+            HttpRequestHelper.put(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(user)),
+                    successListener,
+                    errorListener,
+                    "CreateUser"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void editUserProfile(User user, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
