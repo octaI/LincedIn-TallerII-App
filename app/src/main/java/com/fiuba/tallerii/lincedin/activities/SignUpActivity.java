@@ -137,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
         return new SignUpUser(
                 ((EditText) findViewById(R.id.signup_first_name_edittext)).getText().toString(),
                 ((EditText) findViewById(R.id.signup_last_name_edittext)).getText().toString(),
-                ((EditText) findViewById(R.id.signup_date_of_birth_edittext)).getText().toString(),
+                DateUtils.parseDateWithoutTimeToDatetime(((EditText) findViewById(R.id.signup_date_of_birth_edittext)).getText().toString()),
                 ((EditText) findViewById(R.id.signup_email_edittext)).getText().toString(),
                 ((EditText) findViewById(R.id.signup_password_edittext)).getText().toString()
         );
