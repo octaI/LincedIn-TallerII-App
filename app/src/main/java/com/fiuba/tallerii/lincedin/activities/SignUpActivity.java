@@ -23,6 +23,7 @@ import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.InputValidationUtils;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

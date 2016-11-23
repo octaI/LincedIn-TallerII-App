@@ -69,7 +69,7 @@ public class LincedInRequester {
                 + "/user";
 
         try {
-            HttpRequestHelper.put(
+            HttpRequestHelper.post(
                     url,
                     requestParams,
                     new JSONObject(new Gson().toJson(user)),
