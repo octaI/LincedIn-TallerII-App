@@ -118,6 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.i(TAG, "New user account created.");
                         refreshLoadingIndicator(false);
                         onSuccessUserAccountCreation();
                     }
