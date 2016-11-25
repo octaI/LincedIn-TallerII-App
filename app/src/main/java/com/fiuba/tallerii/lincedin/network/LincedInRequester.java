@@ -10,6 +10,7 @@ import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -18,15 +19,20 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getBooleanFromSharedPreferences;
 import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getStringFromSharedPreferences;
 
 public class LincedInRequester {
 
     private static String getAppServerBaseURL(Context context) {
-        return "http://"
-                + "lincedin.ddns.net";
-                //+ getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
-                //+ ":" + getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED);
+        if (getBooleanFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IS_LOCAL, false)) {
+            return "http://"
+                    + getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
+                    + ":" + getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_PORT, HTTPConfigurationDialogFragment.DEFAULT_PORT_EXPOSED);
+        } else {
+            return "http://"
+                    + "lincedin.ddns.net";
+        }
     }
 
     public static void logIn(LogInUser logInUser, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {

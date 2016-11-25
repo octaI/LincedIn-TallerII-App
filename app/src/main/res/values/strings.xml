@@ -99,6 +99,8 @@
     <string name="account_successfully_created">La cuenta fue creada exitosamente</string>
     <string name="login_has_account_question">¿No tienes una cuenta?</string>
     <string name="error_login">Hubo un error al iniciar sesión</string>
+    <string name="local">Local</string>
+    <string name="remote">Remoto</string>
     <string name="http_configuration_dialog_title">Configuración HTTP</string>
     <string name="http_configuration_dialog_description">Indique la dirección del servidor al cual se le enviarán las consultas HTTP</string>
     <string name="http_configuration_dialog_local_ip_text_view">IP</string>

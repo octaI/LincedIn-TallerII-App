@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.utils;
 
 public interface SharedPreferencesKeys {
+    String SERVER_IS_LOCAL = "ServerIsLocal";
     String SERVER_IP = "ServerIP";
     String SERVER_PORT = "ServerPort";
 

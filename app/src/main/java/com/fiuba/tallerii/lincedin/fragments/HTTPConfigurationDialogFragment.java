@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -38,11 +40,7 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
     public static final String DEFAULT_SERVER_IP = "192.168.0.14";
     public static final String DEFAULT_PORT_EXPOSED = "8081";
 
-    private ArrayAdapter adapter;
-
-    public void setAdapter(ArrayAdapter adapter){
-        this.adapter = adapter;
-    }
+    private AlertDialog alertDialog;
 
     @Override
     public @NonNull Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -61,7 +59,11 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
                         String serverPort = TextUtils.isEmpty(serverPortEditText.getText().toString()) ?
                                 DEFAULT_PORT_EXPOSED : serverPortEditText.getText().toString();
 
-                        saveChanges(serverIP, serverPort);
+                        saveChanges(
+                                ((SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch)).isChecked(),
+                                serverIP,
+                                serverPort
+                        );
                         //sendDummyHTTPRequestToAppServer(localIp, port);
                     }
                 })
@@ -71,25 +73,32 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
                     }
                 });
 
-        final AlertDialog dialog = builder.create();
-        dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+        alertDialog = builder.create();
+        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+
+                setLocalOrRemoteSwitchListener();
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_server_ip_edit_text))
+                ((EditText) alertDialog.findViewById(R.id.dialog_http_configuration_server_ip_edit_text))
                         .setText(preferences.getString(SharedPreferencesKeys.SERVER_IP, DEFAULT_SERVER_IP));
-                ((EditText) dialog.findViewById(R.id.dialog_http_configuration_port_edit_text))
+                ((EditText) alertDialog.findViewById(R.id.dialog_http_configuration_port_edit_text))
                         .setText(preferences.getString(SharedPreferencesKeys.SERVER_PORT, DEFAULT_PORT_EXPOSED));
             }
         });
-        return dialog;
+        return alertDialog;
     }
 
-    private void saveChanges(String serverIP, String serverPort) {
+    private void saveChanges(boolean isLocal, String serverIP, String serverPort) {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+        if (isLocal) {
+            editor.putBoolean(SharedPreferencesKeys.SERVER_IS_LOCAL, true);
+        } else {
+            editor.putBoolean(SharedPreferencesKeys.SERVER_IS_LOCAL, false);
+        }
         editor.putString(SharedPreferencesKeys.SERVER_IP, serverIP);
         editor.putString(SharedPreferencesKeys.SERVER_PORT, serverPort);
         editor.apply();
@@ -97,43 +106,14 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
         Toast.makeText(getContext(), getString(R.string.http_configuration_dialog_saved_toast), Toast.LENGTH_SHORT).show();
     }
 
-    private void sendDummyHTTPRequestToAppServer(String localIp, String port) {
-        final Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("appName", "LincedIn");
-        requestParams.put("testing", Boolean.TRUE.toString());
-        final String url = "http://" + localIp + ":" + port + "/skills";
-
-
-
-        HttpRequestHelper.get(
-                url,
-                requestParams,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-
-                        try {
-                            JSONArray skills = response.getJSONArray("skills");
-                            for (int i=0; i < skills.length(); i++) {
-                                JSONObject skill = skills.getJSONObject(i);
-                                adapter.add(skill.getString("name"));
-                            }
-                        } catch (JSONException e) {
-                            EventBus.getDefault().post(new MessageEvent("No hay skills :("));
-                        }
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                        EventBus.getDefault().post(new MessageEvent(error.toString()));
-                    }
-                },
-                "TEST_REQUEST"
-        );
+    private void setLocalOrRemoteSwitchListener() {
+        SwitchCompat localOrRemoteSwitch = (SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch);
+        if (localOrRemoteSwitch.isChecked()) {
+            localOrRemoteSwitch.setText(getString(R.string.local));
+            alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.VISIBLE);
+        } else {
+            localOrRemoteSwitch.setText(getString(R.string.remote));
+            alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.GONE);
+        }
     }
 }
