@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -130,5 +131,18 @@ public class LincedInRequester {
                 errorListener,
                 "GetAllSkills"
         );
+    }
+
+    public static void getUserFriends(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, @Nullable String anId) {
+        /*
+        You can use this request either to get an own user's friends or
+        some other user's friends.
+        anId field can either be null (an own user's friends) or not null
+        (some other user's friends)
+         */
+        final Map<String,String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context) + "/friends/" + anId;
+
+        HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserFriends");
     }
 }
