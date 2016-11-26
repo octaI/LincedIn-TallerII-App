@@ -109,6 +109,21 @@ public class LincedInRequester {
         }
     }
 
+    public static void getUserRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/recommendation/"
+                + userId;
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetUserRecommendations"
+        );
+    }
+
     public static void getAllJobPositions(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
