@@ -60,11 +60,10 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
                                 DEFAULT_PORT_EXPOSED : serverPortEditText.getText().toString();
 
                         saveChanges(
-                                ((SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch)).isChecked(),
+                                !((SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch)).isChecked(),
                                 serverIP,
                                 serverPort
                         );
-                        //sendDummyHTTPRequestToAppServer(localIp, port);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -107,13 +106,18 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
     }
 
     private void setLocalOrRemoteSwitchListener() {
-        SwitchCompat localOrRemoteSwitch = (SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch);
-        if (localOrRemoteSwitch.isChecked()) {
-            localOrRemoteSwitch.setText(getString(R.string.local));
-            alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.VISIBLE);
-        } else {
-            localOrRemoteSwitch.setText(getString(R.string.remote));
-            alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.GONE);
-        }
+        final SwitchCompat localOrRemoteSwitch = (SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch);
+        localOrRemoteSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (localOrRemoteSwitch.isChecked()) {
+                    localOrRemoteSwitch.setText(getString(R.string.remote));
+                    alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.GONE);
+                } else {
+                    localOrRemoteSwitch.setText(getString(R.string.local));
+                    alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 }
