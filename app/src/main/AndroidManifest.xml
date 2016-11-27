@@ -130,6 +130,17 @@
                 android:value=".activities.HomeActivity" />
             >
         </activity>
+        <activity
+            android:name=".activities.RecommendationsActivity"
+            android:label="@string/recommendations"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+            >
+        </activity>
     </application>
 
 </manifest>

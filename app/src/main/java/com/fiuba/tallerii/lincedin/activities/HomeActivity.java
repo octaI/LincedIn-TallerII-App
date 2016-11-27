@@ -42,20 +42,6 @@ public class HomeActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ArrayAdapter mSkillsAdapter;
-    private ArrayList<String> listSkills = new ArrayList<>();
-
-    public ArrayList<String> getArrayList() {
-        return listSkills;
-    }
-
-    public ArrayAdapter getArrayAdapter() {
-        return mSkillsAdapter;
-    }
-
-    public void setArrayAdapter(ArrayAdapter adapter) {
-        mSkillsAdapter = adapter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
