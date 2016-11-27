@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +60,6 @@ public class RecommendationsReceivedFragment extends Fragment {
     private void requestRecommendationsReceived(final View v) {
         if (getArguments() != null) {
             String userId = getArguments().getString(ARG_USER_ID);
-            // TODO: 27/11/16 Request for retrieving recommendations and call setAdapter on success
             refreshLoadingIndicator(v, true);
             LincedInRequester.getUserRecommendations(
                     userId,
@@ -75,10 +75,16 @@ public class RecommendationsReceivedFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            refreshLoadingIndicator(v, false);
                             Log.e(TAG, "Error retrieving user recommendations received: " + error.toString());
                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
+                            ViewUtils.setSnackbar(
+                                    v.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab),
+                                    R.string.error_retrieving_recommendations,
+                                    Snackbar.LENGTH_LONG
+                            );
                         }
                     }
             );

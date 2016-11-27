@@ -70,6 +70,7 @@
     <string name="error_edit_education">Hubo un error y el curso no pudo ser editado</string>
     <string name="error_edit_job">Hubo un error y el cargo no pudo ser editado</string>
     <string name="error_edit_skill">Hubo un error y la aptitud no pudo ser editada</string>
+    <string name="error_retrieving_recommendations">Hubo un error y no se pudieron cargar las recomendaciones</string>
     <string name="are_you_sure_you_want_to_delete_job">¿Estás seguro de que quieres eliminar este cargo?</string>
     <string name="are_you_sure_you_want_to_delete_education">¿Estás seguro de que quieres eliminar este curso?</string>
     <string name="are_you_sure_you_want_to_delete_skill">¿Estás seguro de que quieres eliminar esta aptitud?</string>
