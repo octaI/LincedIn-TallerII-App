@@ -109,7 +109,7 @@ public class LincedInRequester {
         }
     }
 
-    public static void getUserRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void getUserReceivedRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
                 + "/recommendation/"
@@ -120,7 +120,22 @@ public class LincedInRequester {
                 requestParams,
                 successListener,
                 errorListener,
-                "GetUserRecommendations"
+                "GetUserReceivedRecommendations"
+        );
+    }
+
+    public static void getUserMadeRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/recommendation/"
+                + userId;
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetUserMadeRecommendations"
         );
     }
 

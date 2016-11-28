@@ -1,19 +1,32 @@
 package com.fiuba.tallerii.lincedin.model.user;
 
-public class Recommendation {
-    private String description;
-    private String from;
+import com.google.gson.annotations.SerializedName;
 
-    public Recommendation(String description, String from) {
+public class Recommendation {
+
+    private String description;
+
+    @SerializedName("from_user")
+    private String fromUser;
+
+    @SerializedName("for_user")
+    private String forUser;
+
+    public Recommendation(String description, String fromUser, String forUser) {
         this.description = description;
-        this.from = from;
+        this.fromUser = fromUser;
+        this.forUser = forUser;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public String getFrom() {
-        return from;
+    public String getFromUser() {
+        return fromUser;
+    }
+
+    public String getForUser() {
+        return forUser;
     }
 }

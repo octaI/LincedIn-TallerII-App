@@ -18,6 +18,7 @@
     <string name="email">E-mail</string>
     <string name="user">Usuario</string>
     <string name="from_user">De :1</string>
+    <string name="for_user">Para :1</string>
     <string name="description">Descripción</string>
     <string name="tell_a_little_about_yourself">Cuenta un poco sobre tí</string>
     <string name="password">Contraseña</string>

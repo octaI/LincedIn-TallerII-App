@@ -13,16 +13,15 @@ import com.fiuba.tallerii.lincedin.model.user.Recommendation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecommendationsReceivedAdapter extends BaseAdapter {
-
+public class RecommendationsMadeAdapter extends BaseAdapter {
     private final Context context;
     private List<Recommendation> dataset = new ArrayList<>();
 
-    public RecommendationsReceivedAdapter(Context context) {
+    public RecommendationsMadeAdapter(Context context) {
         this.context = context;
     }
 
-    public RecommendationsReceivedAdapter(Context context, List<Recommendation> dataset) {
+    public RecommendationsMadeAdapter(Context context, List<Recommendation> dataset) {
         this.context = context;
         setDataset(dataset);
     }
@@ -53,16 +52,16 @@ public class RecommendationsReceivedAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).
-                    inflate(R.layout.recommendation_received_row, parent, false);
+                    inflate(R.layout.recommendation_made_row, parent, false);
         }
 
         Recommendation currentRecommendation = dataset.get(position);
         if (currentRecommendation != null) {
-            TextView descriptionTextView = (TextView) convertView.findViewById(R.id.recommendation_received_row_description_textview);
-            TextView fromUserTextView = (TextView) convertView.findViewById(R.id.recommendation_received_row_from_user_textview);
+            TextView descriptionTextView = (TextView) convertView.findViewById(R.id.recommendation_made_row_description_textview);
+            TextView fromUserTextView = (TextView) convertView.findViewById(R.id.recommendation_made_row_for_user_textview);
             descriptionTextView.setText(currentRecommendation.getDescription());
             fromUserTextView.setText(
-                    fromUserTextView.getText().toString().replace(":1", currentRecommendation.getFromUser())
+                    fromUserTextView.getText().toString().replace(":1", currentRecommendation.getForUser())
             );
         }
 
