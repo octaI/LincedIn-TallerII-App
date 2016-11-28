@@ -60,7 +60,7 @@ public class RecommendationsReceivedFragment extends Fragment {
 
     private void requestRecommendationsReceived(final View v) {
         if (getArguments() != null) {
-            String userId = getArguments().getString(ARG_USER_ID);
+            String userId = getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me";
             refreshLoadingIndicator(v, true);
             LincedInRequester.getUserRecommendations(
                     userId,

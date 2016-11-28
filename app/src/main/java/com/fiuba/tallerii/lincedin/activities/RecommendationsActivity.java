@@ -99,7 +99,7 @@ public class RecommendationsActivity extends AppCompatActivity {
                 return RecommendationsReceivedFragment.newInstance(userId, isOwnProfile);
             }
             // TODO: 27/11/16 Implement recommendations made tab.
-            return null;
+            return RecommendationsReceivedFragment.newInstance(userId, isOwnProfile);
         }
 
         @Override
