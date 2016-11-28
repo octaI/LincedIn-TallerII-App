@@ -112,7 +112,7 @@ public class LincedInRequester {
     public static void getUserReceivedRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
-                + "/recommendation/"
+                + "/recommendations/"
                 + userId;
 
         HttpRequestHelper.get(
@@ -127,7 +127,7 @@ public class LincedInRequester {
     public static void getUserMadeRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
-                + "/recommendation/"
+                + "/recommendations/"
                 + userId;
 
         HttpRequestHelper.get(
