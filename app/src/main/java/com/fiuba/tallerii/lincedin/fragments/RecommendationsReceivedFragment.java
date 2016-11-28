@@ -20,6 +20,7 @@ import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -69,6 +70,8 @@ public class RecommendationsReceivedFragment extends Fragment {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, new Gson().toJson(response));
+                            Type recommendationListType = new TypeToken<List<Recommendation>>() {}.getType();
+                            recommendations = new Gson().fromJson(response.toString(), recommendationListType);
                             setAdapter(v);
                             refreshLoadingIndicator(v, false);
                         }

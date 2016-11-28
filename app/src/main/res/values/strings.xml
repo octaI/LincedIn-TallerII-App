@@ -43,6 +43,8 @@
     <string name="today">Hoy</string>
     <string name="biography">Biografía</string>
     <string name="recommendations">Recomendaciones</string>
+    <string name="recommendations_received">Recibidas</string>
+    <string name="recommendations_made">Hechas</string>
     <string name="age">:1 años</string>
     <string name="location">Ubicación</string>
     <string name="work_experience">Experiencia laboral</string>
