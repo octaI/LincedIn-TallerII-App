@@ -7,6 +7,7 @@ public interface SharedPreferencesKeys {
 
     String USER_LOGGED_IN = "UserLoggedIn";
     String SESSION_TOKEN = "SessionToken";
+    String USER_ID = "UserId";
     String USER_EMAIL = "UserEmail";
     String USER_PASSWORD = "UserPassword";
     String SESSION_TYPE = "SessionType";

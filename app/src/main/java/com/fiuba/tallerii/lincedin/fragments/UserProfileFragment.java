@@ -99,7 +99,9 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setIsOwnProfileFlag() {
-        isOwnProfile = getArguments() == null || getArguments().getString(ARG_USER_ID) == null;
+        isOwnProfile = getArguments() == null
+                || getArguments().getString(ARG_USER_ID) == null
+                || getArguments().getString(ARG_USER_ID).equals(SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, ""));
     }
 
     private void setButtonsListeners(final View parentView) {
