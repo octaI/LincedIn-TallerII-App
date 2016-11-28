@@ -123,6 +123,7 @@
             android:name=".activities.BiographyActivity"
             android:label="@string/biography"
             android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
