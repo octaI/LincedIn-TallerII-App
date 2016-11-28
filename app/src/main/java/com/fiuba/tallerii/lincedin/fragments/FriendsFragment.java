@@ -92,8 +92,6 @@ public class FriendsFragment extends Fragment {
                 }
             }
         });
-        userFriends.getUserFriends().add("1234");
-        userFriends.getUserFriends().add("abc456");
         UserFriendsAdapter friendListAdapter = new UserFriendsAdapter(userFriends,getContext());
         friendList.setAdapter(friendListAdapter);
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
