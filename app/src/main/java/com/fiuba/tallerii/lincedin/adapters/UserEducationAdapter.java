@@ -64,12 +64,22 @@ public class UserEducationAdapter extends BaseAdapter {
         if (currentEducation != null) {
             ((TextView) convertView.findViewById(R.id.user_education_row_degree_textview)).setText(currentEducation.degree);
             ((TextView) convertView.findViewById(R.id.user_education_row_institute_textview)).setText(currentEducation.schoolName);
-            ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview))
-                    .setText(
-                            ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview)).getText().toString()
-                                    .replace(":1", DateUtils.extractYearFromDatetime(currentEducation.startDate))
-                                    .replace(":2", DateUtils.extractYearFromDatetime(currentEducation.endDate))
-                    );
+            if (currentEducation.endDate != null) {
+                ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview))
+                        .setText(
+                                ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview)).getText().toString()
+                                        .replace(":1", DateUtils.extractYearFromDatetime(currentEducation.startDate))
+                                        .replace(":2", DateUtils.extractYearFromDatetime(currentEducation.endDate))
+                        );
+            } else {
+                ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview))
+                        .setText(
+                                ((TextView) convertView.findViewById(R.id.user_education_row_date_range_textview)).getText().toString()
+                                        .replace(":1", DateUtils.extractYearFromDatetime(currentEducation.startDate))
+                                        .replace(":2", context.getString(R.string.now).toLowerCase())
+                        );
+            }
+
         }
 
         return convertView;

@@ -17,6 +17,7 @@
     <string name="logout">Cerrar sesión</string>
     <string name="email">E-mail</string>
     <string name="user">Usuario</string>
+    <string name="from_user">De :1</string>
     <string name="description">Descripción</string>
     <string name="tell_a_little_about_yourself">Cuenta un poco sobre tí</string>
     <string name="password">Contraseña</string>
@@ -39,6 +40,7 @@
     <string name="current_work">Trabajo actual</string>
     <string name="currently_studying">Cursando actualmente</string>
     <string name="now">Ahora</string>
+    <string name="today">Hoy</string>
     <string name="biography">Biografía</string>
     <string name="recommendations">Recomendaciones</string>
     <string name="age">:1 años</string>

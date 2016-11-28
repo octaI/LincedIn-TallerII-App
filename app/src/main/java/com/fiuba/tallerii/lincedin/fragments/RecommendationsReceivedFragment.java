@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.adapters.RecommendationsReceivedAdapter;
 import com.fiuba.tallerii.lincedin.model.user.Recommendation;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
@@ -76,7 +77,7 @@ public class RecommendationsReceivedFragment extends Fragment {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             refreshLoadingIndicator(v, false);
-                            Log.e(TAG, "Error retrieving user recommendations received: " + error.toString());
+                            Log.e(TAG, "Error retrieving recommendations received: " + error.toString());
                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
