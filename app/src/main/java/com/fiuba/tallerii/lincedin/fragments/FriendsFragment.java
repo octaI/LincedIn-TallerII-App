@@ -40,7 +40,7 @@ public class FriendsFragment extends Fragment {
 
     private UserFriends userFriends = new UserFriends();
 
-    private Boolean isOwnProfile;
+    private Boolean isOwnProfile = false;
 
     private UserFriendsAdapter userFriendsAdapter;
 
@@ -55,6 +55,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
+        requestUserFriends();
 
 
     }
@@ -93,21 +94,20 @@ public class FriendsFragment extends Fragment {
         });
         userFriends.getUserFriends().add("1234");
         userFriends.getUserFriends().add("abc456");
-        //requestUserFriends();
-        ArrayAdapter<String> friendListAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,userFriends.getUserFriends());
+        UserFriendsAdapter friendListAdapter = new UserFriendsAdapter(userFriends,getContext());
         friendList.setAdapter(friendListAdapter);
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-               /* UserProfileFragment switchFragment =  UserProfileFragment.newInstance(userFriends.getUserFriends().get(i).toString());
+                UserProfileFragment switchFragment =  UserProfileFragment.newInstance(userFriends.getUserFriends().get(i).toString());
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.container,switchFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                */
-                Toast.makeText(getContext(),"Clickeaste en el user" + userFriends.getUserFriends().get(i).toString(), Toast.LENGTH_SHORT);
+
+                Toast.makeText(getContext(),"Clickeaste en el user" + userFriends.getUserFriends().get(i).toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -133,7 +133,6 @@ public class FriendsFragment extends Fragment {
                             public void onResponse(JSONObject response) {
                                 Gson parser = new Gson();
                                 Log.d(TAG, parser.toJson(response));
-
                                 userFriends = parser.fromJson(response.toString(), UserFriends.class);
 
                             }
@@ -141,6 +140,7 @@ public class FriendsFragment extends Fragment {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getContext(),"Ha ocurrido un error al establecer la conexión con el servidor.",Toast.LENGTH_LONG).show();
                                 Log.e(TAG,error.toString());
                                 error.printStackTrace();
                             }
