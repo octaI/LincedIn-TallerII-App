@@ -79,12 +79,12 @@ public class RecommendationsMadeFragment extends Fragment {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             refreshLoadingIndicator(v, false);
-                            Log.e(TAG, "Error retrieving recommendations received: " + error.toString());
+                            Log.e(TAG, "Error retrieving recommendations made: " + error.toString());
                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
                             ViewUtils.setSnackbar(
-                                    v.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab),
+                                    v.findViewById(R.id.fragment_recommendations_made_listview),
                                     R.string.error_retrieving_recommendations,
                                     Snackbar.LENGTH_LONG
                             );
