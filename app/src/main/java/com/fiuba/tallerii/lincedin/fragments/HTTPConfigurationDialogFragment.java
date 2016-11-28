@@ -24,6 +24,7 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.events.MessageEvent;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -107,6 +108,11 @@ public class HTTPConfigurationDialogFragment extends DialogFragment {
 
     private void setLocalOrRemoteSwitchListener() {
         final SwitchCompat localOrRemoteSwitch = (SwitchCompat) alertDialog.findViewById(R.id.dialog_http_configuration_server_local_or_remote_switch);
+        if (!SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.SERVER_IS_LOCAL, false)) {
+            localOrRemoteSwitch.setChecked(true);
+            localOrRemoteSwitch.setText(getString(R.string.remote));
+            alertDialog.findViewById(R.id.dialog_http_configuration_server_local_layout).setVisibility(View.GONE);
+        }
         localOrRemoteSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
