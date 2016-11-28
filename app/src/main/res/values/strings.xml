@@ -91,6 +91,7 @@
     <string name="see_more">Ver más</string>
     <string name="add">Agregar</string>
     <string name="couldnt_retrieve_user_profile">No se pudo obtener el perfil de usuario</string>
+    <string name="couldnt_retrieve_chats">No se pudieron obtener las conversaciones</string>
     <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
     <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
@@ -117,6 +118,7 @@
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
     <string name="send_email">Enviar e-mail</string>
     <string name="check_your_network_connection">Chequea tu conexión a la red</string>
+    <string name="no_chats">No hay conversaciones :(</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
