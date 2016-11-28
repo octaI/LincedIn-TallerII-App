@@ -20,6 +20,7 @@ import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -70,7 +71,11 @@ public class RecommendationsReceivedFragment extends Fragment {
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, new Gson().toJson(response));
                             Type recommendationListType = new TypeToken<List<Recommendation>>() {}.getType();
-                            recommendations = new Gson().fromJson(response.toString(), recommendationListType);
+                            try {
+                                recommendations = new Gson().fromJson(response.getJSONArray("recommendations").toString(), recommendationListType);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             setAdapter(v);
                             refreshLoadingIndicator(v, false);
                         }
@@ -96,7 +101,9 @@ public class RecommendationsReceivedFragment extends Fragment {
 
     private void setAdapter(View v) {
         recommendationsReceivedAdapter = new RecommendationsReceivedAdapter(getContext(), recommendations);
-        ((ListView) v.findViewById(R.id.fragment_recommendations_received_listview)).setAdapter(recommendationsReceivedAdapter);
+        ListView recommendationsListView = (ListView) v.findViewById(R.id.fragment_recommendations_received_listview);
+        recommendationsListView.setAdapter(recommendationsReceivedAdapter);
+        recommendationsListView.setEmptyView(v.findViewById(android.R.id.empty));
     }
 
     private void setListeners(View v) {

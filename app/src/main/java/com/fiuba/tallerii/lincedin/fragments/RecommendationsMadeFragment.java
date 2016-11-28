@@ -20,6 +20,7 @@ import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -29,7 +30,7 @@ import java.util.List;
 public class RecommendationsMadeFragment extends Fragment {
 
 
-    private static final String TAG = "RecommendationsReceived";
+    private static final String TAG = "RecommendationsMade";
 
     private static final String ARG_USER_ID = "ARG_USER_ID";
     private static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
@@ -53,12 +54,12 @@ public class RecommendationsMadeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_recommendations_made, container, false);
-        requestRecommendationsReceived(v);
+        requestRecommendationsMade(v);
         setListeners(v);
         return v;
     }
 
-    private void requestRecommendationsReceived(final View v) {
+    private void requestRecommendationsMade(final View v) {
         if (getArguments() != null) {
             String userId = getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me";
             refreshLoadingIndicator(v, true);
@@ -70,7 +71,11 @@ public class RecommendationsMadeFragment extends Fragment {
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, new Gson().toJson(response));
                             Type recommendationListType = new TypeToken<List<Recommendation>>() {}.getType();
-                            recommendations = new Gson().fromJson(response.toString(), recommendationListType);
+                            try {
+                                recommendations = new Gson().fromJson(response.getJSONArray("recommendations").toString(), recommendationListType);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             setAdapter(v);
                             refreshLoadingIndicator(v, false);
                         }
@@ -96,7 +101,9 @@ public class RecommendationsMadeFragment extends Fragment {
 
     private void setAdapter(View v) {
         recommendationsMadeAdapter = new RecommendationsMadeAdapter(getContext(), recommendations);
-        ((ListView) v.findViewById(R.id.fragment_recommendations_made_listview)).setAdapter(recommendationsMadeAdapter);
+        ListView recommendationsListView = (ListView) v.findViewById(R.id.fragment_recommendations_made_listview);
+        recommendationsListView.setAdapter(recommendationsMadeAdapter);
+        recommendationsListView.setEmptyView(v.findViewById(android.R.id.empty));
     }
 
     private void setListeners(View v) {
