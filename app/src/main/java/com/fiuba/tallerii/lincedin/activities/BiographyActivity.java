@@ -28,6 +28,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseDateWithoutTimeToDatetime;
+import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseDatetimeToDateWithoutTime;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateEmail;
 import static com.fiuba.tallerii.lincedin.utils.InputValidationUtils.validateThatAllFieldsAreFilled;
 
@@ -46,6 +47,7 @@ public class BiographyActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         setToolbar();
         getUserFromIntent();
+        initFields();
         setListeners();
     }
 
@@ -79,6 +81,32 @@ public class BiographyActivity extends AppCompatActivity {
             user = new Gson().fromJson(userJson, User.class);
         }
         return user;
+    }
+
+    private void initFields() {
+        if (user != null) {
+            EditText firstNameEditText = (EditText) findViewById(R.id.biography_firstname_edittext);
+            EditText lastNameEditText = (EditText) findViewById(R.id.biography_lastname_edittext);
+            EditText dateOfBirthEditText = (EditText) findViewById(R.id.biography_date_of_birth_edittext);
+            EditText emailEditText = (EditText) findViewById(R.id.biography_email_edittext);
+            EditText descriptionEditText = (EditText) findViewById(R.id.biography_description_edittext);
+
+            if (user.firstName != null && !user.firstName.equals("")) {
+                firstNameEditText.setText(user.firstName);
+            }
+            if (user.lastName != null && !user.lastName.equals("")) {
+                lastNameEditText.setText(user.lastName);
+            }
+            if (user.dateOfBirth != null && !user.dateOfBirth.equals("")) {
+                dateOfBirthEditText.setText(parseDatetimeToDateWithoutTime(user.dateOfBirth));
+            }
+            if (user.email != null && !user.email.equals("")) {
+                emailEditText.setText(user.email);
+            }
+            if (user.description != null && !user.description.equals("")) {
+                descriptionEditText.setText(user.description);
+            }
+        }
     }
 
     private void setListeners() {

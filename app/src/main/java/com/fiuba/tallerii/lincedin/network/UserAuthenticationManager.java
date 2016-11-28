@@ -86,16 +86,18 @@ public class UserAuthenticationManager {
         return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN, null);
     }
 
-    public static void saveUserAuthInfo(Context context, String sessionToken, String email, String password) {
+    public static void saveUserAuthInfo(Context context, String sessionToken, String userId, String email, String password) {
         SharedPreferencesUtils.putBooleanToSharedPreferences(context, SharedPreferencesKeys.USER_LOGGED_IN, true);
         SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN, sessionToken);
         SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL, email);
+        SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.USER_ID, userId);
         SharedPreferencesUtils.putEncryptedStringToSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD, password);
     }
 
     public static void deleteUserAuthInfo(Context context) {
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_LOGGED_IN);
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN);
+        SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_ID);
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.USER_EMAIL);
         SharedPreferencesUtils.removeFromSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD);
 

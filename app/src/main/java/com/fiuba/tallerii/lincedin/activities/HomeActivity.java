@@ -23,6 +23,8 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.FriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
@@ -42,20 +44,6 @@ public class HomeActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ArrayAdapter mSkillsAdapter;
-    private ArrayList<String> listSkills = new ArrayList<>();
-
-    public ArrayList<String> getArrayList() {
-        return listSkills;
-    }
-
-    public ArrayAdapter getArrayAdapter() {
-        return mSkillsAdapter;
-    }
-
-    public void setArrayAdapter(ArrayAdapter adapter) {
-        mSkillsAdapter = adapter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +159,7 @@ public class HomeActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return UserProfileFragment.newInstance(null);
+                return UserProfileFragment.newInstance(SharedPreferencesUtils.getStringFromSharedPreferences(getApplicationContext(), SharedPreferencesKeys.USER_ID, null));
             }
 
             if (position == 1 ) {

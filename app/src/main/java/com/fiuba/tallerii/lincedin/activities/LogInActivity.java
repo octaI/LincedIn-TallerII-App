@@ -38,6 +38,8 @@ public class LogInActivity extends AppCompatActivity {
 
     private static final int REQ_CREATE_ACCOUNT = 10;
 
+    String userId;
+
     private static CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private AccessTokenTracker accessTokenTracker;
@@ -105,7 +107,7 @@ public class LogInActivity extends AppCompatActivity {
         refreshLoadingIndicator(false);
         Log.d(TAG, new Gson().toJson(response));
         try {
-            saveUserAuthInfo(this, response.getString("token"), email, password);
+            saveUserAuthInfo(this, response.getString("token"), response.getString("user_id"), email, password);
             finish();
         } catch (JSONException e) {
             e.printStackTrace();

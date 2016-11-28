@@ -81,6 +81,7 @@ public class EditEducationFragment extends Fragment {
         if (selectedEducation != null) {
             ((TextView) v.findViewById(R.id.edit_education_title_textview)).setText(getString(R.string.edit_education));
             v.findViewById(R.id.edit_education_delete_button).setVisibility(View.VISIBLE);
+            initFields(v);
         } else {
             ((TextView) v.findViewById(R.id.edit_education_title_textview)).setText(getString(R.string.add_new_education));
             v.findViewById(R.id.edit_education_delete_button).setVisibility(View.GONE);
@@ -89,6 +90,28 @@ public class EditEducationFragment extends Fragment {
         setListeners(v);
 
         return v;
+    }
+
+    private void initFields(View v) {
+        if (selectedEducation != null) {
+            EditText degreeEditText = (EditText) v.findViewById(R.id.edit_education_degree_edittext);
+            EditText schoolEditText = (EditText) v.findViewById(R.id.edit_education_school_edittext);
+            EditText startDateEditText = (EditText) v.findViewById(R.id.edit_education_since_date_edittext);
+            EditText endDateEditText = (EditText) v.findViewById(R.id.edit_education_until_date_edittext);
+
+            if (selectedEducation.degree != null && !selectedEducation.degree.equals("")) {
+                degreeEditText.setText(selectedEducation.degree);
+            }
+            if (selectedEducation.schoolName != null && !selectedEducation.schoolName.equals("")) {
+                schoolEditText.setText(selectedEducation.schoolName);
+            }
+            if (selectedEducation.startDate != null && !selectedEducation.startDate.equals("")) {
+                startDateEditText.setText(selectedEducation.startDate);
+            }
+            if (selectedEducation.endDate != null && !selectedEducation.endDate.equals("")) {
+                endDateEditText.setText(selectedEducation.endDate);
+            }
+        }
     }
 
     private void setListeners(View v) {
