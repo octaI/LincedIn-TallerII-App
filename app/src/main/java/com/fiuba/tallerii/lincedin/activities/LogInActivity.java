@@ -107,8 +107,7 @@ public class LogInActivity extends AppCompatActivity {
         refreshLoadingIndicator(false);
         Log.d(TAG, new Gson().toJson(response));
         try {
-            // TODO: 27/11/16 Change message from user_id when API updates.
-            saveUserAuthInfo(this, response.getString("token"), response.getString("message").replace("Hi, ", ""), email, password);
+            saveUserAuthInfo(this, response.getString("token"), response.getString("user_id"), email, password);
             finish();
         } catch (JSONException e) {
             e.printStackTrace();

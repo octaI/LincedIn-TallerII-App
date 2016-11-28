@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.fragments.RecommendationsReceivedFragment;
 
 public class RecommendationsActivity extends AppCompatActivity {
 
@@ -94,7 +95,10 @@ public class RecommendationsActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // TODO: 27/11/16 Implement!
+            if (position == 0) {
+                return RecommendationsReceivedFragment.newInstance(userId, isOwnProfile);
+            }
+            // TODO: 27/11/16 Implement recommendations made tab.
             return null;
         }
 
