@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.facebook.login.LoginManager;
@@ -9,6 +10,7 @@ import com.fiuba.tallerii.lincedin.model.user.login.LincedInLogInUser;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -27,7 +29,7 @@ public class UserAuthenticationManager {
                                      final Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
 
         Response.Listener<JSONObject> listenerThatSavesSessionType = extendSuccessListenerForSavingSessionType(context, successListener, LOGIN_TYPE_FACEBOOK);
-        LogInUser logInUser = new FacebookLogInUser(facebookAccessToken);
+        LogInUser logInUser = new FacebookLogInUser(facebookAccessToken, getFirebaseId(context));
         LincedInRequester.logIn(
                 logInUser,
                 context,
@@ -40,7 +42,7 @@ public class UserAuthenticationManager {
                                      final Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
 
         Response.Listener<JSONObject> listenerThatSavesSessionType = extendSuccessListenerForSavingSessionType(context, successListener, LOGIN_TYPE_NORMAL);
-        LogInUser logInUser = new LincedInLogInUser(email, password);
+        LogInUser logInUser = new LincedInLogInUser(email, password, getFirebaseId(context));
         LincedInRequester.logIn(
                 logInUser,
                 context,
@@ -80,6 +82,10 @@ public class UserAuthenticationManager {
     public static boolean isUserLoggedInWithLincedInAccount(Context context) {
         return isUserLoggedIn(context) &&
                 SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TYPE, "").equals(LOGIN_TYPE_FACEBOOK);
+    }
+
+    public static String getFirebaseId(Context context) {
+        return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.FIREBASE_ID, "");
     }
 
     public static String getSessionToken(Context context) {

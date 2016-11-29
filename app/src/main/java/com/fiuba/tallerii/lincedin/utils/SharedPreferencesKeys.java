@@ -11,5 +11,6 @@ public interface SharedPreferencesKeys {
     String USER_EMAIL = "UserEmail";
     String USER_PASSWORD = "UserPassword";
     String SESSION_TYPE = "SessionType";
+    String FIREBASE_ID = "FirebaseId";
 
 }

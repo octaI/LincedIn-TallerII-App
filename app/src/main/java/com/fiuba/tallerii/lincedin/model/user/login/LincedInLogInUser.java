@@ -5,8 +5,8 @@ public class LincedInLogInUser extends LogInUser {
     private String email;
     private String password;
 
-    public LincedInLogInUser(String email, String password) {
-        super("Normal");
+    public LincedInLogInUser(String email, String password, String firebaseId) {
+        super("Normal", firebaseId);
         this.email = email;
         this.password = password;
     }
