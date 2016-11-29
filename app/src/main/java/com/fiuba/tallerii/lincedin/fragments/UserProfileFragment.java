@@ -1,10 +1,23 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,11 +48,18 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ClipboardManager;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
+import com.fiuba.tallerii.lincedin.utils.ImageUtils;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
+
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserProfileFragment extends Fragment {
@@ -47,6 +67,11 @@ public class UserProfileFragment extends Fragment {
     private static final String TAG = "UserProfile";
 
     private static final String ARG_USER_ID = "USER_ID";
+    private static final String TEMP_IMAGE_NAME = "tempImage" ;
+    private static final int ACTIVITY_SELECT_IMAGE = 1 ;
+
+    private static final int DEFAULT_MIN_WIDTH = 400 ;
+    private static int minWidthQuality = DEFAULT_MIN_WIDTH;
 
     private View convertView;
 
@@ -147,7 +172,216 @@ public class UserProfileFragment extends Fragment {
                 openUserSkills();
             }
         });
+
+        parentView.findViewById(R.id.user_profile_picture_imageview).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isOwnProfile) {
+
+                    promptGalleryChoice();
+                }
+            }
+        });
     }
+
+    private void promptGalleryChoice() {
+        Intent chooserIntent = null;
+        List<Intent> intentList = new ArrayList<>();
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhotoIntent.putExtra("return-data",true);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(getTempFile(getContext())));
+        intentList = addIntentsToList(getContext(),intentList,pickIntent);
+        intentList = addIntentsToList(getContext(),intentList,takePhotoIntent);
+
+        if (intentList.size() > 0) {
+            chooserIntent = Intent.createChooser(intentList.remove(intentList.size()-1),getContext().getString(R.string.pick_image_intent_text));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+        }
+         startActivityForResult(chooserIntent,ACTIVITY_SELECT_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case ACTIVITY_SELECT_IMAGE:
+                Bitmap bitmap = getImageFromResult(this, resultCode, data);
+                if (bitmap != null) {
+
+
+                    byte[] bmByteArray = ImageUtils.returnByteArrayFromBitmap(bitmap);
+                    String b64encode = ImageUtils.encodeByteArrayToBase64(bmByteArray);
+                    user.profilePicture = b64encode;
+                    LincedInRequester.editUserProfile(user, getContext(),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.d(TAG, response.toString());
+                                    Log.i(TAG, "Succesfully updated profile picture!");
+
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    Log.e(TAG, error.toString());
+                                    error.printStackTrace();
+
+                                }
+                            });
+
+                    Toast.makeText(getContext(), "Imagen cambiada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                }
+        }
+    }
+
+    private Bitmap getImageFromResult(UserProfileFragment userProfileFragment, int resultCode, Intent imageReturnedIntent) {
+        Log.d(TAG, "getImageFromResult, resultCode: " + resultCode);
+        Bitmap bm = null;
+        File imageFile = getTempFile(getContext());
+        if (resultCode == Activity.RESULT_OK) {
+            Uri selectedImage;
+            boolean isCamera = (imageReturnedIntent == null ||
+                    imageReturnedIntent.getData() == null  ||
+                    imageReturnedIntent.getData().toString().contains(imageFile.toString()));
+            if (isCamera) {     /** CAMERA **/
+                selectedImage = Uri.fromFile(imageFile);
+            } else {            /** ALBUM **/
+                selectedImage = imageReturnedIntent.getData();
+            }
+            Log.d(TAG, "selectedImage: " + selectedImage);
+
+            bm = getImageResized(getContext(), selectedImage);
+            int rotation = getRotation(getContext(), selectedImage, isCamera);
+            bm = rotate(bm, rotation);
+        }
+        return bm;
+    }
+
+    private static Bitmap getImageResized(Context context, Uri selectedImage) {
+        Bitmap bm = null;
+        int[] sampleSizes = new int[]{5, 3, 2, 1};
+        int i = 0;
+        do {
+            bm = decodeBitmap(context, selectedImage, sampleSizes[i]);
+            Log.d(TAG, "resizer: new bitmap width = " + bm.getWidth());
+            i++;
+        } while (bm.getWidth() < minWidthQuality && i < sampleSizes.length);
+        return bm;
+    }
+
+    private static Bitmap decodeBitmap(Context context, Uri theUri, int sampleSize) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize;
+
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(
+                fileDescriptor.getFileDescriptor(), null, options);
+
+        Log.d(TAG, options.inSampleSize + " sample method bitmap ... " +
+                actuallyUsableBitmap.getWidth() + " " + actuallyUsableBitmap.getHeight());
+
+        return actuallyUsableBitmap;
+    }
+
+
+    private static int getRotation(Context context, Uri imageUri, boolean isCamera) {
+        int rotation;
+        if (isCamera) {
+            rotation = getRotationFromCamera(context, imageUri);
+        } else {
+            rotation = getRotationFromGallery(context, imageUri);
+        }
+        Log.d(TAG, "Image rotation: " + rotation);
+        return rotation;
+    }
+
+    private static int getRotationFromCamera(Context context, Uri imageFile) {
+        int rotate = 0;
+        try {
+
+            context.getContentResolver().notifyChange(imageFile, null);
+            ExifInterface exif = new ExifInterface(imageFile.getPath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+
+    public static int getRotationFromGallery(Context context, Uri imageUri) {
+        int result = 0;
+        String[] columns = {MediaStore.Images.Media.ORIENTATION};
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(imageUri, columns, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int orientationColumnIndex = cursor.getColumnIndex(columns[0]);
+                result = cursor.getInt(orientationColumnIndex);
+            }
+        } catch (Exception e) {
+            //Do nothing
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }//End of try-catch block
+        return result;
+    }
+
+
+    private static Bitmap rotate(Bitmap bm, int rotation) {
+        if (rotation != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotation);
+            Bitmap bmOut = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+            return bmOut;
+        }
+        return bm;
+    }
+
+
+    private static File getTempFile(Context context) {
+        File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
+        imageFile.getParentFile().mkdirs();
+        return imageFile;
+    }
+
+    private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
+        List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo resolveInfo : resInfo) {
+            String packageName = resolveInfo.activityInfo.packageName;
+            Intent targetedIntent = new Intent(intent);
+            targetedIntent.setPackage(packageName);
+            list.add(targetedIntent);
+            Log.d(TAG, "Intent: " + intent.getAction() + " package: " + packageName);
+        }
+        return list;
+    }
+
 
     private void setButtonsVisibility(View v) {
         if (isOwnProfile) {
@@ -166,6 +400,7 @@ public class UserProfileFragment extends Fragment {
             if (isUserLogged) {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
+                        "me",
                         getContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -209,10 +444,32 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void populateBasicInfo(View v, User user) {
-        Glide.with(getContext())
-                .load(user.profilePicture)
-                .centerCrop()
-                .into((ImageView) v.findViewById(R.id.user_profile_picture_imageview));
+        final ImageView userImageView = (ImageView) v.findViewById(R.id.user_profile_picture_imageview);
+        LincedInRequester.getUserProfileImage(getContext(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    String b64str = response.getJSONObject("content").toString();
+                    ImageUtils.setBase64ImageFromString(getContext(),b64str,userImageView);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+        new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                error.printStackTrace();
+                refreshLoadingIndicator(convertView, false);
+            }
+        }
+        ,user.profilePicture);
+
+        //String baseliteral = getResources().getString(R.string.literal_riquelme);
+
+
+        //ImageUtils.setBase64ImageFromString(getContext(),baseliteral,userImageView);
 
         ((TextView) v.findViewById(R.id.user_profile_username_textview)).setText(user.fullName);
 

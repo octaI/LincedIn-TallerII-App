@@ -10,6 +10,17 @@ import java.util.Date;
 
 public class DateUtils {
 
+    public static String parseTimestampToDatetime(String timestamp) {
+        return parseTimestampToDatetime(Long.valueOf(timestamp));
+    }
+
+    public static String parseTimestampToDatetime(long timestamp) {
+        Date date = new Date(timestamp * 1000L);
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String formattedDate = df.format(date);
+        return formattedDate;
+    }
+
     public static String parseToDatetime(int dayNumber, int monthNumber, int yearNumber) {
         String day = dayNumber >= 10 ? String.valueOf(dayNumber) : "0" + String.valueOf(dayNumber);
         String month = monthNumber >= 10 ? String.valueOf(monthNumber) : "0" + String.valueOf(monthNumber);

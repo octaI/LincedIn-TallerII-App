@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fiuba.tallerii.lincedin.fragments.ErrorFragment;
+import com.fiuba.tallerii.lincedin.fragments.UserNotLoggedFragment;
 
 public class ViewUtils {
     public static void setToast(Context context, String message, int duration) {
@@ -30,6 +31,12 @@ public class ViewUtils {
     public static void setErrorFragment(int containerId, FragmentManager fragmentManager) {
         fragmentManager.beginTransaction()
                 .replace(containerId, new ErrorFragment())
+                .commit();
+    }
+
+    public static void setUserNotLoggedFragment(int containerId, FragmentManager fragmentManager) {
+        fragmentManager.beginTransaction()
+                .replace(containerId, new UserNotLoggedFragment())
                 .commit();
     }
 }
