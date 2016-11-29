@@ -124,9 +124,9 @@
             android:name=".activities.BiographyActivity"
             android:label="@string/biography"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".activities.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.HomeActivity" />
@@ -135,6 +135,17 @@
         <activity
             android:name=".activities.RecommendationsActivity"
             android:label="@string/recommendations"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
+            >
+        </activity>
+        <activity
+            android:name=".activities.ChatActivity"
+            android:label="@string/chat"
             android:launchMode="singleTop"
             android:parentActivityName=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">

@@ -400,6 +400,7 @@ public class UserProfileFragment extends Fragment {
             if (isUserLogged) {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
+                        "me",
                         getContext(),
                         new Response.Listener<JSONObject>() {
                             @Override

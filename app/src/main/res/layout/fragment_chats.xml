@@ -1,0 +1,105 @@
+<FrameLayout
+    android:id="@+id/fragment_chats_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/fragment_chats_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView android:id="@+id/fragment_chats_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android" />
+
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/no_chats"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/fragment_chats_user_not_logged_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textSize="24sp"
+                android:text="@string/user_not_logged_in"/>
+
+            <Button style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/fragment_chats_login_button"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/login"
+                android:textColor="@color/white"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/fragment_chats_loading_circular_progress"
+            android:theme="@style/CircularProgress"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/fragment_chats_network_error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="12dp"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/fragment_chats_network_error_layout_error_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="20sp"
+                android:text="@string/couldnt_retrieve_chats"/>
+            <TextView
+                android:id="@+id/fragment_chats_network_error_layout_check_internet_textview"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fragment_chats_network_error_layout_error_textview"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="@string/check_your_network_connection"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/fragment_chats_network_error_layout_check_internet_textview"
+                android:layout_margin="8dp"
+                android:textSize="18sp"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/click_to_try_again"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
