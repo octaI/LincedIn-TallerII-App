@@ -89,7 +89,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
             result = view;
 
         }
-        LincedInRequester.getUserProfile(mContext, new Response.Listener<JSONObject>() {
+        LincedInRequester.getUserProfile(userFriends.get(i).toString(),mContext, new Response.Listener<JSONObject>() {
                       @Override
                       public void onResponse(JSONObject response) {
                           Gson parser = new Gson();
