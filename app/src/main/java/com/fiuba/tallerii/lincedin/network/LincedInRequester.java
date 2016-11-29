@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.model.chat.CreateChat;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
@@ -17,7 +18,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getBooleanFromSharedPreferences;
@@ -151,6 +154,28 @@ public class LincedInRequester {
                 errorListener,
                 "GetAllUserChats"
         );
+    }
+
+    public static void createChatWithUser(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/chat";
+
+        List<String> participants = new ArrayList<>();
+        participants.add(userId);
+        CreateChat requestBody = new CreateChat(participants);
+        try {
+            HttpRequestHelper.post(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(requestBody)),
+                    successListener,
+                    errorListener,
+                    "CreateChatWithUser"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void getAllJobPositions(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {

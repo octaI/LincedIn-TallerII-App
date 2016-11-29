@@ -90,6 +90,7 @@
     <string name="category">Categoría</string>
     <string name="see_more">Ver más</string>
     <string name="add">Agregar</string>
+    <string name="error_occurred">Ocurrió un error</string>
     <string name="couldnt_retrieve_user_profile">No se pudo obtener el perfil de usuario</string>
     <string name="couldnt_retrieve_chats">No se pudieron obtener las conversaciones</string>
     <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
@@ -121,6 +122,8 @@
     <string name="message">Mensaje</string>
     <string name="last_message">Último mensaje</string>
     <string name="no_chats">No hay conversaciones :(</string>
+    <string name="say_hello_to_user">¡Saluda a :1!</string>
+    <string name="chat">Conversación</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

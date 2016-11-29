@@ -8,15 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="12dp"
-        android:visibility="gone">
+        android:padding="12dp">
         <TextView
             android:id="@+id/fragment_error_inform_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="20sp"
-            android:text="@string/couldnt_retrieve_user_profile"/>
+            android:text="@string/error_occurred"/>
         <TextView
             android:id="@+id/fragment_error_check_internet_textview"
             android:layout_centerInParent="true"
