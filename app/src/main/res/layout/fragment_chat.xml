@@ -1,8 +1,8 @@
-<FrameLayout
-    android:id="@+id/fragment_chats_container"
+<FrameLayout android:id="@+id/fragment_chats_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,10 +13,49 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView android:id="@+id/fragment_chat_messages_listview"
+            <LinearLayout
+                android:id="@+id/fragment_chat_usernames_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                xmlns:android="http://schemas.android.com/apk/res/android" />
+                android:orientation="horizontal"
+                android:background="@color/lighterGrey"
+                android:padding="8dp">
+                <TextView
+                    android:id="@+id/fragment_chat_own_username_textview"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="start"
+                    android:text="@string/user"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"/>
+                <View
+                    style="@style/ThinHorizontalSeparator"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"/>
+                <TextView
+                    android:id="@+id/fragment_chat_other_username_textview"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="end"
+                    android:text="@string/user"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <ListView android:id="@+id/fragment_chat_messages_listview"
+                android:layout_below="@id/fragment_chat_usernames_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_marginBottom="52dp"/>
 
             <TextView
                 android:id="@android:id/empty"
@@ -27,6 +66,34 @@
                 android:textColor="@color/colorPrimary"
                 android:text="@string/say_hello_to_user"
                 android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center_vertical"
+                android:background="@color/colorPrimary">
+                <EditText
+                    android:id="@+id/fragment_chat_message_edittext"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/write_here"/>
+                <ImageButton
+                    android:id="@+id/fragment_chat_send_button"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@drawable/ic_send"
+                    android:tint="@color/white"
+                    android:background="?attr/selectableItemBackground"/>
+            </LinearLayout>
 
         </RelativeLayout>
 

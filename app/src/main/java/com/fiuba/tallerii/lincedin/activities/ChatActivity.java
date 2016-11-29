@@ -21,6 +21,7 @@ public class ChatActivity extends AppCompatActivity
     private static final String TAG = "ChatActivity";
 
     public static final String ARG_RECEIVING_USER_ID = "ARG_RECEIVING_USER_ID";
+    public static final String ARG_CHAT_ID = "ARG_CHAT_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         setToolbar();
         getReceivingUserIdFromIntent();
+        getChatIdFromIntent();
         showInitialFragment();
     }
 
@@ -69,6 +71,10 @@ public class ChatActivity extends AppCompatActivity
         return getIntent().getStringExtra(ARG_RECEIVING_USER_ID);
     }
 
+    private String getChatIdFromIntent() {
+        return getIntent().getStringExtra(ARG_CHAT_ID);
+    }
+
     private void showInitialFragment() {
         if (UserAuthenticationManager.isUserLoggedIn(this)) {
             showChatFragment();
@@ -79,7 +85,7 @@ public class ChatActivity extends AppCompatActivity
 
     private void showChatFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.chat_container_framelayout, ChatFragment.newInstance(getReceivingUserIdFromIntent()))
+                .replace(R.id.chat_container_framelayout, ChatFragment.newInstance(getChatIdFromIntent(), getReceivingUserIdFromIntent()))
                 .commit();
     }
 

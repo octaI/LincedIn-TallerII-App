@@ -11,7 +11,11 @@ import java.util.Date;
 public class DateUtils {
 
     public static String parseTimestampToDatetime(String timestamp) {
-        Date date = new Date(Long.valueOf(timestamp) * 1000L);
+        return parseTimestampToDatetime(Long.valueOf(timestamp));
+    }
+
+    public static String parseTimestampToDatetime(long timestamp) {
+        Date date = new Date(timestamp * 1000L);
         final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String formattedDate = df.format(date);
         return formattedDate;

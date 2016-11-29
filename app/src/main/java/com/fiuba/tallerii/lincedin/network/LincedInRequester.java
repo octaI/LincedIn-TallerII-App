@@ -7,6 +7,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
+import com.fiuba.tallerii.lincedin.model.chat.ChatNewMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CreateChat;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
@@ -156,6 +157,22 @@ public class LincedInRequester {
         );
     }
 
+    public static void getChat(String chatId, int size, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("size", Integer.toString(size));
+        final String url = getAppServerBaseURL(context)
+                + "/chat/"
+                + chatId;
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetChat"
+        );
+    }
+
     public static void createChatWithUser(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
@@ -172,6 +189,27 @@ public class LincedInRequester {
                     successListener,
                     errorListener,
                     "CreateChatWithUser"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendMessageToChat(String chatId, String message, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/chat/"
+                + chatId;
+
+        ChatNewMessage requestBody = new ChatNewMessage(message);
+        try {
+            HttpRequestHelper.post(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(requestBody)),
+                    successListener,
+                    errorListener,
+                    "SendMessageToChat"
             );
         } catch (JSONException e) {
             e.printStackTrace();
