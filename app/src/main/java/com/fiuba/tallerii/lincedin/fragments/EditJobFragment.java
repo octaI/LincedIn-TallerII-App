@@ -91,6 +91,7 @@ public class EditJobFragment extends Fragment {
         if (selectedJob != null) {
             ((TextView) v.findViewById(R.id.edit_job_title_textview)).setText(getString(R.string.edit_job));
             v.findViewById(R.id.edit_job_delete_button).setVisibility(View.VISIBLE);
+            initFields(v);
         } else {
             ((TextView) v.findViewById(R.id.edit_job_title_textview)).setText(getString(R.string.add_new_job));
             v.findViewById(R.id.edit_job_delete_button).setVisibility(View.GONE);
@@ -100,6 +101,24 @@ public class EditJobFragment extends Fragment {
         setListeners(v);
 
         return v;
+    }
+
+    private void initFields(View v) {
+        if (selectedJob != null) {
+            EditText companyEditText = (EditText) v.findViewById(R.id.edit_job_company_edittext);
+            EditText startDateEditText = (EditText) v.findViewById(R.id.edit_job_since_date_edittext);
+            EditText endDateEditText = (EditText) v.findViewById(R.id.edit_job_until_date_edittext);
+
+            if (selectedJob.company != null && !selectedJob.company.equals("")) {
+                companyEditText.setText(selectedJob.company);
+            }
+            if (selectedJob.since != null && !selectedJob.since.equals("")) {
+                startDateEditText.setText(selectedJob.since);
+            }
+            if (selectedJob.to != null && !selectedJob.to.equals("")) {
+                endDateEditText.setText(selectedJob.to);
+            }
+        }
     }
 
     private void populatePositionSpinner(final View v) {
@@ -133,10 +152,26 @@ public class EditJobFragment extends Fragment {
 
     private void setJobPositionsSpinnerAdapter(View v, List<UserJobPosition> jobPositions) {
         AppCompatSpinner jobPositionsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown);
-        jobPositionsSpinner.setAdapter(new JobPositionsSpinnerAdapter(getContext(), jobPositions));
+        JobPositionsSpinnerAdapter adapter = new JobPositionsSpinnerAdapter(getContext(), jobPositions);
+        jobPositionsSpinner.setAdapter(adapter);
 
-        if (!jobPositionsSpinner.getAdapter().isEmpty()) {
+        if (!adapter.isEmpty()) {
             v.findViewById(R.id.edit_job_position_description_textview).setVisibility(View.VISIBLE);
+        }
+
+        setSpinnerDefaultOption(v, adapter);
+    }
+
+    private void setSpinnerDefaultOption(View v, JobPositionsSpinnerAdapter adapter) {
+        if (selectedJob != null && selectedJob.position != null) {
+            AppCompatSpinner jobPositionsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                UserJobPosition jobPosition = adapter.getItem(i);
+                if (jobPosition.equals(selectedJob.position)) {
+                    jobPositionsSpinner.setSelection(i, true);
+                    break;
+                }
+            }
         }
     }
 

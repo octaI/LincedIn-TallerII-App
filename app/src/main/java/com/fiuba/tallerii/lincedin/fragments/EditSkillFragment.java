@@ -125,10 +125,26 @@ public class EditSkillFragment extends Fragment {
 
     private void setSkillsSpinnerAdapter(View v, List<UserSkill> skills) {
         AppCompatSpinner skillsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown);
-        skillsSpinner.setAdapter(new SkillsSpinnerAdapter(getContext(), skills));
+        SkillsSpinnerAdapter adapter = new SkillsSpinnerAdapter(getContext(), skills);
+        skillsSpinner.setAdapter(adapter);
 
-        if (!skillsSpinner.getAdapter().isEmpty()) {
+        if (!adapter.isEmpty()) {
             v.findViewById(R.id.edit_skill_description_textview).setVisibility(View.VISIBLE);
+        }
+
+        setSpinnerDefaultOption(v, adapter);
+    }
+
+    private void setSpinnerDefaultOption(View v, SkillsSpinnerAdapter adapter) {
+        if (selectedSkill != null) {
+            AppCompatSpinner skillsSpinner = (android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_skills_dropdown);
+            for (int i = 0; i < adapter.getCount(); i++) {
+                UserSkill skill = adapter.getItem(i);
+                if (skill.equals(selectedSkill)) {
+                    skillsSpinner.setSelection(i, true);
+                    break;
+                }
+            }
         }
     }
 

@@ -37,6 +37,7 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.BiographyActivity;
 import com.fiuba.tallerii.lincedin.activities.EducationActivity;
 import com.fiuba.tallerii.lincedin.activities.LogInActivity;
+import com.fiuba.tallerii.lincedin.activities.RecommendationsActivity;
 import com.fiuba.tallerii.lincedin.activities.SkillsActivity;
 import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserEducationAdapter;
@@ -124,7 +125,9 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void setIsOwnProfileFlag() {
-        isOwnProfile = getArguments() == null || getArguments().getString(ARG_USER_ID) == null;
+        isOwnProfile = getArguments() == null
+                || getArguments().getString(ARG_USER_ID) == null
+                || getArguments().getString(ARG_USER_ID).equals(SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, ""));
     }
 
     private void setButtonsListeners(final View parentView) {
@@ -153,6 +156,13 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 openUserEducation();
+            }
+        });
+
+        parentView.findViewById(R.id.user_profile_see_recommendations_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRecommendations();
             }
         });
 
@@ -636,6 +646,15 @@ public class UserProfileFragment extends Fragment {
         }
         educationIntent.putExtra(EducationActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
         startActivity(educationIntent);
+    }
+
+    private void openRecommendations() {
+        Intent recommendationsIntent = new Intent(getContext(), RecommendationsActivity.class);
+        if (user != null) {
+            recommendationsIntent.putExtra(RecommendationsActivity.ARG_USER_ID, user.id);
+        }
+        recommendationsIntent.putExtra(RecommendationsActivity.ARG_IS_OWN_PROFILE, isOwnProfile);
+        startActivity(recommendationsIntent);
     }
 
     private void openUserSkills() {
