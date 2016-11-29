@@ -18,6 +18,7 @@ import com.fiuba.tallerii.lincedin.adapters.ChatsAdapter;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
 import com.fiuba.tallerii.lincedin.model.chat.ChatRow;
 import com.fiuba.tallerii.lincedin.model.user.User;
+import com.fiuba.tallerii.lincedin.network.HttpRequestHelper;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -38,6 +39,7 @@ public class ChatsFragment extends Fragment {
     private View fragmentView;
     private List<ChatRow> inflatedChats = new ArrayList<>();
     private ChatsAdapter chatsAdapter;
+    private boolean errorOnRetrievingUsers;
 
     public ChatsFragment() {}
 
@@ -113,12 +115,19 @@ public class ChatsFragment extends Fragment {
                                     }
 
                                     if (chat.equals(chats.get(chats.size() - 1))) {
-                                        if (chatsAdapter != null) {
-                                            chatsAdapter.setDataset(inflatedChats);
-                                            chatsAdapter.notifyDataSetChanged();
+                                        if (!errorOnRetrievingUsers) {
+                                            if (chatsAdapter != null) {
+                                                chatsAdapter.setDataset(inflatedChats);
+                                                chatsAdapter.notifyDataSetChanged();
 
+                                                refreshLoadingIndicator(fragmentView, false);
+                                                hideErrorScreen(fragmentView);
+                                            }
+                                        } else {
+                                            errorOnRetrievingUsers = false;
+                                            inflatedChats.remove(inflatedChat);
                                             refreshLoadingIndicator(fragmentView, false);
-                                            hideErrorScreen(fragmentView);
+                                            setErrorScreen(fragmentView);
                                         }
                                     }
                                 }
@@ -128,9 +137,13 @@ public class ChatsFragment extends Fragment {
                                 public void onErrorResponse(VolleyError error) {
                                     Log.e(TAG, error.toString());
                                     error.printStackTrace();
-                                    inflatedChats = new ArrayList<>();
-                                    refreshLoadingIndicator(fragmentView, false);
-                                    setErrorScreen(fragmentView);
+                                    HttpRequestHelper.cancelPendingRequests("GetUserProfile");
+                                    errorOnRetrievingUsers = true;
+
+                                    if (chat.equals(chats.get(chats.size() - 1))) {
+                                        refreshLoadingIndicator(fragmentView, false);
+                                        setErrorScreen(fragmentView);
+                                    }
                                 }
                             }
                     );

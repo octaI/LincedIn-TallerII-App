@@ -5,13 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.model.chat.Chat;
 import com.fiuba.tallerii.lincedin.model.chat.ChatRow;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseTimestampToDatetime;
 
 public class ChatsAdapter extends BaseAdapter {
 
@@ -60,6 +62,25 @@ public class ChatsAdapter extends BaseAdapter {
                     inflate(R.layout.chat_row, parent, false);
         }
 
+        final ChatRow currentChat = dataset.get(position);
+        if (currentChat != null) {
+            setUsersTextView(currentChat, convertView);
+            ((TextView) convertView.findViewById(R.id.chat_row_last_message_textview)).setText(currentChat.getLastMessage());
+            ((TextView) convertView.findViewById(R.id.chat_row_date_last_message_textview))
+                    .setText(parseTimestampToDatetime(currentChat.getTimestamp()));
+        }
+
         return convertView;
+    }
+
+    private void setUsersTextView(ChatRow chat, View convertView) {
+        String users = "";
+        for (int i = 0; i < chat.getUsers().size(); i++) {
+            if (i > 0) {
+                users += ", ";
+            }
+            users += chat.getUsers().get(i);
+        }
+        ((TextView) convertView.findViewById(R.id.chat_row_username_textview)).setText(users);
     }
 }
