@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,8 +13,11 @@ import android.widget.RelativeLayout;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.adapters.ChatsAdapter;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
+import com.fiuba.tallerii.lincedin.model.chat.ChatRow;
+import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -32,7 +36,7 @@ public class ChatsFragment extends Fragment {
     private static final String TAG = "Chats";
 
     private View fragmentView;
-    private List<Chat> chats = new ArrayList<>();
+    private List<ChatRow> inflatedChats = new ArrayList<>();
     private ChatsAdapter chatsAdapter;
 
     public ChatsFragment() {}
@@ -42,6 +46,7 @@ public class ChatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_chats, container, false);
         setAdapter();
+        setListeners();
         return fragmentView;
     }
 
@@ -65,20 +70,14 @@ public class ChatsFragment extends Fragment {
                                 Gson gson = new Gson();
                                 Log.d(TAG, gson.toJson(response));
 
-                                String chatsJson = null;
+                                List<Chat> chats = new ArrayList<>();
+                                Type chatListType = new TypeToken<List<Chat>>() {}.getType();
                                 try {
-                                    chatsJson = gson.toJson(response.getJSONArray("chats"));
+                                    chats = gson.fromJson(response.getString("chats"), chatListType);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                Type chatListType = new TypeToken<List<Chat>>() {}.getType();
-                                if (chatsJson != null) {
-                                    chats = gson.fromJson(chatsJson, chatListType);
-                                }
-                                populateChats();
-
-                                refreshLoadingIndicator(fragmentView, false);
-                                hideErrorScreen(fragmentView);
+                                populateChats(chats);
                             }
                         },
                         new Response.ErrorListener() {
@@ -95,17 +94,78 @@ public class ChatsFragment extends Fragment {
         }
     }
 
-    private void populateChats() {
-        if (chatsAdapter != null) {
-            chatsAdapter.setDataset(chats);
-            chatsAdapter.notifyDataSetChanged();
+    private void populateChats(final List<Chat> chats) {
+        for (final Chat chat : chats) {
+            if (chat.lastMessage != null && chat.lastMessage.message != null) {
+                final ChatRow inflatedChat = new ChatRow(chat.chatId, new ArrayList<String>(), chat.lastMessage.message, chat.lastMessage.timestamp);
+                for (final String userId : chat.participants) {
+                    LincedInRequester.getUserProfile(
+                            userId,
+                            getContext(),
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    User user = new Gson().fromJson(response.toString(), User.class);
+                                    inflatedChat.addUser(user.id);
+
+                                    if (userId.equals(chat.participants.get(chat.participants.size() - 1))) {
+                                        inflatedChats.add(inflatedChat);
+                                    }
+
+                                    if (chat.equals(chats.get(chats.size() - 1))) {
+                                        if (chatsAdapter != null) {
+                                            chatsAdapter.setDataset(inflatedChats);
+                                            chatsAdapter.notifyDataSetChanged();
+
+                                            refreshLoadingIndicator(fragmentView, false);
+                                            hideErrorScreen(fragmentView);
+                                        }
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e(TAG, error.toString());
+                                    error.printStackTrace();
+                                    inflatedChats = new ArrayList<>();
+                                    refreshLoadingIndicator(fragmentView, false);
+                                    setErrorScreen(fragmentView);
+                                }
+                            }
+                    );
+                }
+            } else {
+                if (chat.equals(chats.get(chats.size() - 1))) {
+                    if (chatsAdapter != null) {
+                        chatsAdapter.setDataset(inflatedChats);
+                        chatsAdapter.notifyDataSetChanged();
+
+                        refreshLoadingIndicator(fragmentView, false);
+                        hideErrorScreen(fragmentView);
+                    }
+                }
+            }
         }
     }
 
     private void setAdapter() {
         if (fragmentView != null) {
-            chatsAdapter = new ChatsAdapter(getContext(), chats);
-            ((ListView) fragmentView.findViewById(R.id.fragment_chats_listview)).setAdapter(chatsAdapter);
+            chatsAdapter = new ChatsAdapter(getContext(), inflatedChats);
+            ListView chatsListView = (ListView) fragmentView.findViewById(R.id.fragment_chats_listview);
+            chatsListView.setAdapter(chatsAdapter);
+            chatsListView.setEmptyView(fragmentView.findViewById(android.R.id.empty));
+        }
+    }
+
+    private void setListeners() {
+        if (fragmentView != null) {
+            fragmentView.findViewById(R.id.fragment_chats_login_button).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openLogin();
+                }
+            });
         }
     }
 
@@ -147,5 +207,10 @@ public class ChatsFragment extends Fragment {
 
     private void hideErrorScreen(View v) {
         v.findViewById(R.id.fragment_chats_network_error_layout).setVisibility(View.GONE);
+    }
+
+    private void openLogin() {
+        Intent loginIntent = new Intent(getContext(), LogInActivity.class);
+        startActivity(loginIntent);
     }
 }

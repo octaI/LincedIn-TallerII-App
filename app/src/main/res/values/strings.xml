@@ -118,6 +118,8 @@
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
     <string name="send_email">Enviar e-mail</string>
     <string name="check_your_network_connection">Chequea tu conexión a la red</string>
+    <string name="message">Mensaje</string>
+    <string name="last_message">Último mensaje</string>
     <string name="no_chats">No hay conversaciones :(</string>
 
     <!-- TODO: Remove or change this placeholder text -->

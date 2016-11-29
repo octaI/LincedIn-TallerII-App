@@ -55,11 +55,11 @@ public class LincedInRequester {
         }
     }
 
-    public static void getUserProfile(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void getUserProfile(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
-                + "/user"
-                + "/me";
+                + "/user/"
+                + userId;
 
         HttpRequestHelper.get(
                 url,

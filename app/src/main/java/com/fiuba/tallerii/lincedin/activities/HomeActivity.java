@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.fragments.ChatsFragment;
 import com.fiuba.tallerii.lincedin.fragments.FriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
@@ -160,10 +161,10 @@ public class HomeActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
                 return UserProfileFragment.newInstance(SharedPreferencesUtils.getStringFromSharedPreferences(getApplicationContext(), SharedPreferencesKeys.USER_ID, null));
-            }
-
-            if (position == 1 ) {
+            } else if (position == 1) {
                 return FriendsFragment.newInstance(null);
+            } else if (position == 3) {
+                return new ChatsFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
