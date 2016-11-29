@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -13,6 +14,8 @@ import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class UserAuthenticationManager {
 
@@ -29,7 +32,7 @@ public class UserAuthenticationManager {
                                      final Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
 
         Response.Listener<JSONObject> listenerThatSavesSessionType = extendSuccessListenerForSavingSessionType(context, successListener, LOGIN_TYPE_FACEBOOK);
-        LogInUser logInUser = new FacebookLogInUser(facebookAccessToken, getFirebaseId(context));
+        LogInUser logInUser = new FacebookLogInUser(facebookAccessToken, getFirebaseToken(context));
         LincedInRequester.logIn(
                 logInUser,
                 context,
@@ -42,7 +45,7 @@ public class UserAuthenticationManager {
                                      final Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
 
         Response.Listener<JSONObject> listenerThatSavesSessionType = extendSuccessListenerForSavingSessionType(context, successListener, LOGIN_TYPE_NORMAL);
-        LogInUser logInUser = new LincedInLogInUser(email, password, getFirebaseId(context));
+        LogInUser logInUser = new LincedInLogInUser(email, password, getFirebaseToken(context));
         LincedInRequester.logIn(
                 logInUser,
                 context,
@@ -84,8 +87,12 @@ public class UserAuthenticationManager {
                 SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TYPE, "").equals(LOGIN_TYPE_FACEBOOK);
     }
 
-    public static String getFirebaseId(Context context) {
-        return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.FIREBASE_ID, "");
+    private static String getFirebaseToken(Context context) {
+        return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.FIREBASE_ID, FirebaseInstanceId.getInstance().getToken());
+    }
+
+    private static void deleteFirebaseToken(Context context) {
+        SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.FIREBASE_ID);
     }
 
     public static String getSessionToken(Context context) {
@@ -108,5 +115,6 @@ public class UserAuthenticationManager {
         SharedPreferencesUtils.removeFromSecurePreferences(context, SharedPreferencesKeys.USER_PASSWORD);
 
         SharedPreferencesUtils.removeFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TYPE);
+        deleteFirebaseToken(context);
     }
 }
