@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.model.chat.ChatRow;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,10 +78,13 @@ public class ChatsAdapter extends BaseAdapter {
     private void setUsersTextView(ChatRow chat, View convertView) {
         String users = "";
         for (int i = 0; i < chat.getUsers().size(); i++) {
-            if (i > 0) {
-                users += ", ";
+            String userId = chat.getUsers().get(i);
+            if (!SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_ID, "").equals(userId)) {
+                if (i > 0) {
+                    users += ", ";
+                }
+                users += userId;
             }
-            users += chat.getUsers().get(i);
         }
         ((TextView) convertView.findViewById(R.id.chat_row_username_textview)).setText(users);
     }
