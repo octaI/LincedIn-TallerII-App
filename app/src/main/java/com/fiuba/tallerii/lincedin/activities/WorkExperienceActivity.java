@@ -89,10 +89,10 @@ public class WorkExperienceActivity extends AppCompatActivity
     }
 
     private void showInitialFragment() {
-        if (user.jobs != null && !user.jobs.isEmpty()) {
-            showAllJobsFragment();
-        } else {
+        if ( (user.jobs == null || user.jobs.isEmpty()) && isOwnProfile ) {
             showEditJobFragment(null);
+        } else {
+            showAllJobsFragment();
         }
     }
 

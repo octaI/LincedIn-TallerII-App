@@ -89,10 +89,10 @@ public class SkillsActivity extends AppCompatActivity
     }
 
     private void showInitialFragment() {
-        if (user.skills != null && !user.skills.isEmpty()) {
-            showAllSkillsFragment();
-        } else {
+        if ( (user.skills == null || user.skills.isEmpty()) && isOwnProfile) {
             showEditSkillFragment(null);
+        } else {
+            showAllSkillsFragment();
         }
     }
 

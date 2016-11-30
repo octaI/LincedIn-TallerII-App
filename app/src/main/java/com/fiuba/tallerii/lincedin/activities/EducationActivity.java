@@ -91,10 +91,10 @@ public class EducationActivity extends AppCompatActivity
     }
 
     private void showInitialFragment() {
-        if (user.education != null && !user.education.isEmpty()) {
-            showAllEducationFragment();
-        } else {
+        if ( (user.education == null || user.education.isEmpty()) && isOwnProfile) {
             showEditEducationFragment(null);
+        } else {
+            showAllEducationFragment();
         }
     }
 
