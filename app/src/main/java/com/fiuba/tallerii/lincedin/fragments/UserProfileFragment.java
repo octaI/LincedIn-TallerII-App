@@ -70,7 +70,7 @@ public class UserProfileFragment extends Fragment {
     private static final String TEMP_IMAGE_NAME = "tempImage" ;
     private static final int ACTIVITY_SELECT_IMAGE = 1 ;
 
-    private static final int DEFAULT_MIN_WIDTH = 400 ;
+    private static final int DEFAULT_MIN_WIDTH = 100 ;
     private static int minWidthQuality = DEFAULT_MIN_WIDTH;
 
     private View convertView;
@@ -206,7 +206,7 @@ public class UserProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case ACTIVITY_SELECT_IMAGE:
-                Bitmap bitmap = getImageFromResult(this, resultCode, data);
+                Bitmap bitmap = getImageFromResult(getContext(), resultCode, data);
                 if (bitmap != null) {
 
 
@@ -238,10 +238,10 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    private Bitmap getImageFromResult(UserProfileFragment userProfileFragment, int resultCode, Intent imageReturnedIntent) {
+    private Bitmap getImageFromResult(Context Context, int resultCode, Intent imageReturnedIntent) {
         Log.d(TAG, "getImageFromResult, resultCode: " + resultCode);
         Bitmap bm = null;
-        File imageFile = getTempFile(getContext());
+        File imageFile = getTempFile(Context);
         if (resultCode == Activity.RESULT_OK) {
             Uri selectedImage;
             boolean isCamera = (imageReturnedIntent == null ||

@@ -16,15 +16,10 @@ import java.nio.ByteBuffer;
 public class ImageUtils {
 
     public static byte[] returnByteArrayFromBitmap(Bitmap aBitmap) {
-        int size = aBitmap.getRowBytes() * aBitmap.getHeight();
-        ByteBuffer b = ByteBuffer.allocate(size);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        aBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
-        aBitmap.copyPixelsToBuffer(b);
-        byte[] bytes;
-
-        bytes = b.array();
-
-        return bytes;
+        return byteArrayOutputStream .toByteArray();
     }
 
     public static void setImageview(Context ctxInUse, ImageView anImage, Bitmap aBm) {
