@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.model.chat.CompleteChatMessage;
+import com.fiuba.tallerii.lincedin.model.chat.ChatMessage;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
@@ -20,25 +20,25 @@ import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseTimestampToDateti
 public class ChatMessagesAdapter extends BaseAdapter {
 
     private Context context;
-    private List<CompleteChatMessage> dataset = new ArrayList<>();
+    private List<ChatMessage> dataset = new ArrayList<>();
 
     public ChatMessagesAdapter(Context context) {
         this.context = context;
     }
 
-    public ChatMessagesAdapter(Context context, List<CompleteChatMessage> dataset) {
+    public ChatMessagesAdapter(Context context, List<ChatMessage> dataset) {
         this.context = context;
         setDataset(dataset);
     }
 
-    public void setDataset(List<CompleteChatMessage> dataset) {
+    public void setDataset(List<ChatMessage> dataset) {
         if (dataset == null) {
             dataset = new ArrayList<>();
         }
         this.dataset = dataset;
     }
 
-    public void addToDataset(CompleteChatMessage message) {
+    public void addToDataset(ChatMessage message) {
         dataset.add(message);
     }
 
@@ -48,7 +48,7 @@ public class ChatMessagesAdapter extends BaseAdapter {
     }
 
     @Override
-    public CompleteChatMessage getItem(int position) {
+    public ChatMessage getItem(int position) {
         return dataset.get(position);
     }
 
@@ -64,7 +64,7 @@ public class ChatMessagesAdapter extends BaseAdapter {
                     inflate(R.layout.chat_message_row, parent, false);
         }
 
-        CompleteChatMessage currentMessage = dataset.get(position);
+        ChatMessage currentMessage = dataset.get(position);
         if (currentMessage != null) {
             selectBubbleSide(convertView, currentMessage);
             setMessages(convertView, currentMessage);
@@ -74,7 +74,7 @@ public class ChatMessagesAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void selectBubbleSide(View convertView, CompleteChatMessage message) {
+    private void selectBubbleSide(View convertView, ChatMessage message) {
         if (isOwnMessage(message)) {
             convertView.findViewById(R.id.chat_message_row_left_bubble).setVisibility(View.VISIBLE);
             convertView.findViewById(R.id.chat_message_row_right_bubble).setVisibility(View.GONE);
@@ -84,19 +84,19 @@ public class ChatMessagesAdapter extends BaseAdapter {
         }
     }
 
-    private void setMessages(View convertView, CompleteChatMessage message) {
+    private void setMessages(View convertView, ChatMessage message) {
         ((TextView) convertView.findViewById(R.id.chat_message_row_message_left_textview)).setText(message.message);
         ((TextView) convertView.findViewById(R.id.chat_message_row_message_right_textview)).setText(message.message);
     }
 
-    private void setDates(View convertView, CompleteChatMessage message) {
+    private void setDates(View convertView, ChatMessage message) {
         ((TextView) convertView.findViewById(R.id.chat_message_row_date_left_textview))
                 .setText(parseTimestampToDatetime(message.timestamp));
         ((TextView) convertView.findViewById(R.id.chat_message_row_date_right_textview))
                 .setText(parseTimestampToDatetime(message.timestamp));
     }
 
-    private boolean isOwnMessage(CompleteChatMessage message) {
+    private boolean isOwnMessage(ChatMessage message) {
         return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_ID, "").equals(message.userId);
     }
 }

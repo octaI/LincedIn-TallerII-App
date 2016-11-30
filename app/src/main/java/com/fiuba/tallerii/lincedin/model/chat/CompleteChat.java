@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CompleteChat {
 
-    public List<CompleteChatMessage> messages;
+    public List<ChatMessage> messages;
 
-    public CompleteChatMetadata metadata;
+    public List<String> participants;
 }

@@ -15,8 +15,8 @@ public class DateUtils {
     }
 
     public static String parseTimestampToDatetime(long timestamp) {
-        Date date = new Date(timestamp);
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date = new Date(timestamp * 1000L);
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(date);
         return formattedDate;
     }
@@ -58,7 +58,7 @@ public class DateUtils {
     }
 
     public static String getActualDatetime() {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return df.format(new Date());
     }
 
@@ -71,7 +71,7 @@ public class DateUtils {
     }
 
     public static String extractYearFromDatetime(String datetime) {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
         Integer yearInt = 0;
         try {
@@ -84,7 +84,7 @@ public class DateUtils {
     }
 
     public static String extractMonthFromDatetime(String datetime) {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
         Integer monthInt = 0;
         try {
@@ -97,7 +97,7 @@ public class DateUtils {
     }
 
     public static String extractDayOfMonthFromDatetime(String datetime) {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
         Integer dayOfMonthInt = 0;
         try {
@@ -110,7 +110,7 @@ public class DateUtils {
     }
 
     public static String getAgeFromDatetime(String datetime) {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final Calendar c = Calendar.getInstance();
         Integer ageInt = 0;
         try {

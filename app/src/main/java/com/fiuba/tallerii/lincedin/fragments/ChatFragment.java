@@ -24,8 +24,8 @@ import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.ChatMessagesAdapter;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
+import com.fiuba.tallerii.lincedin.model.chat.ChatMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CompleteChat;
-import com.fiuba.tallerii.lincedin.model.chat.CompleteChatMessage;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -250,10 +250,10 @@ public class ChatFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        CompleteChatMessage chatMessage = new CompleteChatMessage();
+                        ChatMessage chatMessage = new ChatMessage();
                         chatMessage.message = message;
                         chatMessage.userId = SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, "");
-                        chatMessage.timestamp = System.currentTimeMillis();
+                        chatMessage.timestamp = Long.toString(System.currentTimeMillis() / 1000L);
 
                         chatMessagesAdapter.addToDataset(chatMessage);
                         chatMessagesAdapter.notifyDataSetChanged();
