@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.ChatActivity;
 import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.adapters.ChatsAdapter;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
@@ -194,7 +196,33 @@ public class ChatsFragment extends Fragment {
                     openLogin();
                 }
             });
+
+            if (chatsAdapter != null) {
+                ((ListView) fragmentView.findViewById(R.id.fragment_chats_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        openChat(chatsAdapter.getItem(position));
+                    }
+                });
+            }
         }
+    }
+
+    private void openChat(Chat chat) {
+        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+        chatIntent.putExtra(ChatActivity.ARG_CHAT_ID, chat.chatId);
+
+        // TODO: 29/11/16 It only supports 1-1 conversations!
+        String receivingUserId = null;
+        for (String userId : chat.participants) {
+            if (!userId.equals(SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, ""))) {
+                receivingUserId = userId;
+                break;
+            }
+        }
+        chatIntent.putExtra(ChatActivity.ARG_RECEIVING_USER_ID, receivingUserId);
+
+        startActivity(chatIntent);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
