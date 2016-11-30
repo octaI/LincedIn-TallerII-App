@@ -57,7 +57,6 @@ public class FriendsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
 
-        requestUserFriends();
 
 
     }
@@ -65,6 +64,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
+        requestUserFriends();
         convertView = inflater.inflate(R.layout.fragment_friends,container,false);
         final ListView friendList = (ListView) convertView.findViewById(R.id.user_friend_list);
         friendList.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -109,7 +109,6 @@ public class FriendsFragment extends Fragment {
 
             }
         });
-
 
         return convertView;
     }
