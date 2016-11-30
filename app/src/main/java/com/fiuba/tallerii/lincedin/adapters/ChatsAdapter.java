@@ -83,7 +83,7 @@ public class ChatsAdapter extends BaseAdapter {
         for (int i = 0; i < chat.participants.size(); i++) {
             String userId = chat.participants.get(i);
             if (!SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_ID, "").equals(userId)) {
-                if (i > 0) {
+                if (i > 0 && !users.equals("")) {
                     users += ", ";
                 }
                 users += parseUserIdToUsername(userId);
