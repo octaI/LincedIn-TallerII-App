@@ -35,6 +35,10 @@ public class RecommendationsMadeAdapter extends BaseAdapter {
         this.dataset = dataset;
     }
 
+    public boolean removeFromDataset(RecommendationSent recommendation) {
+        return this.dataset.remove(recommendation);
+    }
+
     @Override
     public int getCount() {
         return dataset.size();

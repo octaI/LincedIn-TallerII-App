@@ -98,7 +98,7 @@ public class RecommendationsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.recommendations_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setOffscreenPageLimit(1);
 
         tabLayout.getTabAt(0).setText(R.string.recommendations_received);
         tabLayout.getTabAt(1).setText(R.string.recommendations_made);
