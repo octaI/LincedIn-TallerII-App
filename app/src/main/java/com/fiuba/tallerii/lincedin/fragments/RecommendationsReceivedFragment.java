@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,9 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.RecommendationsReceivedAdapter;
-import com.fiuba.tallerii.lincedin.model.user.Recommendation;
+import com.fiuba.tallerii.lincedin.model.recommendations.RecommendationReceived;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
@@ -34,7 +36,7 @@ public class RecommendationsReceivedFragment extends Fragment {
     private static final String ARG_USER_ID = "ARG_USER_ID";
     private static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
-    private List<Recommendation> recommendations = new ArrayList<>();
+    private List<RecommendationReceived> recommendations = new ArrayList<>();
 
     private RecommendationsReceivedAdapter recommendationsReceivedAdapter;
 
@@ -62,16 +64,16 @@ public class RecommendationsReceivedFragment extends Fragment {
         if (getArguments() != null) {
             String userId = getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me";
             refreshLoadingIndicator(v, true);
-            LincedInRequester.getUserReceivedRecommendations(
+            LincedInRequester.getUserRecommendations(
                     userId,
                     getContext(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, new Gson().toJson(response));
-                            Type recommendationListType = new TypeToken<List<Recommendation>>() {}.getType();
+                            Type recommendationListType = new TypeToken<List<RecommendationReceived>>() {}.getType();
                             try {
-                                recommendations = new Gson().fromJson(response.getJSONArray("recommendations").toString(), recommendationListType);
+                                recommendations = new Gson().fromJson(response.getString("recommendations_received"), recommendationListType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -106,6 +108,7 @@ public class RecommendationsReceivedFragment extends Fragment {
     }
 
     private void setListeners(View v) {
+        setRecommendationRowOnClickListener(v);
         setRecommendationRowOnLongClickListener(v);
     }
 
@@ -116,6 +119,25 @@ public class RecommendationsReceivedFragment extends Fragment {
         } else {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
             v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void openUserProfile(String userId) {
+        Intent userProfileIntent = new Intent(getContext(), UserProfileActivity.class);
+        userProfileIntent.putExtra(UserProfileActivity.ARG_USER_ID, userId);
+        startActivity(userProfileIntent);
+    }
+
+    private void setRecommendationRowOnClickListener(View v) {
+        if (getArguments() != null) {
+            ((ListView) v.findViewById(R.id.fragment_recommendations_received_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (recommendationsReceivedAdapter != null) {
+                        openUserProfile(recommendationsReceivedAdapter.getItem(position).recommender);
+                    }
+                }
+            });
         }
     }
 

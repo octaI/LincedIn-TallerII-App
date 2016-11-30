@@ -1,8 +1,8 @@
 package com.fiuba.tallerii.lincedin.events;
 
-public class MessageEvent {
+public class RecommendationPostedEvent {
     public String message;
-    public MessageEvent(String message) {
+    public RecommendationPostedEvent(String message) {
         this.message = message;
     }
 }

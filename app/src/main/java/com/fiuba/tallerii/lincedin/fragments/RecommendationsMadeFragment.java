@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -13,8 +14,10 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.RecommendationsMadeAdapter;
-import com.fiuba.tallerii.lincedin.model.user.Recommendation;
+import com.fiuba.tallerii.lincedin.model.recommendations.RecommendationReceived;
+import com.fiuba.tallerii.lincedin.model.recommendations.RecommendationSent;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
@@ -29,13 +32,12 @@ import java.util.List;
 
 public class RecommendationsMadeFragment extends Fragment {
 
-
     private static final String TAG = "RecommendationsMade";
 
     private static final String ARG_USER_ID = "ARG_USER_ID";
     private static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
-    private List<Recommendation> recommendations = new ArrayList<>();
+    private List<RecommendationSent> recommendations = new ArrayList<>();
 
     private RecommendationsMadeAdapter recommendationsMadeAdapter;
 
@@ -63,16 +65,16 @@ public class RecommendationsMadeFragment extends Fragment {
         if (getArguments() != null) {
             String userId = getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me";
             refreshLoadingIndicator(v, true);
-            LincedInRequester.getUserMadeRecommendations(
+            LincedInRequester.getUserRecommendations(
                     userId,
                     getContext(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, new Gson().toJson(response));
-                            Type recommendationListType = new TypeToken<List<Recommendation>>() {}.getType();
+                            Type recommendationListType = new TypeToken<List<RecommendationSent>>() {}.getType();
                             try {
-                                recommendations = new Gson().fromJson(response.getJSONArray("recommendations").toString(), recommendationListType);
+                                recommendations = new Gson().fromJson(response.getString("recommendations_sent"), recommendationListType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -85,6 +87,7 @@ public class RecommendationsMadeFragment extends Fragment {
                         public void onErrorResponse(VolleyError error) {
                             refreshLoadingIndicator(v, false);
                             Log.e(TAG, "Error retrieving recommendations made: " + error.toString());
+                            error.printStackTrace();
                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
@@ -107,6 +110,7 @@ public class RecommendationsMadeFragment extends Fragment {
     }
 
     private void setListeners(View v) {
+        setRecommendationRowOnClickListener(v);
         setRecommendationRowOnLongClickListener(v);
     }
 
@@ -117,6 +121,25 @@ public class RecommendationsMadeFragment extends Fragment {
         } else {
             v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.GONE);
             v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void openUserProfile(String userId) {
+        Intent userProfileIntent = new Intent(getContext(), UserProfileActivity.class);
+        userProfileIntent.putExtra(UserProfileActivity.ARG_USER_ID, userId);
+        startActivity(userProfileIntent);
+    }
+
+    private void setRecommendationRowOnClickListener(View v) {
+        if (getArguments() != null) {
+            ((ListView) v.findViewById(R.id.fragment_recommendations_made_listview)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (recommendationsMadeAdapter != null) {
+                        openUserProfile(recommendationsMadeAdapter.getItem(position).userId);
+                    }
+                }
+            });
         }
     }
 
