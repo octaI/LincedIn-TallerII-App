@@ -109,27 +109,31 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                             Toast.makeText(mContext,"Ha ocurrido un error en la transferencia de datos.",Toast.LENGTH_LONG).show();
                         }
                     });
-            LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            try {
-                                String b64str = response.getJSONObject("content").toString();
-                                ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+            if(userFriendsObject.getUserFriends().get(i) != null && userFriendsObject.getUserFriends().get(i) != "null"){
+                LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    String b64str = response.getJSONObject("content").toString();
+                                    ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                error.printStackTrace();
                             }
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                        }
+                        },viewHolder.imgURL);
 
-                    },viewHolder.imgURL);
+                view.setTag(viewHolder);
 
-            view.setTag(viewHolder);
+            }
+
         }else {
             viewHolder = (ViewHolder) view.getTag();
             result = view;

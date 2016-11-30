@@ -276,6 +276,8 @@ public class LincedInRequester {
     public static void getUserProfileImage(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String imgId) {
         final String url = getAppServerBaseURL(context) + imgId;
         final Map<String,String> requestParams = new HashMap<>();
-        HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserProfilePicture");
+        if(imgId != null){
+            HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserProfilePicture");
+        }
     }
 }
