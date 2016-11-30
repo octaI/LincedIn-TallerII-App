@@ -67,33 +67,7 @@ public class FriendsFragment extends Fragment {
         requestUserFriends();
         convertView = inflater.inflate(R.layout.fragment_friends,container,false);
         final ListView friendList = (ListView) convertView.findViewById(R.id.user_friend_list);
-        friendList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            private int currentVisibleItemCount;
-            private int currentScrollState;
-            private int currentFirstVisibleItem;
-            private int totalItem;
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
-                this.currentScrollState = i;
-                isScrollCompleted();
-            }
 
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                this.currentFirstVisibleItem = i;
-                this.currentVisibleItemCount = i1;
-                this.totalItem = i2;
-            }
-
-            private void isScrollCompleted() {
-                if (totalItem - currentFirstVisibleItem == currentVisibleItemCount
-                        && this.currentScrollState == SCROLL_STATE_IDLE) {
-                    for (int i = currentFirstVisibleItem; i< currentVisibleItemCount; i++) {
-                        friendList.getAdapter().getView(i,null,friendList);
-                    }
-                }
-            }
-        });
         UserFriendsAdapter friendListAdapter = new UserFriendsAdapter(userFriends,getContext());
         friendList.setAdapter(friendListAdapter);
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

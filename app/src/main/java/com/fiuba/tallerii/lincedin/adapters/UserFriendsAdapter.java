@@ -86,6 +86,48 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
             viewHolder.txtJob = (TextView) view.findViewById(R.id.friend_job);
             viewHolder.friendPicture = (ImageView) view.findViewById(R.id.friend_image);
             result = view;
+            LincedInRequester.getUserProfile(userFriends.get(i).toString(),mContext, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Gson parser = new Gson();
+                            User userData = parser.fromJson(response.toString(), User.class);
+                            viewHolder.txtName.setText(userData.fullName);
+                            if(userData.getCurrentWork() != null){
+                                viewHolder.txtJob.setText(userData.getCurrentWork().company);
+                            }
+                            viewHolder.txtJob.setText("SER SOLTERO");
+                            viewHolder.friendID = userData.id;
+                            viewHolder.imgURL = userData.profilePicture;
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG,error.toString());
+                            error.printStackTrace();
+                            Toast.makeText(mContext,"Ha ocurrido un error en la transferencia de datos.",Toast.LENGTH_LONG).show();
+                        }
+                    });
+            LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                String b64str = response.getJSONObject("content").toString();
+                                ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+
+                    },viewHolder.imgURL);
 
             view.setTag(viewHolder);
         }else {
@@ -93,48 +135,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
             result = view;
 
         }
-        LincedInRequester.getUserProfile(userFriends.get(i).toString(),mContext, new Response.Listener<JSONObject>() {
-                      @Override
-                      public void onResponse(JSONObject response) {
-                          Gson parser = new Gson();
-                          User userData = parser.fromJson(response.toString(), User.class);
-                          viewHolder.txtName.setText(userData.fullName);
-                          if(userData.getCurrentWork() != null){
-                              viewHolder.txtJob.setText(userData.getCurrentWork().company);
-                          }
-                          viewHolder.txtJob.setText("SER SOLTERO");
-                          viewHolder.friendID = userData.id;
-                          viewHolder.imgURL = userData.profilePicture;
 
-                      }
-                  },
-                  new Response.ErrorListener() {
-                      @Override
-                      public void onErrorResponse(VolleyError error) {
-                          Log.e(TAG,error.toString());
-                          error.printStackTrace();
-                          Toast.makeText(mContext,"Ha ocurrido un error en la transferencia de datos.",Toast.LENGTH_LONG).show();
-                      }
-                  });
-        LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String b64str = response.getJSONObject("content").toString();
-                            ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-
-                },viewHolder.imgURL);
 
         ImageUtils.setBase64ImageFromString(mContext,mContext.getResources().getString(R.string.literal_riquelme),viewHolder.friendPicture);
         return view;
