@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserFriendsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserFriends;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -42,7 +44,6 @@ public class FriendsFragment extends Fragment {
 
     private Boolean isOwnProfile = false;
 
-    private UserFriendsAdapter userFriendsAdapter;
 
     public static FriendsFragment newInstance(String userID){
         FriendsFragment fragment = new FriendsFragment();
@@ -55,6 +56,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
+
         requestUserFriends();
 
 
@@ -99,13 +101,12 @@ public class FriendsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 UserProfileFragment switchFragment =  UserProfileFragment.newInstance(userFriends.getUserFriends().get(i).toString());
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container,switchFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Intent switchUserProfileIntent = new Intent(getActivity(), UserProfileActivity.class);
+                switchUserProfileIntent.putExtra("ARG_USER_ID",userFriends.getUserFriends().get(i).toString());
+                getActivity().startActivity(switchUserProfileIntent);
 
-                Toast.makeText(getContext(),"Clickeaste en el user" + userFriends.getUserFriends().get(i).toString(), Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
@@ -138,14 +139,19 @@ public class FriendsFragment extends Fragment {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getContext(),"Ha ocurrido un error al establecer la conexión con el servidor.",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(),"Ha ocurrido un error al traer la lista de amigos, verifique su conexión.",Toast.LENGTH_SHORT).show();
                                 Log.e(TAG,error.toString());
                                 error.printStackTrace();
                             }
                         }
                 ,userId);
+            } else {
+
             }
         }
+
+        userFriends.addUserFriend("TUser1");
+        userFriends.addUserFriend("TUser2");
     }
 
 

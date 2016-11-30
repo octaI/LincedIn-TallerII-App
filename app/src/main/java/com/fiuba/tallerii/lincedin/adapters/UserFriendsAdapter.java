@@ -26,6 +26,7 @@ import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ImageUtils;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
         TextView txtJob;
         ImageView friendPicture;
         String friendID;
+        String imgURL;
     }
 
     public UserFriendsAdapter(UserFriends friends, Context ctx) {
@@ -83,7 +85,9 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
             viewHolder.txtName = (TextView) view.findViewById(R.id.friend_name);
             viewHolder.txtJob = (TextView) view.findViewById(R.id.friend_job);
             viewHolder.friendPicture = (ImageView) view.findViewById(R.id.friend_image);
+            result = view;
 
+            view.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) view.getTag();
             result = view;
@@ -95,9 +99,12 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                           Gson parser = new Gson();
                           User userData = parser.fromJson(response.toString(), User.class);
                           viewHolder.txtName.setText(userData.fullName);
-                          viewHolder.txtJob.setText(userData.getCurrentWork().company);
-                          ImageUtils.setBase64ImageFromString(getContext(),userData.profilePicture,viewHolder.friendPicture);
+                          if(userData.getCurrentWork() != null){
+                              viewHolder.txtJob.setText(userData.getCurrentWork().company);
+                          }
+                          viewHolder.txtJob.setText("SER SOLTERO");
                           viewHolder.friendID = userData.id;
+                          viewHolder.imgURL = userData.profilePicture;
 
                       }
                   },
@@ -109,7 +116,27 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                           Toast.makeText(mContext,"Ha ocurrido un error en la transferencia de datos.",Toast.LENGTH_LONG).show();
                       }
                   });
+        LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String b64str = response.getJSONObject("content").toString();
+                            ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+
+                },viewHolder.imgURL);
+
+        ImageUtils.setBase64ImageFromString(mContext,mContext.getResources().getString(R.string.literal_riquelme),viewHolder.friendPicture);
         return view;
     }
 
