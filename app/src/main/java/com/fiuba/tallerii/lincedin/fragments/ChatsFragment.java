@@ -37,9 +37,9 @@ public class ChatsFragment extends Fragment {
     private static final String TAG = "Chats";
 
     private View fragmentView;
-    private List<ChatRow> inflatedChats = new ArrayList<>();
+    private List<Chat> chats = new ArrayList<>();
     private ChatsAdapter chatsAdapter;
-    private boolean errorOnRetrievingUsers;
+    //private boolean errorOnRetrievingUsers;
 
     public ChatsFragment() {}
 
@@ -96,6 +96,7 @@ public class ChatsFragment extends Fragment {
         }
     }
 
+    /*@Deprecated
     private void populateChats(final List<Chat> chats) {
         for (final Chat chat : chats) {
             if (chat.lastMessage != null && chat.lastMessage.message != null) {
@@ -160,11 +161,25 @@ public class ChatsFragment extends Fragment {
                 }
             }
         }
+    }*/
+
+    private void populateChats(final List<Chat> chats) {
+        for (final Chat chat : chats) {
+            if (chat.lastMessage != null && chat.lastMessage.message != null) {
+                if (chatsAdapter != null) {
+                    chats.add(chat);
+                    chatsAdapter.addToDataset(chat);
+                    chatsAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+        refreshLoadingIndicator(fragmentView, false);
+        hideErrorScreen(fragmentView);
     }
 
     private void setAdapter() {
         if (fragmentView != null) {
-            chatsAdapter = new ChatsAdapter(getContext(), inflatedChats);
+            chatsAdapter = new ChatsAdapter(getContext(), chats);
             ListView chatsListView = (ListView) fragmentView.findViewById(R.id.fragment_chats_listview);
             chatsListView.setAdapter(chatsAdapter);
             chatsListView.setEmptyView(fragmentView.findViewById(android.R.id.empty));

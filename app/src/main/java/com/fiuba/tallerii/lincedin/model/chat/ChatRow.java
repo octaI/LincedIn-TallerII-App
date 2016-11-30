@@ -3,6 +3,7 @@ package com.fiuba.tallerii.lincedin.model.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class ChatRow {
     private String chatId;
     private List<String> users;
