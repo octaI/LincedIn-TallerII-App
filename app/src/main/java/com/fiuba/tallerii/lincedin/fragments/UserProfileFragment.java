@@ -181,6 +181,13 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        parentView.findViewById(R.id.user_profile_add_user_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendFriendRequest();
+            }
+        });
+
         parentView.findViewById(R.id.user_profile_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +197,24 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void sendFriendRequest() {
+        LincedInRequester.sendFriendRequest(getContext(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SENDFRIENDREQUEST", "Succesfully sent friend request!");
+                        Toast.makeText(getContext(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("SENDFRIENDREQUEST","Error on friend request delivery");
+                        error.printStackTrace();
+
+                    }
+                },ARG_USER_ID);
     }
 
     private void promptGalleryChoice() {

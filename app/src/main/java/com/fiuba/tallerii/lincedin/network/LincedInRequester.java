@@ -266,6 +266,13 @@ public class LincedInRequester {
         HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserFriends");
     }
 
+    public static void sendFriendRequest(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String requestedUserId) {
+        final Map<String,String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context) + "/friends/" + requestedUserId;
+
+        HttpRequestHelper.post(url,requestParams,new JSONObject(),successListener,errorListener,"SendFriendRequest");
+    }
+
     public static void getUserProfileImage(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String imgId) {
         final String url = getAppServerBaseURL(context) + imgId;
         final Map<String,String> requestParams = new HashMap<>();
