@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsMadeFragment;
@@ -37,6 +38,7 @@ public class RecommendationsActivity extends AppCompatActivity {
         setTabs();
 
         getArgsFromIntent();
+        setButtonVisibility();
     }
 
     @Override
@@ -89,6 +91,13 @@ public class RecommendationsActivity extends AppCompatActivity {
         isOwnProfile = getIntent().getBooleanExtra(ARG_IS_OWN_PROFILE, false);
     }
 
+    private void setButtonVisibility() {
+        if (isOwnProfile) {
+            findViewById(R.id.fragment_recommendations_add_recommendation_fab).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.fragment_recommendations_add_recommendation_fab).setVisibility(View.VISIBLE);
+        }
+    }
 
     public class RecommendationsSectionsPagerAdapter extends FragmentPagerAdapter {
         private static final int COUNT_SECTIONS = 2;

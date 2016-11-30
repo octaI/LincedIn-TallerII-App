@@ -70,7 +70,12 @@ public class ChatsAdapter extends BaseAdapter {
         final Chat currentChat = dataset.get(position);
         if (currentChat != null) {
             setUsersTextView(currentChat, convertView);
-            ((TextView) convertView.findViewById(R.id.chat_row_last_message_textview)).setText(currentChat.lastMessage.message);
+            TextView lastMessageTextView = (TextView) convertView.findViewById(R.id.chat_row_last_message_textview);
+            lastMessageTextView.setText(
+                    lastMessageTextView.getText().toString()
+                            .replace(":1", SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_ID, "").equals(currentChat.lastMessage.userId) ? context.getString(R.string.you) : parseUserIdToUsername(currentChat.lastMessage.userId))
+                            .replace(":2", currentChat.lastMessage.message)
+            );
             ((TextView) convertView.findViewById(R.id.chat_row_date_last_message_textview))
                     .setText(parseTimestampToDatetime(currentChat.lastMessage.timestamp));
         }

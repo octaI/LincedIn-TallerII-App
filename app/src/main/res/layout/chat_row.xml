@@ -26,7 +26,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="14sp"
-                android:text="@string/last_message"/>
+                android:text="@string/key_value"/>
 
             <TextView
                 android:id="@+id/chat_row_date_last_message_textview"

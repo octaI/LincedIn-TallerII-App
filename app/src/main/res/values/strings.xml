@@ -123,6 +123,7 @@
     <string name="check_your_network_connection">Chequea tu conexión a la red</string>
     <string name="message">Mensaje</string>
     <string name="last_message">Último mensaje</string>
+    <string name="key_value">:1: :2</string>
     <string name="no_chats">No hay conversaciones :(</string>
     <string name="say_hello_to_user">¡Saluda a :1!</string>
     <string name="chat">Conversación</string>

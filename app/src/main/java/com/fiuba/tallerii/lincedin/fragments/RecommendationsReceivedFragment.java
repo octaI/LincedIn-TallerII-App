@@ -55,7 +55,6 @@ public class RecommendationsReceivedFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_recommendations_received, container, false);
         requestRecommendationsReceived(v);
         setListeners(v);
-        setButtonVisibility(v);
         return v;
     }
 
@@ -89,7 +88,7 @@ public class RecommendationsReceivedFragment extends Fragment {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
                             ViewUtils.setSnackbar(
-                                    v.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab),
+                                    v.findViewById(R.id.fragment_recommendations_received_listview),
                                     R.string.error_retrieving_recommendations,
                                     Snackbar.LENGTH_LONG
                             );
@@ -107,18 +106,7 @@ public class RecommendationsReceivedFragment extends Fragment {
     }
 
     private void setListeners(View v) {
-        setAddRecommendationButtonListener(v);
         setRecommendationRowOnLongClickListener(v);
-    }
-
-    private void setButtonVisibility(View v) {
-        if (getArguments() != null) {
-            if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
-                v.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab).setVisibility(View.GONE);
-            } else {
-                v.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab).setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
@@ -129,15 +117,6 @@ public class RecommendationsReceivedFragment extends Fragment {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
             v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.VISIBLE);
         }
-    }
-
-    private void setAddRecommendationButtonListener(View parentView) {
-        parentView.findViewById(R.id.fragment_recommendations_received_add_recommendation_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: 27/11/16 Call activity method via interface
-            }
-        });
     }
 
     private void setRecommendationRowOnLongClickListener(View v) {
