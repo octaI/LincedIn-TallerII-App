@@ -154,6 +154,17 @@
                 android:value=".activities.HomeActivity" />
             >
         </activity>
+        <activity
+            android:name=".activities.UserProfileActivity"
+            android:label="@string/user_profile"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ChatActivity" />
+            >
+        </activity>
     </application>
 
 </manifest>

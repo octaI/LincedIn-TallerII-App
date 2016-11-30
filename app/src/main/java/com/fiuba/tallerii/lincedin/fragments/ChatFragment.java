@@ -1,6 +1,7 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,18 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.ChatMessagesAdapter;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
+import com.fiuba.tallerii.lincedin.model.chat.ChatMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CompleteChat;
-import com.fiuba.tallerii.lincedin.model.chat.CompleteChatMessage;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
@@ -207,6 +211,23 @@ public class ChatFragment extends Fragment {
     }
 
     private void setListeners() {
+        setUsernamesHeader();
+        setSendButtonListener();
+    }
+
+    private void setUsernamesHeader() {
+        TextView otherUsernameTextView = (TextView) fragmentView.findViewById(R.id.fragment_chat_other_username_textview);
+        otherUsernameTextView.setText(parseUserIdToUsername(receivingUserId));
+        otherUsernameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openUserProfile(receivingUserId);
+            }
+        });
+
+    }
+
+    private void setSendButtonListener() {
         final EditText messageEditText = (EditText) fragmentView.findViewById(R.id.fragment_chat_message_edittext);
         final ImageButton sendButton = (ImageButton) fragmentView.findViewById(R.id.fragment_chat_send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -229,13 +250,15 @@ public class ChatFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        CompleteChatMessage chatMessage = new CompleteChatMessage();
+                        ChatMessage chatMessage = new ChatMessage();
                         chatMessage.message = message;
                         chatMessage.userId = SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, "");
-                        chatMessage.timestamp = System.currentTimeMillis();
+                        chatMessage.timestamp = Long.toString(System.currentTimeMillis() / 1000L);
 
                         chatMessagesAdapter.addToDataset(chatMessage);
                         chatMessagesAdapter.notifyDataSetChanged();
+
+                        clearMessage();
                     }
                 },
                 new Response.ErrorListener() {
@@ -247,6 +270,22 @@ public class ChatFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void clearMessage() {
+        ((EditText) fragmentView.findViewById(R.id.fragment_chat_message_edittext)).setText(null);
+
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void openUserProfile(String userId) {
+        Intent userProfileIntent = new Intent(getContext(), UserProfileActivity.class);
+        userProfileIntent.putExtra(UserProfileActivity.ARG_USER_ID, userId);
+        startActivity(userProfileIntent);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
@@ -274,5 +313,10 @@ public class ChatFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private String parseUserIdToUsername(@NonNull String userId) {
+        String capitalizedId = userId.substring(0, 1).toUpperCase() + userId.substring(1).toLowerCase();
+        return capitalizedId.replaceAll("\\d+.*", "");
     }
 }

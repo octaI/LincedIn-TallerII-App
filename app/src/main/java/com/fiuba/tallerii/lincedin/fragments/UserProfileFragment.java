@@ -400,7 +400,7 @@ public class UserProfileFragment extends Fragment {
             if (isUserLogged) {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
-                        "me",
+                        getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me",
                         getContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -539,7 +539,7 @@ public class UserProfileFragment extends Fragment {
         userJobsAdapter.setDataset(jobsToShow);
         userJobsAdapter.notifyDataSetChanged();
 
-        if (userJobsAdapter.isEmpty()) {
+        if (isOwnProfile && userJobsAdapter.isEmpty()) {
             ((Button) v.findViewById(R.id.user_profile_work_experience_see_more_button)).setText(getString(R.string.add));
         }
     }
@@ -564,7 +564,7 @@ public class UserProfileFragment extends Fragment {
         userEducationAdapter.setDataset(user.education);
         userEducationAdapter.notifyDataSetChanged();
 
-        if (userEducationAdapter.isEmpty()) {
+        if (isOwnProfile && userEducationAdapter.isEmpty()) {
             ((Button) v.findViewById(R.id.user_profile_education_see_more_button)).setText(getString(R.string.add));
         }
     }
@@ -573,7 +573,7 @@ public class UserProfileFragment extends Fragment {
         userSkillsAdapter.setDataset(user.skills);
         userSkillsAdapter.notifyDataSetChanged();
 
-        if (userSkillsAdapter.isEmpty()) {
+        if (isOwnProfile && userSkillsAdapter.isEmpty()) {
             ((Button) v.findViewById(R.id.user_profile_skills_see_more_button)).setText(getString(R.string.add));
         }
     }

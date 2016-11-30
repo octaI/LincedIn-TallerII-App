@@ -7,8 +7,8 @@ public class FacebookLogInUser extends LogInUser {
     @SerializedName("fb_token")
     private String fbToken;
 
-    public FacebookLogInUser(String fbToken) {
-        super("Facebook");
+    public FacebookLogInUser(String fbToken, String firebaseId) {
+        super("Facebook", firebaseId);
         this.fbToken = fbToken;
     }
 

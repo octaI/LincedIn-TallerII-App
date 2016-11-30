@@ -8,6 +8,9 @@ public class User {
 
     public String id;
 
+    @SerializedName("firebase_id")
+    public String firebaseId;
+
     @SerializedName("full_name")
     public String fullName;
 
