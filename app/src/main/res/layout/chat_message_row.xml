@@ -38,6 +38,7 @@
         android:orientation="vertical"
         android:layout_gravity="end"
         android:background="@color/lighterGrey"
+        android:layout_margin="2dp"
         android:padding="8dp"
         android:visibility="gone">
         <TextView
