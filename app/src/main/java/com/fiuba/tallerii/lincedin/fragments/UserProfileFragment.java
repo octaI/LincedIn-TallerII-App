@@ -120,7 +120,6 @@ public class UserProfileFragment extends Fragment {
         setAdapters(convertView);
         setButtonsListeners(convertView);
         setButtonsVisibility(convertView);
-        requestUserProfile();
 
         return convertView;
     }
