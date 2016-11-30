@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.chat.ChatNewMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CreateChat;
+import com.fiuba.tallerii.lincedin.model.recommendations.NewRecommendation;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
@@ -113,7 +114,7 @@ public class LincedInRequester {
         }
     }
 
-    public static void getUserReceivedRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void getUserRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
                 + "/recommendations/"
@@ -124,23 +125,29 @@ public class LincedInRequester {
                 requestParams,
                 successListener,
                 errorListener,
-                "GetUserReceivedRecommendations"
+                "GetUserRecommendations"
         );
     }
 
-    public static void getUserMadeRecommendations(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void recommendUser(String userId, String message, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context)
                 + "/recommendations/"
                 + userId;
 
-        HttpRequestHelper.get(
-                url,
-                requestParams,
-                successListener,
-                errorListener,
-                "GetUserMadeRecommendations"
-        );
+        NewRecommendation requestBody = new NewRecommendation(message);
+        try {
+            HttpRequestHelper.post(
+                    url,
+                    requestParams,
+                    new JSONObject(new Gson().toJson(requestBody)),
+                    successListener,
+                    errorListener,
+                    "RecommendUser"
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void getAllUserChats(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
