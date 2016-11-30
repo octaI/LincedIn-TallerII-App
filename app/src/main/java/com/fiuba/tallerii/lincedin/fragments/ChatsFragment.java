@@ -72,14 +72,13 @@ public class ChatsFragment extends Fragment {
                                 Gson gson = new Gson();
                                 Log.d(TAG, gson.toJson(response));
 
-                                List<Chat> chats = new ArrayList<>();
                                 Type chatListType = new TypeToken<List<Chat>>() {}.getType();
                                 try {
                                     chats = gson.fromJson(response.getString("chats"), chatListType);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                populateChats(chats);
+                                populateChats();
                             }
                         },
                         new Response.ErrorListener() {
@@ -163,15 +162,16 @@ public class ChatsFragment extends Fragment {
         }
     }*/
 
-    private void populateChats(final List<Chat> chats) {
+    private void populateChats() {
+        List<Chat> chatsToShow = new ArrayList<>();
         for (final Chat chat : chats) {
             if (chat.lastMessage != null && chat.lastMessage.message != null) {
-                if (chatsAdapter != null) {
-                    chats.add(chat);
-                    chatsAdapter.addToDataset(chat);
-                    chatsAdapter.notifyDataSetChanged();
-                }
+                chatsToShow.add(chat);
             }
+        }
+        if (chatsAdapter != null) {
+            chatsAdapter.setDataset(chatsToShow);
+            chatsAdapter.notifyDataSetChanged();
         }
         refreshLoadingIndicator(fragmentView, false);
         hideErrorScreen(fragmentView);
