@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.ChatsFragment;
+import com.fiuba.tallerii.lincedin.fragments.FindFriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.FriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
@@ -163,6 +164,8 @@ public class HomeActivity extends AppCompatActivity {
                 return UserProfileFragment.newInstance(null);
             } else if (position == 1) {
                 return FriendsFragment.newInstance(null);
+            } else if (position == 2) {
+                //return FindFriendsFragment.newInstance(null);
             } else if (position == 3) {
                 return new ChatsFragment();
             }

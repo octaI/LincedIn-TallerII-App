@@ -30,7 +30,7 @@ import static com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils.getString
 
 public class LincedInRequester {
 
-    private static String getAppServerBaseURL(Context context) {
+    public static String getAppServerBaseURL(Context context) {
         if (getBooleanFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IS_LOCAL, false)) {
             return "http://"
                     + getStringFromSharedPreferences(context, SharedPreferencesKeys.SERVER_IP, HTTPConfigurationDialogFragment.DEFAULT_SERVER_IP)
