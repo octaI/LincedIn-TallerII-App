@@ -30,25 +30,6 @@ public class RecommendUserDialogFragment extends DialogFragment {
 
     private static final String TAG = "RecommendUserDialog";
 
-    private static final String ARG_RECOMMENDED_USER_ID = "ARG_RECOMMENDED_USER_ID";
-    private String recommendedUserId;
-
-    public static RecommendUserDialogFragment newInstance(String recommendedUserId) {
-        RecommendUserDialogFragment dialogFragment = new RecommendUserDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_RECOMMENDED_USER_ID, recommendedUserId);
-        dialogFragment.setArguments(args);
-        return dialogFragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            recommendedUserId = getArguments().getString(ARG_RECOMMENDED_USER_ID);
-        }
-    }
-
     @Override
     public @NonNull
     Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -63,33 +44,7 @@ public class RecommendUserDialogFragment extends DialogFragment {
 
                         if (recommendationMessageEditText.getText() != null && !recommendationMessageEditText.getText().toString().equals("")) {
                             String message = recommendationMessageEditText.getText().toString();
-                            LincedInRequester.recommendUser(
-                                    recommendedUserId,
-                                    message,
-                                    getActivity(),
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            Log.d(TAG, new Gson().toJson(response));
-                                            try {
-                                                EventBus.getDefault().post(new RecommendationPostedEvent(response.getString("message")));
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                                EventBus.getDefault().post(new RecommendationPostedEvent());
-                                            }
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Log.e(TAG, "Error posting recommendation: " + error.toString());
-                                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                                Log.e(TAG, new String(error.networkResponse.data));
-                                            }
-                                            EventBus.getDefault().post(new RecommendationPostedEvent());
-                                        }
-                                    }
-                            );
+                            EventBus.getDefault().post(new RecommendationPostedEvent(message));
                         } else {
                             ViewUtils.setToast(getContext(), getString(R.string.cannot_be_empty), Toast.LENGTH_LONG);
                         }

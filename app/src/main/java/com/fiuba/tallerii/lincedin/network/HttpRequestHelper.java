@@ -71,7 +71,7 @@ public class HttpRequestHelper {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", UserAuthenticationManager.getSessionToken(context));
-                headers.put("Connection", "close"); // MARTIN TE AMO COMO NUNCA AME A NADIE!
+                headers.put("Connection", "close"); // MARTÍN TE AMO COMO NUNCA AMÉ A NADIE!
                 return headers;
             }
 

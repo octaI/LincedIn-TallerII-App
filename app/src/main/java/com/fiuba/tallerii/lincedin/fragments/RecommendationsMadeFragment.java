@@ -62,9 +62,15 @@ public class RecommendationsMadeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_recommendations_made, container, false);
-        requestRecommendationsMade();
+        setAdapter(fragmentView);
         setListeners(fragmentView);
         return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requestRecommendationsMade();
     }
 
     private void requestRecommendationsMade() {
@@ -84,7 +90,9 @@ public class RecommendationsMadeFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            setAdapter(fragmentView);
+                            recommendationsMadeAdapter.setDataset(recommendations);
+                            recommendationsMadeAdapter.notifyDataSetChanged();
+
                             refreshLoadingIndicator(fragmentView, false);
                             hideErrorScreen(fragmentView);
                         }
@@ -121,11 +129,11 @@ public class RecommendationsMadeFragment extends Fragment {
     private void refreshLoadingIndicator(View v, boolean loading) {
         if (loading) {
             v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.GONE);
+            v.findViewById(R.id.fragment_recommendations_made_layout).setVisibility(View.INVISIBLE);
             v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.GONE);
-            v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.fragment_recommendations_made_layout).setVisibility(View.VISIBLE);
         }
     }
 
@@ -141,13 +149,13 @@ public class RecommendationsMadeFragment extends Fragment {
 
     private void showErrorScreen(View v) {
         v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.VISIBLE);
-        v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_made_layout).setVisibility(View.INVISIBLE);
         v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.GONE);
     }
 
     private void hideErrorScreen(View v) {
         v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.GONE);
-        v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.fragment_recommendations_made_layout).setVisibility(View.VISIBLE);
     }
 
     private void openUserProfile(String userId) {
