@@ -23,10 +23,13 @@ import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserFriendsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserFriends;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -58,16 +61,18 @@ public class FriendsFragment extends Fragment {
         super.onCreate( savedInstanceState);
 
 
-
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestUserFriends();
     }
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        requestUserFriends();
         convertView = inflater.inflate(R.layout.fragment_friends,container,false);
         final ListView friendList = (ListView) convertView.findViewById(R.id.user_friend_list);
-
         UserFriendsAdapter friendListAdapter = new UserFriendsAdapter(userFriends,getContext());
         friendList.setAdapter(friendListAdapter);
         friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,24 +93,20 @@ public class FriendsFragment extends Fragment {
     }
 
     private void requestUserFriends() {
-        String userId;
-        if (isOwnProfile) {
-            userId = null; // this is your own user
-        } else {
-            userId = ARG_USER_ID; //get the ID of the currently viewed profile
-        }
-        if (convertView != null) {
-            boolean isUserLogged =true;
-
-            if (isUserLogged) {
-                refreshLoadingIndicator(convertView, true);
-                LincedInRequester.getUserFriends(getContext(),
+         LincedInRequester.getUserFriends(getContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Gson parser = new Gson();
-                                Log.d(TAG, parser.toJson(response));
-                                userFriends = parser.fromJson(response.toString(), UserFriends.class);
+                                try {
+                                    JSONArray array = response.getJSONArray("friends");
+                                    Log.d(TAG,array.toString());
+                                    for(int i  = 0; i<array.length();i++) {
+                                        userFriends.addUserFriend(array.get(i).toString());
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
 
                             }
                         },
@@ -117,13 +118,13 @@ public class FriendsFragment extends Fragment {
                                 error.printStackTrace();
                             }
                         }
-                ,userId);
-            } else {
-
+                , UserAuthenticationManager.getUserId(getContext()));
             }
-        }
 
-    }
+
+
+
+
 
 
 

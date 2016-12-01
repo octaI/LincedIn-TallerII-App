@@ -12,6 +12,9 @@ public class UserFriends {
     public ArrayList<String> userFriendsIDs = new ArrayList<>();
 
     public void addUserFriend(String userid) {
+        if ( userFriendsIDs.contains(userid)){
+            return;
+        }
         userFriendsIDs.add(userid);
     }
 

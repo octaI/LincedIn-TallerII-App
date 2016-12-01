@@ -272,7 +272,7 @@ public class LincedInRequester {
         (some other user's friends)
          */
         final Map<String,String> requestParams = new HashMap<>();
-        final String url = getAppServerBaseURL(context) + "/friends/" + anId;
+        final String url = getAppServerBaseURL(context) + "/friends";
 
         HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserFriends");
     }
