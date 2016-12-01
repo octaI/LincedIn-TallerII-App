@@ -68,7 +68,7 @@ public class ChatsAdapter extends BaseAdapter {
         }
 
         final Chat currentChat = dataset.get(position);
-        if (currentChat != null) {
+        if (currentChat != null && currentChat.lastMessage != null) {
             setUsersTextView(currentChat, convertView);
             TextView lastMessageTextView = (TextView) convertView.findViewById(R.id.chat_row_last_message_textview);
             lastMessageTextView.setText(

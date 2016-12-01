@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The class wraps the instantiation of JsonObjectRequest{@link JsonObjectRequest}s and the way that Volley library uses them for sending asynchronous HTTP requests.
@@ -86,6 +88,7 @@ public class HttpRequestHelper {
             }
         };
         request.setTag(requestTag);
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(3), 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return mRequestQueue.add(request);
     }
 

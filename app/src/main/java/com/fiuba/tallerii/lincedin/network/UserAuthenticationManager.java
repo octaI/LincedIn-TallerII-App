@@ -99,6 +99,10 @@ public class UserAuthenticationManager {
         return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN, null);
     }
 
+    public static String getUserId(Context context) {
+        return SharedPreferencesUtils.getStringFromSharedPreferences(context, SharedPreferencesKeys.USER_ID, null);
+    }
+
     public static void saveUserAuthInfo(Context context, String sessionToken, String userId, String email, String password) {
         SharedPreferencesUtils.putBooleanToSharedPreferences(context, SharedPreferencesKeys.USER_LOGGED_IN, true);
         SharedPreferencesUtils.putStringToSharedPreferences(context, SharedPreferencesKeys.SESSION_TOKEN, sessionToken);

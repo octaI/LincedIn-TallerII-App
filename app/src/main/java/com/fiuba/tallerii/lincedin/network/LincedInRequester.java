@@ -2,10 +2,7 @@ package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.Log;
-
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.chat.ChatNewMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CreateChat;
@@ -14,7 +11,6 @@ import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
-import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -148,6 +144,21 @@ public class LincedInRequester {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void deleteRecommendation(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/recommendations/"
+                + userId;
+
+        HttpRequestHelper.delete(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetUserRecommendations"
+        );
     }
 
     public static void getAllUserChats(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {

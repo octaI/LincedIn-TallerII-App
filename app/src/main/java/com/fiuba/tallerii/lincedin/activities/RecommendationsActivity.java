@@ -1,6 +1,5 @@
 package com.fiuba.tallerii.lincedin.activities;
 
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -10,28 +9,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.events.RecommendationPostedEvent;
 import com.fiuba.tallerii.lincedin.fragments.RecommendUserDialogFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsMadeFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsReceivedFragment;
-import com.fiuba.tallerii.lincedin.network.LincedInRequester;
-import com.fiuba.tallerii.lincedin.utils.ViewUtils;
-import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
 
-public class RecommendationsActivity extends AppCompatActivity {
+public class RecommendationsActivity extends AppCompatActivity
+        implements RecommendationsReceivedFragment.OnRecommendationsReceivedFragmentInteractionListener {
 
     private static final String TAG = "Recommendations";
 
@@ -48,13 +40,11 @@ public class RecommendationsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendations);
-        EventBus.getDefault().register(this);
 
         setToolbar();
         setTabs();
 
         getArgsFromIntent();
-        setButtonVisibility();
         setButtonListener();
     }
 
@@ -98,7 +88,7 @@ public class RecommendationsActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.recommendations_tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setOffscreenPageLimit(1);
 
         tabLayout.getTabAt(0).setText(R.string.recommendations_received);
         tabLayout.getTabAt(1).setText(R.string.recommendations_made);
@@ -127,38 +117,13 @@ public class RecommendationsActivity extends AppCompatActivity {
     }
 
     private void openRecommendUserDialog() {
-        DialogFragment datePickerDialog = new RecommendUserDialogFragment();
+        DialogFragment datePickerDialog = RecommendUserDialogFragment.newInstance(userId);
         datePickerDialog.show(getSupportFragmentManager(), "RecommendUserDialogFragment");
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecommendationPosted(RecommendationPostedEvent event) {
-        LincedInRequester.recommendUser(
-                userId,
-                event.message,
-                this,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, new Gson().toJson(response));
-                        mSectionsPagerAdapter.notifyDataSetChanged();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Error posting recommendation: " + error.toString());
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            Log.e(TAG, new String(error.networkResponse.data));
-                        }
-                        ViewUtils.setSnackbar(
-                                findViewById(R.id.fragment_recommendations_add_recommendation_fab),
-                                R.string.error_recommend_user,
-                                Snackbar.LENGTH_LONG
-                        );
-                    }
-                }
-        );
+    @Override
+    public void onUserNotRecommended() {
+        setButtonVisibility();
     }
 
     public class RecommendationsSectionsPagerAdapter extends FragmentPagerAdapter {
@@ -171,7 +136,7 @@ public class RecommendationsActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return RecommendationsReceivedFragment.newInstance(userId, isOwnProfile);
+                return RecommendationsReceivedFragment.newInstance(userId);
             } else if (position == 1) {
                 return RecommendationsMadeFragment.newInstance(userId, isOwnProfile);
             }

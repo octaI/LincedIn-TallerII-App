@@ -67,7 +67,7 @@ public class ChatsFragment extends Fragment {
             if (isUserLogged) {
                 refreshLoadingIndicator(fragmentView, true);
                 LincedInRequester.getAllUserChats(
-                        getContext(),
+                        getActivity().getApplicationContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -209,7 +209,7 @@ public class ChatsFragment extends Fragment {
     }
 
     private void openChat(Chat chat) {
-        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+        Intent chatIntent = new Intent(getActivity(), ChatActivity.class);
         chatIntent.putExtra(ChatActivity.ARG_CHAT_ID, chat.chatId);
 
         // TODO: 29/11/16 It only supports 1-1 conversations!
@@ -266,7 +266,7 @@ public class ChatsFragment extends Fragment {
     }
 
     private void openLogin() {
-        Intent loginIntent = new Intent(getContext(), LogInActivity.class);
+        Intent loginIntent = new Intent(getActivity(), LogInActivity.class);
         startActivity(loginIntent);
     }
 }

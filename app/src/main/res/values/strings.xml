@@ -81,13 +81,18 @@
     <string name="error_edit_job">Hubo un error y el cargo no pudo ser editado</string>
     <string name="error_edit_skill">Hubo un error y la aptitud no pudo ser editada</string>
     <string name="error_retrieving_recommendations">Hubo un error y no se pudieron cargar las recomendaciones</string>
+    <string name="error_delete_recommendation">Hubo un error al borrar la recomendación</string>
     <string name="are_you_sure_you_want_to_delete_job">¿Estás seguro de que quieres eliminar este cargo?</string>
     <string name="are_you_sure_you_want_to_delete_education">¿Estás seguro de que quieres eliminar este curso?</string>
     <string name="are_you_sure_you_want_to_delete_skill">¿Estás seguro de que quieres eliminar esta aptitud?</string>
+    <string name="are_you_sure_you_want_to_delete_recommendation">¿Estás seguro de que quieres eliminar esta recomendación?</string>
     <string name="this_change_cannot_be_reverted">Este cambio no puede ser revertido</string>
     <string name="must_select_job_position">Debes seleccionar una posición para el trabajo</string>
     <string name="must_select_skill">Debes seleccionar una aptitud</string>
     <string name="education">Educación</string>
+    <string name="no_education">No hay cursos :(</string>
+    <string name="no_jobs">No hay trabajos :(</string>
+    <string name="no_skills">No hay aptitudes :(</string>
     <string name="skills">Aptitudes</string>
     <string name="skill">Aptitud</string>
     <string name="name">Nombre</string>
@@ -97,6 +102,7 @@
     <string name="error_occurred">Ocurrió un error</string>
     <string name="couldnt_retrieve_user_profile">No se pudo obtener el perfil de usuario</string>
     <string name="couldnt_retrieve_chats">No se pudieron obtener las conversaciones</string>
+    <string name="couldnt_retrieve_recommendatios">No se pudieron obtener las recomendaciones</string>
     <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
     <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>
@@ -129,11 +135,15 @@
     <string name="no_chats">No hay conversaciones :(</string>
     <string name="say_hello_to_user">¡Saluda a :1!</string>
     <string name="chat">Conversación</string>
+    <string name="error_send_message">Hubo un error al enviar el mensaje</string>
+    <string name="error_send_message_try_again">Hubo un error al enviar el mensaje. Intenta nuevamente</string>
     <string name="you">Tú</string>
     <string name="cannot_be_empty">No puede estar vacío</string>
 
     <string name="pick_image_intent_text">Tomar imagen de</string>
-    <string name="literal_riquelme">iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAIAAAC2BqGFAAAAA3NCSVQICAjb4U/gAAAEu0lEQVR4\nnO3XTajUVRjH8d/vnP/M/z8z92Xu9Y5hSolmkgvDMluYiW1atJCidVBgu5aFi1ZBC6G3pasWBUFQ\nixZBG5MgyTYuUqkMCzTxMnrv9b7My//lnKeFIdlGFHvmDj2f9cA8fHk4/3PYbrdh/ntu1AP8X1ho\nJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUW\nWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJ\nhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVW\nYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKh\nlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWsk6DB2JGCEVJCK4GEqGCiKMwUUXQwUZ9YT3Yt2F\nLjwEIJkGlM4Fzyz6mtAJ0soNEteoRj3iPUlGPcC/1SspEk4MYpUlL4T2VC0rXPi+6F5PJFJ8xGqK\nLIx6yrvnsywb9Qy3IeGiPDP50PH2s7vbDw7nJvZNbH6jtXvzGn6Qa4T4SJKjHvOusd1uq/1ZhAiZ\nlTKoMwnlTJI9F+cceCYsnE/7zRziKCIH2g8fqz9xND/z7coVTyYRnQ1z77X2/tq99E5xLsL5MTyl\nVTc6AFnkjQxTBV+bfuyD9v5me2q20zkytWvvcnaymu/XkCTJxzOH3l88803/shMSjJDecHAK196a\nferHG5fXYhnW3ZflzlTPaCEC0czl4My2lxvbX106eS5fANzG6ekPtx54/fLgo+qXx1sbYwhf55cc\n+PfiOgqwuLh4urOyN3vgfPnHOG606m4kIEXKhK9M7Px88efz+QIBInaXl44vnz089QjJrWwN+/1+\nEp3EQAhBAQWrKa4P+9NJE4yaM98vqqFFJPdoltiBye/YzYLPfVKvHICfyoWJtNGK7mpSMEkEBADG\n3AkFwphVsVn3leQRY3jn0A5NZpG5x1It7CgbJSURloknMJmkroqlxLPD652sta+aEkcnLivhJdYC\n6ll6sJz9LV/KxvMerRo6QiqHyQJf+fnDre2FR1bF3MkwwdHq0dPD+dxJv9f7JLv65sSeTkgCXV04\nTNyg7o+lT/45XD4R54tk/O52UL7eVRCSFJlOm8c7h9Kl3qfFxVbFA9NbtjTbR7on5sueF/g0e3fT\n/l29+pfLF1ZiUa+nLzV39Bt4u3vqSrFKoOK6e2fdkWrof6ql9Rdndu6pzZH8fa372dqF1XxAMoJe\nGDyfb297enLTBtfslfm5lfkv+hdDCCJjeOEAMMLQXmIkSkp0dFFAtkr0anCRNeFyErNAH4MHSQYI\n6EmOb+iRPcGjEwA1YaMCxeWehWMtsPTwwkZkAhZeyhorBy8ExvJovmVkh50II1lBSo8INEtUDgAa\nFXIvN58kFJdWpCBwHB+DtxlZaAdCcHNPHRAdHAAiEjW59RsAEMLBj2jM+2bcF2VsWGglFlqJhVZi\noZVYaCUWWslfdT+bFZzlmMQAAAAASUVORK5CYII=\n    <!-- TODO: Remove or change this placeholder text --></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="literal_riquelme">iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAIAAAC2BqGFAAAAA3NCSVQICAjb4U/gAAAEu0lEQVR4\nnO3XTajUVRjH8d/vnP/M/z8z92Xu9Y5hSolmkgvDMluYiW1atJCidVBgu5aFi1ZBC6G3pasWBUFQ\nixZBG5MgyTYuUqkMCzTxMnrv9b7My//lnKeFIdlGFHvmDj2f9cA8fHk4/3PYbrdh/ntu1AP8X1ho\nJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUW\nWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJ\nhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVW\nYqGVWGglFlqJhVZioZVYaCUWWomFVmKhlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWomFVmKh\nlVhoJRZaiYVWYqGVWGglFlqJhVZioZVYaCUWWsk6DB2JGCEVJCK4GEqGCiKMwUUXQwUZ9YT3Yt2F\nLjwEIJkGlM4Fzyz6mtAJ0soNEteoRj3iPUlGPcC/1SspEk4MYpUlL4T2VC0rXPi+6F5PJFJ8xGqK\nLIx6yrvnsywb9Qy3IeGiPDP50PH2s7vbDw7nJvZNbH6jtXvzGn6Qa4T4SJKjHvOusd1uq/1ZhAiZ\nlTKoMwnlTJI9F+cceCYsnE/7zRziKCIH2g8fqz9xND/z7coVTyYRnQ1z77X2/tq99E5xLsL5MTyl\nVTc6AFnkjQxTBV+bfuyD9v5me2q20zkytWvvcnaymu/XkCTJxzOH3l88803/shMSjJDecHAK196a\nferHG5fXYhnW3ZflzlTPaCEC0czl4My2lxvbX106eS5fANzG6ekPtx54/fLgo+qXx1sbYwhf55cc\n+PfiOgqwuLh4urOyN3vgfPnHOG606m4kIEXKhK9M7Px88efz+QIBInaXl44vnz089QjJrWwN+/1+\nEp3EQAhBAQWrKa4P+9NJE4yaM98vqqFFJPdoltiBye/YzYLPfVKvHICfyoWJtNGK7mpSMEkEBADG\n3AkFwphVsVn3leQRY3jn0A5NZpG5x1It7CgbJSURloknMJmkroqlxLPD652sta+aEkcnLivhJdYC\n6ll6sJz9LV/KxvMerRo6QiqHyQJf+fnDre2FR1bF3MkwwdHq0dPD+dxJv9f7JLv65sSeTkgCXV04\nTNyg7o+lT/45XD4R54tk/O52UL7eVRCSFJlOm8c7h9Kl3qfFxVbFA9NbtjTbR7on5sueF/g0e3fT\n/l29+pfLF1ZiUa+nLzV39Bt4u3vqSrFKoOK6e2fdkWrof6ql9Rdndu6pzZH8fa372dqF1XxAMoJe\nGDyfb297enLTBtfslfm5lfkv+hdDCCJjeOEAMMLQXmIkSkp0dFFAtkr0anCRNeFyErNAH4MHSQYI\n6EmOb+iRPcGjEwA1YaMCxeWehWMtsPTwwkZkAhZeyhorBy8ExvJovmVkh50II1lBSo8INEtUDgAa\nFXIvN58kFJdWpCBwHB+DtxlZaAdCcHNPHRAdHAAiEjW59RsAEMLBj2jM+2bcF2VsWGglFlqJhVZi\noZVYaCUWWslfdT+bFZzlmMQAAAAASUVORK5CYII=\n</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
