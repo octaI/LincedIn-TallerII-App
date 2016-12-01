@@ -99,7 +99,6 @@ public class RecommendationsMadeFragment extends Fragment {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
                             showErrorScreen(fragmentView);
-
                         }
                     }
             );

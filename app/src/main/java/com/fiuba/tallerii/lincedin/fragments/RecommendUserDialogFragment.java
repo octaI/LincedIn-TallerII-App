@@ -86,11 +86,7 @@ public class RecommendUserDialogFragment extends DialogFragment {
                                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                                 Log.e(TAG, new String(error.networkResponse.data));
                                             }
-                                            ViewUtils.setSnackbar(
-                                                    d.findViewById(R.id.dialog_post_recommendation_message_edittext),
-                                                    R.string.error_recommend_user,
-                                                    Snackbar.LENGTH_LONG
-                                            );
+                                            EventBus.getDefault().post(new RecommendationPostedEvent());
                                         }
                                     }
                             );
