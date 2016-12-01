@@ -33,7 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class UserFriendsAdapter extends ArrayAdapter<Object>  {
+public class UserFriendsAdapter extends ArrayAdapter<String>  {
 
     private static final String TAG = "UserFriendsAdapter";
     private UserFriends userFriendsObject;
@@ -66,7 +66,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
     }
 
     @Override
-    public Object getItem(int i)
+    public String getItem(int i)
     {
         return userFriendsObject.getUserFriends().get(i);
     }

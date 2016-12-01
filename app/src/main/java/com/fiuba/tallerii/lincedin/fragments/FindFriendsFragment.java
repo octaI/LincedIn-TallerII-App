@@ -61,6 +61,7 @@ public class FindFriendsFragment extends Fragment {
         convertView = inflater.inflate(R.layout.fragment_searchfriends,container,false);
         SearchView searchView = (SearchView) convertView.findViewById(R.id.searchfriends_view);
         final ListView strangerList = (ListView) convertView.findViewById(R.id.found_friends_listview);
+
         strangerList.setAdapter(new FindUserAdapter(userFriends,getContext()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -77,6 +78,8 @@ public class FindFriendsFragment extends Fragment {
                             for (int i = 0; i < responsearray.length(); i++) {
                                 userFriends.addUserFriend(responsearray.get(i).toString());
                             }
+                            strangerList.setAdapter(new FindUserAdapter(userFriends,getContext()));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

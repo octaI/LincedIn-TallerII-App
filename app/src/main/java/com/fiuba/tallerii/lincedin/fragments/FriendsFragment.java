@@ -97,9 +97,11 @@ public class FriendsFragment extends Fragment {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                Toast.makeText(getContext(),"Se accedio a la lista de amigos",Toast.LENGTH_SHORT);
                                 try {
                                     JSONArray array = response.getJSONArray("friends");
                                     JSONArray onlinearray = response.getJSONArray("online");
+                                    Log.d(TAG,array.toString());
                                     Log.d(TAG,array.toString());
                                     for(int i  = 0; i<array.length();i++) {
                                         userFriends.addUserFriend(array.get(i).toString());

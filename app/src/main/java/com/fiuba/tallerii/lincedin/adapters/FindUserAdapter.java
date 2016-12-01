@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class FindUserAdapter extends ArrayAdapter<Object> {
+public class FindUserAdapter extends ArrayAdapter<String> {
 
     private static final String TAG = "FindUserAdapter";
     private UserFriends userFriendsObject;
@@ -59,7 +59,7 @@ public class FindUserAdapter extends ArrayAdapter<Object> {
     }
 
     @Override
-    public Object getItem(int i)
+    public String getItem(int i)
     {
         return userFriendsObject.getUserFriends().get(i);
     }
