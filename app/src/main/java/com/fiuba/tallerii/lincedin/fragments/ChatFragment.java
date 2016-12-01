@@ -2,7 +2,6 @@ package com.fiuba.tallerii.lincedin.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -268,7 +266,7 @@ public class ChatFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
-                        ViewUtils.setSnackbar(fragmentView, R.string.error_send_message, Snackbar.LENGTH_LONG);
+                        ViewUtils.setSnackbar(fragmentView, R.string.error_send_message_try_again, Snackbar.LENGTH_LONG);
                     }
                 }
         );

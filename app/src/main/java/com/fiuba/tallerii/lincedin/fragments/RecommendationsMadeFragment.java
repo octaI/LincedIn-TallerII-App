@@ -70,7 +70,7 @@ public class RecommendationsMadeFragment extends Fragment {
             refreshLoadingIndicator(v, true);
             LincedInRequester.getUserRecommendations(
                     userId,
-                    getContext(),
+                    getActivity(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -189,7 +189,7 @@ public class RecommendationsMadeFragment extends Fragment {
             refreshLoadingIndicator(parentView, true);
             LincedInRequester.deleteRecommendation(
                     userId,
-                    getContext(),
+                    getActivity(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

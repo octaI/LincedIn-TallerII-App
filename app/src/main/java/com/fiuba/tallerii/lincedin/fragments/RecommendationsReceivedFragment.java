@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.RecommendationsReceivedAdapter;
 import com.fiuba.tallerii.lincedin.model.recommendations.RecommendationReceived;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecommendationsReceivedFragment extends Fragment {
+
+    public interface OnRecommendationsReceivedFragmentInteractionListener {
+        void onUserNotRecommended();
+    }
+    private OnRecommendationsReceivedFragmentInteractionListener mListener;
 
     private static final String TAG = "RecommendationsReceived";
 
@@ -66,7 +73,7 @@ public class RecommendationsReceivedFragment extends Fragment {
             refreshLoadingIndicator(v, true);
             LincedInRequester.getUserRecommendations(
                     userId,
-                    getContext(),
+                    getActivity(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -78,6 +85,18 @@ public class RecommendationsReceivedFragment extends Fragment {
                                 e.printStackTrace();
                             }
                             setAdapter(v);
+
+                            boolean isUserAlreadyRecommended = false;
+                            for (RecommendationReceived recommendation : recommendations) {
+                                if (recommendation.recommender.equals(UserAuthenticationManager.getUserId(getContext()))) {
+                                    isUserAlreadyRecommended = true;
+                                    break;
+                                }
+                            }
+                            if (!isUserAlreadyRecommended) {
+                                mListener.onUserNotRecommended();
+                            }
+
                             refreshLoadingIndicator(v, false);
                         }
                     },
@@ -94,6 +113,7 @@ public class RecommendationsReceivedFragment extends Fragment {
                                     R.string.error_retrieving_recommendations,
                                     Snackbar.LENGTH_LONG
                             );
+                            mListener.onUserNotRecommended();
                         }
                     }
             );
@@ -138,6 +158,23 @@ public class RecommendationsReceivedFragment extends Fragment {
                 }
             });
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnRecommendationsReceivedFragmentInteractionListener) {
+            mListener = (OnRecommendationsReceivedFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnRecommendationsReceivedFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
 }

@@ -199,11 +199,11 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void sendFriendRequest() {
-        LincedInRequester.sendFriendRequest(getContext(), new Response.Listener<JSONObject>() {
+        LincedInRequester.sendFriendRequest(getActivity(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("SENDFRIENDREQUEST", "Succesfully sent friend request!");
-                        Toast.makeText(getContext(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -245,7 +245,7 @@ public class UserProfileFragment extends Fragment {
                     byte[] bmByteArray = ImageUtils.returnByteArrayFromBitmap(bitmap);
                     String b64encode = ImageUtils.encodeByteArrayToBase64(bmByteArray);
                     user.profilePicture = b64encode;
-                    LincedInRequester.editUserProfile(user, getContext(),
+                    LincedInRequester.editUserProfile(user, getActivity(),
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
@@ -433,7 +433,7 @@ public class UserProfileFragment extends Fragment {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
                         getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me",
-                        getContext(),
+                        getActivity(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -477,7 +477,7 @@ public class UserProfileFragment extends Fragment {
 
     private void populateBasicInfo(View v, User user) {
         final ImageView userImageView = (ImageView) v.findViewById(R.id.user_profile_picture_imageview);
-        LincedInRequester.getUserProfileImage(getContext(), new Response.Listener<JSONObject>() {
+        LincedInRequester.getUserProfileImage(getActivity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try{
@@ -651,18 +651,18 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openChat(String userId) {
-        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+        Intent chatIntent = new Intent(getActivity(), ChatActivity.class);
         chatIntent.putExtra(ChatActivity.ARG_RECEIVING_USER_ID, userId);
         startActivity(chatIntent);
     }
 
     private void openLogin() {
-        Intent loginIntent = new Intent(getContext(), LogInActivity.class);
+        Intent loginIntent = new Intent(getActivity(), LogInActivity.class);
         startActivity(loginIntent);
     }
 
     private void openUserBiography() {
-        Intent biographyIntent = new Intent(getContext(), BiographyActivity.class);
+        Intent biographyIntent = new Intent(getActivity(), BiographyActivity.class);
         if (user != null) {
             biographyIntent.putExtra(BiographyActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -670,7 +670,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserWorkExperience() {
-        Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
+        Intent workExperienceIntent = new Intent(getActivity(), WorkExperienceActivity.class);
         if (user != null) {
             workExperienceIntent.putExtra(WorkExperienceActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -679,7 +679,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserEducation() {
-        Intent educationIntent = new Intent(getContext(), EducationActivity.class);
+        Intent educationIntent = new Intent(getActivity(), EducationActivity.class);
         if (user != null) {
             educationIntent.putExtra(EducationActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -688,7 +688,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openRecommendations() {
-        Intent recommendationsIntent = new Intent(getContext(), RecommendationsActivity.class);
+        Intent recommendationsIntent = new Intent(getActivity(), RecommendationsActivity.class);
         if (user != null) {
             recommendationsIntent.putExtra(RecommendationsActivity.ARG_USER_ID, user.id);
         }
@@ -697,7 +697,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserSkills() {
-        Intent skillsIntent = new Intent(getContext(), SkillsActivity.class);
+        Intent skillsIntent = new Intent(getActivity(), SkillsActivity.class);
         if (user != null) {
             skillsIntent.putExtra(SkillsActivity.ARG_USER, new Gson().toJson(user));
         }

@@ -31,7 +31,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
-public class RecommendationsActivity extends AppCompatActivity {
+public class RecommendationsActivity extends AppCompatActivity
+        implements RecommendationsReceivedFragment.OnRecommendationsReceivedFragmentInteractionListener {
 
     private static final String TAG = "Recommendations";
 
@@ -54,7 +55,6 @@ public class RecommendationsActivity extends AppCompatActivity {
         setTabs();
 
         getArgsFromIntent();
-        setButtonVisibility();
         setButtonListener();
     }
 
@@ -141,7 +141,7 @@ public class RecommendationsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, new Gson().toJson(response));
-                        mSectionsPagerAdapter.notifyDataSetChanged();
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -156,9 +156,15 @@ public class RecommendationsActivity extends AppCompatActivity {
                                 R.string.error_recommend_user,
                                 Snackbar.LENGTH_LONG
                         );
+                        openRecommendUserDialog();
                     }
                 }
         );
+    }
+
+    @Override
+    public void onUserNotRecommended() {
+        setButtonVisibility();
     }
 
     public class RecommendationsSectionsPagerAdapter extends FragmentPagerAdapter {

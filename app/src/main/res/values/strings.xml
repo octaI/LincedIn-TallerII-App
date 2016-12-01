@@ -135,6 +135,7 @@
     <string name="say_hello_to_user">¡Saluda a :1!</string>
     <string name="chat">Conversación</string>
     <string name="error_send_message">Hubo un error al enviar el mensaje</string>
+    <string name="error_send_message_try_again">Hubo un error al enviar el mensaje. Intenta nuevamente</string>
     <string name="you">Tú</string>
     <string name="cannot_be_empty">No puede estar vacío</string>
 
