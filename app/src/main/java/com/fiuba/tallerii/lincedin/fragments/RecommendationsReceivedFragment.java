@@ -109,7 +109,6 @@ public class RecommendationsReceivedFragment extends Fragment {
 
     private void setListeners(View v) {
         setRecommendationRowOnClickListener(v);
-        setRecommendationRowOnLongClickListener(v);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
@@ -138,20 +137,6 @@ public class RecommendationsReceivedFragment extends Fragment {
                     }
                 }
             });
-        }
-    }
-
-    private void setRecommendationRowOnLongClickListener(View v) {
-        if (getArguments() != null) {
-            if (getArguments().getBoolean(ARG_IS_OWN_PROFILE, false)) {
-                ((ListView) v.findViewById(R.id.fragment_recommendations_received_listview)).setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        // TODO: 27/11/16 Call activity method via interface
-                        return false;
-                    }
-                });
-            }
         }
     }
 
