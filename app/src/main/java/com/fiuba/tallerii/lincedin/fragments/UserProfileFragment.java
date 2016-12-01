@@ -222,7 +222,7 @@ public class UserProfileFragment extends Fragment {
                         error.printStackTrace();
 
                     }
-                },ARG_USER_ID);
+                },UserAuthenticationManager.getUserId(getContext()));
     }
 
     private void promptGalleryChoice() {
@@ -262,6 +262,7 @@ public class UserProfileFragment extends Fragment {
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, "Succesful Image change.");
                                 Toast.makeText(getContext(), "Imagen cambiada exitosamente.", Toast.LENGTH_SHORT).show();
+                                populateBasicInfo(getView(),user);
                             }
                         },
                                 new Response.ErrorListener() {
@@ -279,7 +280,6 @@ public class UserProfileFragment extends Fragment {
                                 return params;
                             }
                         };
-                        userRequest.setRetryPolicy(new DefaultRetryPolicy(20*1000,0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                         VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userRequest);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -505,7 +505,7 @@ public class UserProfileFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d(TAG,"Succesfully retrieved user profile");
                 try {
-                    String b64 = response.getString("Content");
+                    String b64 = response.getString("content");
                     ImageUtils.setBase64ImageFromString(getContext(), b64, userImageView);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -528,7 +528,7 @@ public class UserProfileFragment extends Fragment {
                 return params;
             }
         };
-        userImage.setRetryPolicy(new DefaultRetryPolicy(20*1000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        //userImage.setRetryPolicy(new DefaultRetryPolicy(20*1000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userImage);
 
         //String baseliteral = getResources().getString(R.string.literal_riquelme);

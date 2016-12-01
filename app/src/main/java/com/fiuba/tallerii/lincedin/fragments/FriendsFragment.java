@@ -64,7 +64,7 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
-        //requestUserFriends();
+        requestUserFriends();
         convertView = inflater.inflate(R.layout.fragment_friends,container,false);
         final ListView friendList = (ListView) convertView.findViewById(R.id.user_friend_list);
 
@@ -95,7 +95,7 @@ public class FriendsFragment extends Fragment {
             userId = ARG_USER_ID; //get the ID of the currently viewed profile
         }
         if (convertView != null) {
-            boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
+            boolean isUserLogged =true;
 
             if (isUserLogged) {
                 refreshLoadingIndicator(convertView, true);
@@ -123,8 +123,6 @@ public class FriendsFragment extends Fragment {
             }
         }
 
-        userFriends.addUserFriend("TUser1");
-        userFriends.addUserFriend("TUser2");
     }
 
 

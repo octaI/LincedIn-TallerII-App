@@ -92,10 +92,11 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                             Gson parser = new Gson();
                             User userData = parser.fromJson(response.toString(), User.class);
                             viewHolder.txtName.setText(userData.fullName);
+                            viewHolder.txtJob.setText(" ");
                             if(userData.getCurrentWork() != null){
                                 viewHolder.txtJob.setText(userData.getCurrentWork().company);
                             }
-                            viewHolder.txtJob.setText("SER SOLTERO");
+
                             viewHolder.friendID = userData.id;
                             viewHolder.imgURL = userData.profilePicture;
 
@@ -113,8 +114,11 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                 LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
+                                Log.d("FRIENDADAPTER","Successfuly retrieved friend info");
+
                                 try {
-                                    String b64str = response.getJSONObject("content").toString();
+                                    String b64str = response.getString("content");
+                                    Log.d("FRIENDPICTURE",b64str);
                                     ImageUtils.setBase64ImageFromString(getContext(), b64str, viewHolder.friendPicture);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -141,7 +145,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
         }
 
 
-        ImageUtils.setBase64ImageFromString(mContext,mContext.getResources().getString(R.string.literal_riquelme),viewHolder.friendPicture);
+        //ImageUtils.setBase64ImageFromString(mContext,mContext.getResources().getString(R.string.literal_riquelme),viewHolder.friendPicture);
         return view;
     }
 
