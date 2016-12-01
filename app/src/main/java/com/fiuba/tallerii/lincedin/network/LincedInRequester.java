@@ -11,6 +11,7 @@ import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.login.LogInUser;
 import com.fiuba.tallerii.lincedin.model.user.signup.SignUpUser;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -289,6 +290,21 @@ public class LincedInRequester {
         final Map<String,String> requestParams = new HashMap<>();
         if(imgId != null){
             HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserProfilePicture");
+        }
+    }
+
+    public static void sendUserCoordinates(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, LatLng point) {
+        final String url = getAppServerBaseURL(context) + "/geolocalization/";
+        final Map<String,String> requestParams = new HashMap<>();
+        if (point != null){
+            JSONObject coordinatesToSend = new JSONObject();
+            try {
+                coordinatesToSend.put("latitude",point.latitude);
+                coordinatesToSend.put("longitude",point.longitude);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            HttpRequestHelper.post(url,requestParams,coordinatesToSend,successListener,errorListener,"SendUserLocation");
         }
     }
 }

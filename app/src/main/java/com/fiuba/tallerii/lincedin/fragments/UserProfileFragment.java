@@ -1,9 +1,11 @@
 package com.fiuba.tallerii.lincedin.fragments;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -16,9 +18,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +47,7 @@ import com.fiuba.tallerii.lincedin.activities.BiographyActivity;
 import com.fiuba.tallerii.lincedin.activities.ChatActivity;
 import com.fiuba.tallerii.lincedin.activities.EducationActivity;
 import com.fiuba.tallerii.lincedin.activities.LogInActivity;
+import com.fiuba.tallerii.lincedin.activities.MapsActivity;
 import com.fiuba.tallerii.lincedin.activities.RecommendationsActivity;
 import com.fiuba.tallerii.lincedin.activities.SkillsActivity;
 import com.fiuba.tallerii.lincedin.activities.WorkExperienceActivity;
@@ -80,6 +86,9 @@ public class UserProfileFragment extends Fragment {
     private static final int ACTIVITY_SELECT_IMAGE = 1 ;
 
     private static final int DEFAULT_MIN_WIDTH = 100 ;
+    private static final int READ_EXTERNAL_STORAGE_CODE = 23 ;
+    private static final int ACCESS_COARSE_GPS = 24;
+    private static final int ACCESS_FINE_GPS = 25;
     private static int minWidthQuality = DEFAULT_MIN_WIDTH;
 
     private View convertView;
@@ -147,6 +156,13 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        parentView.findViewById(R.id.user_own_edit_position_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                googleMapsPrompt();
+            }
+        });
+
         parentView.findViewById(R.id.user_profile_login_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,11 +216,21 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isOwnProfile) {
-
-                    promptGalleryChoice();
+                    if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},READ_EXTERNAL_STORAGE_CODE);
+                        promptGalleryChoice();
+                    }else{
+                        promptGalleryChoice();
+                    }
                 }
             }
         });
+    }
+
+    private void googleMapsPrompt() {
+
+        Intent mapsIntent = new Intent(getContext(),MapsActivity.class);
+        startActivity(mapsIntent);
     }
 
     private void sendFriendRequest() {
@@ -229,11 +255,14 @@ public class UserProfileFragment extends Fragment {
         Intent chooserIntent = null;
         List<Intent> intentList = new ArrayList<>();
 
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        if (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intentList = addIntentsToList(getContext(),intentList,pickIntent);
+        }
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePhotoIntent.putExtra("return-data",true);
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(getTempFile(getContext())));
-        intentList = addIntentsToList(getContext(),intentList,pickIntent);
         intentList = addIntentsToList(getContext(),intentList,takePhotoIntent);
 
         if (intentList.size() > 0) {
@@ -242,6 +271,7 @@ public class UserProfileFragment extends Fragment {
         }
          startActivityForResult(chooserIntent,ACTIVITY_SELECT_IMAGE);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -440,6 +470,7 @@ public class UserProfileFragment extends Fragment {
         if (isOwnProfile) {
             v.findViewById(R.id.user_profile_public_buttons_layout).setVisibility(View.GONE);
             v.findViewById(R.id.user_own_profile_edit_button).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_own_edit_position_button).setVisibility(View.VISIBLE);
         } else {
             v.findViewById(R.id.user_profile_public_buttons_layout).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_own_profile_edit_button).setVisibility(View.GONE);

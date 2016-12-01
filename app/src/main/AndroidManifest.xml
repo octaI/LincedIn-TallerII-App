@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".AppInitializer"
@@ -43,6 +45,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.MapsActivity"
+            android:label="Geolocalization"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
@@ -165,6 +175,11 @@
                 android:value=".activities.ChatActivity" />
             >
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBg3Rb3Z1dvOpbuFAIOunmyB5p5XaE4msw"/>
+
     </application>
 
 </manifest>
