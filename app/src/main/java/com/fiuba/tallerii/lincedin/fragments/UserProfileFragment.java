@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -50,6 +51,7 @@ import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.fiuba.tallerii.lincedin.network.VolleyRequestQueueSingleton;
 import com.fiuba.tallerii.lincedin.utils.ClipboardManager;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
@@ -65,7 +67,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserProfileFragment extends Fragment {
 
@@ -252,7 +256,7 @@ public class UserProfileFragment extends Fragment {
                     user.profilePicture = b64encode;
                     try {
                         JSONObject userJson = new JSONObject(new Gson().toJson(user));
-                        JsonObjectRequest userRequest = new JsonObjectRequest(Request.Method.PUT, LincedInRequester.getAppServerBaseURL(getContext())+"/user/",
+                        JsonObjectRequest userRequest = new JsonObjectRequest(Request.Method.PUT, LincedInRequester.getAppServerBaseURL(getContext())+"/user/"+ UserAuthenticationManager.getUserId(getContext()),
                                 userJson, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -267,7 +271,14 @@ public class UserProfileFragment extends Fragment {
                                         Toast.makeText(getContext(), "Ha ocurrido un error en el cambio de imagen.", Toast.LENGTH_SHORT).show();
 
                                     }
-                                });
+                                }){
+                            @Override
+                            public Map<String,String> getHeaders() throws AuthFailureError {
+                                Map<String,String> params = new HashMap<>();
+                                params.put("Authorization",UserAuthenticationManager.getSessionToken(getContext()).toString());
+                                return params;
+                            }
+                        };
                         userRequest.setRetryPolicy(new DefaultRetryPolicy(20*1000,0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                         VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userRequest);
                     } catch (JSONException e) {
@@ -494,7 +505,7 @@ public class UserProfileFragment extends Fragment {
             public void onResponse(JSONObject response) {
                 Log.d(TAG,"Succesfully retrieved user profile");
                 try {
-                    String b64 = response.getJSONObject("content").toString();
+                    String b64 = response.getString("Content");
                     ImageUtils.setBase64ImageFromString(getContext(), b64, userImageView);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -508,7 +519,16 @@ public class UserProfileFragment extends Fragment {
                         Log.e(TAG,url);
                         Log.e(TAG,"Failed to retrieve image");
                     }
-                });
+                }){
+            @Override
+            public Map<String,String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("Authorization",UserAuthenticationManager.getSessionToken(getContext()).toString());
+                params.put("Connection","close");
+                return params;
+            }
+        };
+        userImage.setRetryPolicy(new DefaultRetryPolicy(20*1000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userImage);
 
         //String baseliteral = getResources().getString(R.string.literal_riquelme);
