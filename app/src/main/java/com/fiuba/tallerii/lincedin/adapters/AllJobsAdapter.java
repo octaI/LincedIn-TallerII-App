@@ -13,7 +13,6 @@ import com.fiuba.tallerii.lincedin.model.user.UserJob;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.fiuba.tallerii.lincedin.utils.DateUtils.*;
@@ -71,10 +70,10 @@ public class AllJobsAdapter extends BaseAdapter {
             ((TextView) convertView.findViewById(R.id.work_experience_row_date_range_textview))
                     .setText(
                             ((TextView) convertView.findViewById(R.id.work_experience_row_date_range_textview)).getText().toString()
-                                    .replace(":1", extractYearFromDatetime(currentJob.since))
+                                    .replace(":1", extractYearFromDatetime(currentJob.date_since))
                                     .replace(":2",
-                                            currentJob.to != null && !currentJob.to.equals("") ?
-                                                    extractYearFromDatetime(currentJob.to)
+                                            currentJob.date_to != null && !currentJob.date_to.equals("") ?
+                                                    extractYearFromDatetime(currentJob.date_to)
                                                     : context.getResources().getString(R.string.now).toLowerCase()
                                     )
                     );

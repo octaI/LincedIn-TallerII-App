@@ -13,14 +13,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -36,12 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.BiographyActivity;
 import com.fiuba.tallerii.lincedin.activities.ChatActivity;
@@ -137,7 +132,7 @@ public class UserProfileFragment extends Fragment {
         setAdapters(convertView);
         setButtonsListeners(convertView);
         setButtonsVisibility(convertView);
-        requestUserProfile();
+        //requestUserProfile();
 
         return convertView;
     }
@@ -675,7 +670,7 @@ public class UserProfileFragment extends Fragment {
             ((TextView) v.findViewById(R.id.user_profile_current_job_since_date_textview))
                     .setText(
                             ((TextView) v.findViewById(R.id.user_profile_current_job_since_date_textview)).getText().toString()
-                                    .replace(":1", DateUtils.extractYearFromDatetime(user.getCurrentWork().since))
+                                    .replace(":1", DateUtils.extractYearFromDatetime(user.getCurrentWork().date_since))
                     );
         } else {
             v.findViewById(R.id.user_profile_current_job_cardview).setVisibility(View.GONE);

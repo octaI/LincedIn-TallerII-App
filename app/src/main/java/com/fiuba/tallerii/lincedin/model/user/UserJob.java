@@ -6,9 +6,9 @@ public class UserJob {
 
     public UserJobPosition position;
 
-    public String since;
+    public String date_since;
 
-    public String to;
+    public String date_to;
 
     @Override
     public boolean equals(Object o) {
@@ -21,8 +21,8 @@ public class UserJob {
             return false;
         if (position != null ? !position.equals(userJob.position) : userJob.position != null)
             return false;
-        if (since != null ? !since.equals(userJob.since) : userJob.since != null) return false;
-        return to != null ? to.equals(userJob.to) : userJob.to == null;
+        if (date_since != null ? !date_since.equals(userJob.date_since) : userJob.date_since != null) return false;
+        return date_to != null ? date_to.equals(userJob.date_to) : userJob.date_to == null;
 
     }
 
@@ -30,8 +30,8 @@ public class UserJob {
     public int hashCode() {
         int result = company != null ? company.hashCode() : 0;
         result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (since != null ? since.hashCode() : 0);
-        result = 31 * result + (to != null ? to.hashCode() : 0);
+        result = 31 * result + (date_since != null ? date_since.hashCode() : 0);
+        result = 31 * result + (date_to != null ? date_to.hashCode() : 0);
         return result;
     }
 }

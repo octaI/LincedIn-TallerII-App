@@ -39,7 +39,7 @@ public class User {
     public boolean isCurrentlyWorking() {
         if (jobs != null && !jobs.isEmpty()) {
             for (UserJob job : jobs) {
-                if (job.to == null || job.to.equals("")) {
+                if (job.date_to == null || job.date_to.equals("")) {
                     return true;
                 }
             }
@@ -50,7 +50,7 @@ public class User {
     public UserJob getCurrentWork() {
         if (isCurrentlyWorking()) {
             for (UserJob job : jobs) {
-                if (job.to == null || job.to.equals("")) {
+                if (job.date_to == null || job.date_to.equals("")) {
                     return job;
                 }
             }
