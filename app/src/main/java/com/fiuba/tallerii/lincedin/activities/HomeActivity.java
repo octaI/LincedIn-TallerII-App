@@ -167,7 +167,7 @@ public class HomeActivity extends AppCompatActivity {
             } else if (position == 2) {
                 return new ChatsFragment();
             } else if (position == 3) {
-                //return FindFriendsFragment.newInstance(null);
+                return FindFriendsFragment.newInstance(null);
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

@@ -40,8 +40,8 @@ public class FindFriendsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        convertView = inflater.inflate(R.layout.fragment_searchfriends,container);
-        SearchView searchView = (SearchView) getView().findViewById(R.id.searchfriends_view);
+        convertView = inflater.inflate(R.layout.fragment_searchfriends,container,false);
+        SearchView searchView = (SearchView) convertView.findViewById(R.id.searchfriends_view);
 
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
