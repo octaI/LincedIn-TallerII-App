@@ -67,7 +67,7 @@ public class ChatsFragment extends Fragment {
             if (isUserLogged) {
                 refreshLoadingIndicator(fragmentView, true);
                 LincedInRequester.getAllUserChats(
-                        getActivity(),
+                        getActivity().getApplicationContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {

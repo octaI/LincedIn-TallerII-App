@@ -433,7 +433,7 @@ public class UserProfileFragment extends Fragment {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
                         getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me",
-                        getActivity(),
+                        getActivity().getApplicationContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -518,8 +518,6 @@ public class UserProfileFragment extends Fragment {
 
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
         setEmailListeners(v);
-
-        // TODO: 05/11/16 Set location when API supports it.
     }
 
     private void setDateOfBirthInfo(View v, User user) {

@@ -86,7 +86,7 @@ public class ChatFragment extends Fragment {
             getChatById(chatId, pagingSize);
         } else {
             LincedInRequester.getAllUserChats(
-                    getContext(),
+                    getActivity(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

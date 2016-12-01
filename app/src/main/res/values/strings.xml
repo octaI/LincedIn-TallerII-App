@@ -102,6 +102,7 @@
     <string name="error_occurred">Ocurrió un error</string>
     <string name="couldnt_retrieve_user_profile">No se pudo obtener el perfil de usuario</string>
     <string name="couldnt_retrieve_chats">No se pudieron obtener las conversaciones</string>
+    <string name="couldnt_retrieve_recommendatios">No se pudieron obtener las recomendaciones</string>
     <string name="user_not_logged_in">El usuario no ha iniciado sesión</string>
     <string name="user_already_logged_in">El usuario ya ha iniciado sesión</string>
     <string name="user_profile_see_recomendations">Ver recomendaciones</string>

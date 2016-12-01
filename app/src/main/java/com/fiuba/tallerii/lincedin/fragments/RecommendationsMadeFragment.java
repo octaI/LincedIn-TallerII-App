@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,6 +41,8 @@ public class RecommendationsMadeFragment extends Fragment {
     private static final String ARG_USER_ID = "ARG_USER_ID";
     private static final String ARG_IS_OWN_PROFILE = "IS_OWN_PROFILE";
 
+    private View fragmentView;
+
     private List<RecommendationSent> recommendations = new ArrayList<>();
 
     private RecommendationsMadeAdapter recommendationsMadeAdapter;
@@ -58,16 +61,16 @@ public class RecommendationsMadeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_recommendations_made, container, false);
-        requestRecommendationsMade(v);
-        setListeners(v);
-        return v;
+        fragmentView = inflater.inflate(R.layout.fragment_recommendations_made, container, false);
+        requestRecommendationsMade();
+        setListeners(fragmentView);
+        return fragmentView;
     }
 
-    private void requestRecommendationsMade(final View v) {
-        if (getArguments() != null) {
+    private void requestRecommendationsMade() {
+        if (fragmentView != null) {
             String userId = getArguments().getString(ARG_USER_ID);
-            refreshLoadingIndicator(v, true);
+            refreshLoadingIndicator(fragmentView, true);
             LincedInRequester.getUserRecommendations(
                     userId,
                     getActivity(),
@@ -81,24 +84,22 @@ public class RecommendationsMadeFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            setAdapter(v);
-                            refreshLoadingIndicator(v, false);
+                            setAdapter(fragmentView);
+                            refreshLoadingIndicator(fragmentView, false);
+                            hideErrorScreen(fragmentView);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            refreshLoadingIndicator(v, false);
+                            refreshLoadingIndicator(fragmentView, false);
                             Log.e(TAG, "Error retrieving recommendations made: " + error.toString());
                             error.printStackTrace();
                             if (error.networkResponse != null && error.networkResponse.data != null) {
                                 Log.e(TAG, new String(error.networkResponse.data));
                             }
-                            ViewUtils.setSnackbar(
-                                    v.findViewById(R.id.fragment_recommendations_made_listview),
-                                    R.string.error_retrieving_recommendations,
-                                    Snackbar.LENGTH_LONG
-                            );
+                            showErrorScreen(fragmentView);
+
                         }
                     }
             );
@@ -115,16 +116,39 @@ public class RecommendationsMadeFragment extends Fragment {
     private void setListeners(View v) {
         setRecommendationRowOnClickListener(v);
         setRecommendationRowOnLongClickListener(v);
+        setErrorScreen(v);
     }
 
     private void refreshLoadingIndicator(View v, boolean loading) {
         if (loading) {
             v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.VISIBLE);
             v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.GONE);
+            v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.GONE);
             v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setErrorScreen(final View parentView) {
+        parentView.findViewById(R.id.fragment_recommendations_made_network_error_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideErrorScreen(parentView);
+                requestRecommendationsMade();
+            }
+        });
+    }
+
+    private void showErrorScreen(View v) {
+        v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_made_loading_circular_progress).setVisibility(View.GONE);
+    }
+
+    private void hideErrorScreen(View v) {
+        v.findViewById(R.id.fragment_recommendations_made_network_error_layout).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_made_listview).setVisibility(View.VISIBLE);
     }
 
     private void openUserProfile(String userId) {
