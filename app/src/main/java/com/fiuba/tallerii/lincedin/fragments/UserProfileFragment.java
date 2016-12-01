@@ -274,7 +274,7 @@ public class UserProfileFragment extends Fragment {
                         error.printStackTrace();
 
                     }
-                },UserAuthenticationManager.getUserId(getContext()));
+                },getArguments().getString(ARG_USER_ID).toString());
     }
 
     private void promptGalleryChoice() {

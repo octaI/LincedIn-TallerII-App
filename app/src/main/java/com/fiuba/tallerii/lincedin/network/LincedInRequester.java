@@ -313,4 +313,10 @@ public class LincedInRequester {
         final Map<String,String> requestParams = new HashMap<>();
         HttpRequestHelper.delete(url,requestParams,successListener,errorListener,"RemoveFriendRequest");
     }
+
+    public static void submitSearchQuery(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String textQuery) {
+        final String url = getAppServerBaseURL(context) + "/search?text=" + textQuery;
+        final Map<String,String> requestParams = new HashMap<>();
+        HttpRequestHelper.get(url,requestParams,successListener,errorListener,"FindFriendByString");
+    }
 }
