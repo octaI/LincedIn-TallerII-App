@@ -88,7 +88,7 @@ public class RecommendationsReceivedFragment extends Fragment {
             refreshLoadingIndicator(fragmentView, true);
             LincedInRequester.getUserRecommendations(
                     recommendedUserId,
-                    getActivity(),
+                    getContext(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -114,6 +114,7 @@ public class RecommendationsReceivedFragment extends Fragment {
                             }
 
                             refreshLoadingIndicator(fragmentView, false);
+                            hideErrorScreen(fragmentView);
                         }
                     },
                     new Response.ErrorListener() {
@@ -130,6 +131,7 @@ public class RecommendationsReceivedFragment extends Fragment {
                                     Snackbar.LENGTH_LONG
                             );
                             mListener.onUserNotRecommended();
+                            showErrorScreen(fragmentView);
                         }
                     }
             );
@@ -145,6 +147,7 @@ public class RecommendationsReceivedFragment extends Fragment {
 
     private void setListeners(View v) {
         setRecommendationRowOnClickListener(v);
+        setErrorScreen(v);
     }
 
     private void setRecommendationRowOnClickListener(View v) {
@@ -168,11 +171,33 @@ public class RecommendationsReceivedFragment extends Fragment {
     private void refreshLoadingIndicator(View v, boolean loading) {
         if (loading) {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.GONE);
+            v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.GONE);
+            v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
-            v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setErrorScreen(final View parentView) {
+        parentView.findViewById(R.id.fragment_recommendations_received_network_error_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideErrorScreen(parentView);
+                requestRecommendationsReceived();
+            }
+        });
+    }
+
+    private void showErrorScreen(View v) {
+        v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
+    }
+
+    private void hideErrorScreen(View v) {
+        v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.VISIBLE);
     }
 
     private void openUserProfile(String userId) {

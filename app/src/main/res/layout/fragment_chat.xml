@@ -86,6 +86,7 @@
                     android:textColorHint="@color/white"
                     android:background="@android:color/transparent"
                     android:hint="@string/write_here"
+                    android:maxLines="4"
                     android:inputType="textAutoComplete|textCapSentences|textMultiLine"/>
                 <ImageButton
                     android:id="@+id/fragment_chat_send_button"

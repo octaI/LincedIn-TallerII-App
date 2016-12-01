@@ -1,5 +1,6 @@
 package com.fiuba.tallerii.lincedin.activities;
 
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -14,11 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.events.RecommendationErrorEvent;
 import com.fiuba.tallerii.lincedin.events.RecommendationPostedEvent;
 import com.fiuba.tallerii.lincedin.fragments.RecommendUserDialogFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsMadeFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsReceivedFragment;
+import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -40,6 +44,7 @@ public class RecommendationsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendations);
+        EventBus.getDefault().register(this);
 
         setToolbar();
         setTabs();
@@ -119,6 +124,15 @@ public class RecommendationsActivity extends AppCompatActivity
     private void openRecommendUserDialog() {
         DialogFragment datePickerDialog = RecommendUserDialogFragment.newInstance(userId);
         datePickerDialog.show(getSupportFragmentManager(), "RecommendUserDialogFragment");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onRecommendationError(RecommendationErrorEvent event) {
+        ViewUtils.setSnackbar(
+                findViewById(R.id.fragment_recommendations_add_recommendation_fab),
+                R.string.error_recommend_user,
+                Snackbar.LENGTH_LONG
+        );
     }
 
     @Override
