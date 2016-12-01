@@ -30,8 +30,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.BiographyActivity;
@@ -47,6 +50,7 @@ import com.fiuba.tallerii.lincedin.adapters.UserSkillsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.User;
 import com.fiuba.tallerii.lincedin.model.user.UserJob;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.network.VolleyRequestQueueSingleton;
 import com.fiuba.tallerii.lincedin.utils.ClipboardManager;
 import com.fiuba.tallerii.lincedin.utils.DateUtils;
 import com.fiuba.tallerii.lincedin.utils.ImageUtils;
@@ -120,6 +124,7 @@ public class UserProfileFragment extends Fragment {
         setAdapters(convertView);
         setButtonsListeners(convertView);
         setButtonsVisibility(convertView);
+        requestUserProfile();
 
         return convertView;
     }
@@ -199,11 +204,11 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void sendFriendRequest() {
-        LincedInRequester.sendFriendRequest(getActivity(), new Response.Listener<JSONObject>() {
+        LincedInRequester.sendFriendRequest(getContext(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("SENDFRIENDREQUEST", "Succesfully sent friend request!");
-                        Toast.makeText(getActivity(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -245,26 +250,31 @@ public class UserProfileFragment extends Fragment {
                     byte[] bmByteArray = ImageUtils.returnByteArrayFromBitmap(bitmap);
                     String b64encode = ImageUtils.encodeByteArrayToBase64(bmByteArray);
                     user.profilePicture = b64encode;
-                    LincedInRequester.editUserProfile(user, getActivity(),
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.d(TAG, response.toString());
-                                    Log.i(TAG, "Succesfully updated profile picture!");
+                    try {
+                        JSONObject userJson = new JSONObject(new Gson().toJson(user));
+                        JsonObjectRequest userRequest = new JsonObjectRequest(Request.Method.PUT, LincedInRequester.getAppServerBaseURL(getContext())+"/user/",
+                                userJson, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(TAG, "Succesful Image change.");
+                                Toast.makeText(getContext(), "Imagen cambiada exitosamente.", Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e(TAG,"Failed to change image.");
+                                        Toast.makeText(getContext(), "Ha ocurrido un error en el cambio de imagen.", Toast.LENGTH_SHORT).show();
 
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
+                                    }
+                                });
+                        userRequest.setRetryPolicy(new DefaultRetryPolicy(20*1000,0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userRequest);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("BASE64",b64encode);
 
-                                    Log.e(TAG, error.toString());
-                                    error.printStackTrace();
-
-                                }
-                            });
-
-                    Toast.makeText(getContext(), "Imagen cambiada exitosamente.", Toast.LENGTH_SHORT).show();
 
                 }
         }
@@ -433,7 +443,7 @@ public class UserProfileFragment extends Fragment {
                 refreshLoadingIndicator(convertView, true);
                 LincedInRequester.getUserProfile(
                         getArguments().getString(ARG_USER_ID) != null ? getArguments().getString(ARG_USER_ID) : "me",
-                        getActivity().getApplicationContext(),
+                        getContext(),
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -477,26 +487,29 @@ public class UserProfileFragment extends Fragment {
 
     private void populateBasicInfo(View v, User user) {
         final ImageView userImageView = (ImageView) v.findViewById(R.id.user_profile_picture_imageview);
-        LincedInRequester.getUserProfileImage(getActivity(), new Response.Listener<JSONObject>() {
+        final String url = LincedInRequester.getAppServerBaseURL(getContext()) + user.profilePicture;
+        JsonObjectRequest userImage = new JsonObjectRequest(Request.Method.GET, LincedInRequester.getAppServerBaseURL(getContext()) + user.profilePicture, null
+                , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try{
-                    String b64str = response.getJSONObject("content").toString();
-                    ImageUtils.setBase64ImageFromString(getContext(),b64str,userImageView);
+                Log.d(TAG,"Succesfully retrieved user profile");
+                try {
+                    String b64 = response.getJSONObject("content").toString();
+                    ImageUtils.setBase64ImageFromString(getContext(), b64, userImageView);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         },
-        new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
-                error.printStackTrace();
-                refreshLoadingIndicator(convertView, false);
-            }
-        }
-        ,user.profilePicture);
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        Log.e(TAG,url);
+                        Log.e(TAG,"Failed to retrieve image");
+                    }
+                });
+        VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userImage);
 
         //String baseliteral = getResources().getString(R.string.literal_riquelme);
 
@@ -518,6 +531,8 @@ public class UserProfileFragment extends Fragment {
 
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
         setEmailListeners(v);
+
+        // TODO: 05/11/16 Set location when API supports it.
     }
 
     private void setDateOfBirthInfo(View v, User user) {
@@ -649,18 +664,18 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openChat(String userId) {
-        Intent chatIntent = new Intent(getActivity(), ChatActivity.class);
+        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
         chatIntent.putExtra(ChatActivity.ARG_RECEIVING_USER_ID, userId);
         startActivity(chatIntent);
     }
 
     private void openLogin() {
-        Intent loginIntent = new Intent(getActivity(), LogInActivity.class);
+        Intent loginIntent = new Intent(getContext(), LogInActivity.class);
         startActivity(loginIntent);
     }
 
     private void openUserBiography() {
-        Intent biographyIntent = new Intent(getActivity(), BiographyActivity.class);
+        Intent biographyIntent = new Intent(getContext(), BiographyActivity.class);
         if (user != null) {
             biographyIntent.putExtra(BiographyActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -668,7 +683,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserWorkExperience() {
-        Intent workExperienceIntent = new Intent(getActivity(), WorkExperienceActivity.class);
+        Intent workExperienceIntent = new Intent(getContext(), WorkExperienceActivity.class);
         if (user != null) {
             workExperienceIntent.putExtra(WorkExperienceActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -677,7 +692,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserEducation() {
-        Intent educationIntent = new Intent(getActivity(), EducationActivity.class);
+        Intent educationIntent = new Intent(getContext(), EducationActivity.class);
         if (user != null) {
             educationIntent.putExtra(EducationActivity.ARG_USER, new Gson().toJson(user));
         }
@@ -686,7 +701,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openRecommendations() {
-        Intent recommendationsIntent = new Intent(getActivity(), RecommendationsActivity.class);
+        Intent recommendationsIntent = new Intent(getContext(), RecommendationsActivity.class);
         if (user != null) {
             recommendationsIntent.putExtra(RecommendationsActivity.ARG_USER_ID, user.id);
         }
@@ -695,7 +710,7 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void openUserSkills() {
-        Intent skillsIntent = new Intent(getActivity(), SkillsActivity.class);
+        Intent skillsIntent = new Intent(getContext(), SkillsActivity.class);
         if (user != null) {
             skillsIntent.putExtra(SkillsActivity.ARG_USER, new Gson().toJson(user));
         }

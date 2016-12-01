@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.fragments.ChatsFragment;
+import com.fiuba.tallerii.lincedin.fragments.FindFriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.FriendsFragment;
 import com.fiuba.tallerii.lincedin.fragments.UserProfileFragment;
 import com.fiuba.tallerii.lincedin.utils.GooglePlayServicesUtils;
@@ -60,7 +61,6 @@ public class HomeActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -101,8 +101,8 @@ public class HomeActivity extends AppCompatActivity {
     private void setTabLayoutIcons(TabLayout tabLayout) {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_account_circle);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_group);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_person_add);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_chat);
     }
 
     /**
@@ -165,6 +165,8 @@ public class HomeActivity extends AppCompatActivity {
             } else if (position == 1) {
                 return FriendsFragment.newInstance(null);
             } else if (position == 2) {
+                //return FindFriendsFragment.newInstance(null);
+            } else if (position == 3) {
                 return new ChatsFragment();
             }
             return PlaceholderFragment.newInstance(position + 1);
