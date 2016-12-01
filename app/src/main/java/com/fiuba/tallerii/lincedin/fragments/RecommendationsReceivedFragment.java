@@ -67,7 +67,6 @@ public class RecommendationsReceivedFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
 
         if (getArguments() != null) {
             recommendedUserId = getArguments().getString(ARG_USER_ID);
@@ -78,9 +77,15 @@ public class RecommendationsReceivedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_recommendations_received, container, false);
-        requestRecommendationsReceived();
+        setAdapter(fragmentView);
         setListeners(fragmentView);
         return fragmentView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        requestRecommendationsReceived();
     }
 
     private void requestRecommendationsReceived() {
@@ -100,7 +105,8 @@ public class RecommendationsReceivedFragment extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            setAdapter(fragmentView);
+                            recommendationsReceivedAdapter.setDataset(recommendations);
+                            recommendationsReceivedAdapter.notifyDataSetChanged();
 
                             boolean isUserAlreadyRecommended = false;
                             for (RecommendationReceived recommendation : recommendations) {
@@ -139,8 +145,8 @@ public class RecommendationsReceivedFragment extends Fragment {
     }
 
     private void setAdapter(View v) {
-        recommendationsReceivedAdapter = new RecommendationsReceivedAdapter(getContext(), recommendations);
         ListView recommendationsListView = (ListView) v.findViewById(R.id.fragment_recommendations_received_listview);
+        recommendationsReceivedAdapter = new RecommendationsReceivedAdapter(getContext(), recommendations);
         recommendationsListView.setAdapter(recommendationsReceivedAdapter);
         recommendationsListView.setEmptyView(v.findViewById(android.R.id.empty));
     }
@@ -163,19 +169,14 @@ public class RecommendationsReceivedFragment extends Fragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecommendationPosted(RecommendationPostedEvent event) {
-        requestRecommendationsReceived();
-    }
-
     private void refreshLoadingIndicator(View v, boolean loading) {
         if (loading) {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.GONE);
+            v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.INVISIBLE);
             v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.GONE);
         } else {
             v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
-            v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.VISIBLE);
         }
     }
 
@@ -191,13 +192,13 @@ public class RecommendationsReceivedFragment extends Fragment {
 
     private void showErrorScreen(View v) {
         v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.VISIBLE);
-        v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.GONE);
+        v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.INVISIBLE);
         v.findViewById(R.id.fragment_recommendations_received_loading_circular_progress).setVisibility(View.GONE);
     }
 
     private void hideErrorScreen(View v) {
         v.findViewById(R.id.fragment_recommendations_received_network_error_layout).setVisibility(View.GONE);
-        v.findViewById(R.id.fragment_recommendations_received_listview).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.fragment_recommendations_received_layout).setVisibility(View.VISIBLE);
     }
 
     private void openUserProfile(String userId) {

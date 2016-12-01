@@ -57,7 +57,7 @@ public class RecommendationsReceivedAdapter extends BaseAdapter {
                     inflate(R.layout.recommendation_received_row, parent, false);
         }
 
-        RecommendationReceived currentRecommendation = dataset.get(position);
+        final RecommendationReceived currentRecommendation = dataset.get(position);
         if (currentRecommendation != null) {
             TextView descriptionTextView = (TextView) convertView.findViewById(R.id.recommendation_received_row_description_textview);
             TextView fromUserTextView = (TextView) convertView.findViewById(R.id.recommendation_received_row_from_user_textview);

@@ -10,21 +10,27 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
-import com.fiuba.tallerii.lincedin.events.RecommendationErrorEvent;
 import com.fiuba.tallerii.lincedin.events.RecommendationPostedEvent;
 import com.fiuba.tallerii.lincedin.fragments.RecommendUserDialogFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsMadeFragment;
 import com.fiuba.tallerii.lincedin.fragments.RecommendationsReceivedFragment;
+import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RecommendationsActivity extends AppCompatActivity
         implements RecommendationsReceivedFragment.OnRecommendationsReceivedFragmentInteractionListener {
@@ -122,16 +128,37 @@ public class RecommendationsActivity extends AppCompatActivity
     }
 
     private void openRecommendUserDialog() {
-        DialogFragment datePickerDialog = RecommendUserDialogFragment.newInstance(userId);
+        DialogFragment datePickerDialog = new RecommendUserDialogFragment();
         datePickerDialog.show(getSupportFragmentManager(), "RecommendUserDialogFragment");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onRecommendationError(RecommendationErrorEvent event) {
-        ViewUtils.setSnackbar(
-                findViewById(R.id.fragment_recommendations_add_recommendation_fab),
-                R.string.error_recommend_user,
-                Snackbar.LENGTH_LONG
+    public void onRecommendationPosted(RecommendationPostedEvent event) {
+        LincedInRequester.recommendUser(
+                userId,
+                event.message,
+                this,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, new Gson().toJson(response));
+                        // TODO: 01/12/16 Reload Received fragment
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error posting recommendation: " + error.toString());
+                        if (error.networkResponse != null && error.networkResponse.data != null) {
+                            Log.e(TAG, new String(error.networkResponse.data));
+                        }
+                        ViewUtils.setSnackbar(
+                                findViewById(R.id.fragment_recommendations_add_recommendation_fab),
+                                R.string.error_recommend_user,
+                                Snackbar.LENGTH_LONG
+                        );
+                    }
+                }
         );
     }
 

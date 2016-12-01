@@ -41,7 +41,6 @@ public class ChatsFragment extends Fragment {
     private View fragmentView;
     private List<Chat> chats = new ArrayList<>();
     private ChatsAdapter chatsAdapter;
-    //private boolean errorOnRetrievingUsers;
 
     public ChatsFragment() {}
 
@@ -96,73 +95,6 @@ public class ChatsFragment extends Fragment {
             }
         }
     }
-
-    /*@Deprecated
-    private void populateChats(final List<Chat> chats) {
-        for (final Chat chat : chats) {
-            if (chat.lastMessage != null && chat.lastMessage.message != null) {
-                final ChatRow inflatedChat = new ChatRow(chat.chatId, new ArrayList<String>(), chat.lastMessage.message, chat.lastMessage.timestamp);
-                for (final String userId : chat.participants) {
-                    LincedInRequester.getUserProfile(
-                            userId,
-                            getContext(),
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    User user = new Gson().fromJson(response.toString(), User.class);
-                                    inflatedChat.addUser(user.id);
-
-                                    if (userId.equals(chat.participants.get(chat.participants.size() - 1))) {
-                                        inflatedChats.add(inflatedChat);
-                                    }
-
-                                    if (chat.equals(chats.get(chats.size() - 1))) {
-                                        if (!errorOnRetrievingUsers) {
-                                            if (chatsAdapter != null) {
-                                                chatsAdapter.setDataset(inflatedChats);
-                                                chatsAdapter.notifyDataSetChanged();
-
-                                                refreshLoadingIndicator(fragmentView, false);
-                                                hideErrorScreen(fragmentView);
-                                            }
-                                        } else {
-                                            errorOnRetrievingUsers = false;
-                                            inflatedChats.remove(inflatedChat);
-                                            refreshLoadingIndicator(fragmentView, false);
-                                            setErrorScreen(fragmentView);
-                                        }
-                                    }
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e(TAG, error.toString());
-                                    error.printStackTrace();
-                                    HttpRequestHelper.cancelPendingRequests("GetUserProfile");
-                                    errorOnRetrievingUsers = true;
-
-                                    if (chat.equals(chats.get(chats.size() - 1))) {
-                                        refreshLoadingIndicator(fragmentView, false);
-                                        setErrorScreen(fragmentView);
-                                    }
-                                }
-                            }
-                    );
-                }
-            } else {
-                if (chat.equals(chats.get(chats.size() - 1))) {
-                    if (chatsAdapter != null) {
-                        chatsAdapter.setDataset(inflatedChats);
-                        chatsAdapter.notifyDataSetChanged();
-
-                        refreshLoadingIndicator(fragmentView, false);
-                        hideErrorScreen(fragmentView);
-                    }
-                }
-            }
-        }
-    }*/
 
     private void populateChats() {
         List<Chat> chatsToShow = new ArrayList<>();
