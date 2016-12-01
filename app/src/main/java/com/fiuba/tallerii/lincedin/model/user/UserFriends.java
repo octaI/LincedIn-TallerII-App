@@ -11,6 +11,8 @@ public class UserFriends {
     @SerializedName("friends")
     public ArrayList<String> userFriendsIDs = new ArrayList<>();
 
+    public ArrayList<String> onlineUsers = new ArrayList<>();
+
     public void addUserFriend(String userid) {
         if ( userFriendsIDs.contains(userid)){
             return;
@@ -18,8 +20,19 @@ public class UserFriends {
         userFriendsIDs.add(userid);
     }
 
+    public void addOnlineUser(String userId){
+        if (onlineUsers.contains(userId)){
+            return;
+        }
+        onlineUsers.add(userId);
+    }
+
 
     public ArrayList<String> getUserFriends(){
         return userFriendsIDs;
+    }
+
+    public ArrayList<String> getOnlineUserFriends() {
+        return onlineUsers;
     }
 }

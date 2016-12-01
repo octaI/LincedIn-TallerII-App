@@ -212,6 +212,13 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        parentView.findViewById(R.id.user_profile_remove_user_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeFriend();
+            }
+        });
+
         parentView.findViewById(R.id.user_profile_picture_imageview).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -225,6 +232,25 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void removeFriend() {
+        LincedInRequester.sendRemoveFriendRequest(getContext(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SENDFRIENDREQUEST", "Succesfully sent remove request!");
+                        Toast.makeText(getContext(), "Amigo eliminado exitosamente.", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("SENDFRIENDREQUEST","Error on remove request delivery");
+                        error.printStackTrace();
+
+                    }
+                },getArguments().getString(ARG_USER_ID).toString());
+
     }
 
     private void googleMapsPrompt() {

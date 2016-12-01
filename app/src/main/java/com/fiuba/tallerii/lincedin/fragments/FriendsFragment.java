@@ -99,9 +99,13 @@ public class FriendsFragment extends Fragment {
                             public void onResponse(JSONObject response) {
                                 try {
                                     JSONArray array = response.getJSONArray("friends");
+                                    JSONArray onlinearray = response.getJSONArray("online");
                                     Log.d(TAG,array.toString());
                                     for(int i  = 0; i<array.length();i++) {
                                         userFriends.addUserFriend(array.get(i).toString());
+                                    }
+                                    for (int i = 0; i<onlinearray.length();i++) {
+                                        userFriends.addOnlineUser(onlinearray.get(i).toString());
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

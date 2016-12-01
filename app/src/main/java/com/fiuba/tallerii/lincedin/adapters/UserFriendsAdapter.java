@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
         ImageView friendPicture;
         String friendID;
         String imgURL;
+        ImageButton online;
     }
 
     public UserFriendsAdapter(UserFriends friends, Context ctx) {
@@ -82,6 +84,7 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             view = inflater.inflate(R.layout.friend_row_item,viewGroup,false);
+            viewHolder.online = (ImageButton) view.findViewById(R.id.user_online_icon);
             viewHolder.txtName = (TextView) view.findViewById(R.id.friend_name);
             viewHolder.txtJob = (TextView) view.findViewById(R.id.friend_job);
             viewHolder.friendPicture = (ImageView) view.findViewById(R.id.friend_image);
@@ -98,6 +101,9 @@ public class UserFriendsAdapter extends ArrayAdapter<Object>  {
                             }
 
                             viewHolder.friendID = userData.id;
+                            if (userFriendsObject.getOnlineUserFriends().contains(viewHolder.friendID)) {
+                                viewHolder.online.setVisibility(View.VISIBLE);
+                            }
                             viewHolder.imgURL = userData.profilePicture;
                             LincedInRequester.getUserProfileImage(mContext, new Response.Listener<JSONObject>() {
                                         @Override

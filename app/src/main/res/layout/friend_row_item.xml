@@ -29,6 +29,14 @@
             android:textSize="10dp"
             />
     </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/user_online_icon"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:paddingLeft="30dp"
+        android:src="@drawable/ic_online_user"
+        android:tint="@android:color/holo_green_light"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:visibility="gone"/>
 
 </LinearLayout>

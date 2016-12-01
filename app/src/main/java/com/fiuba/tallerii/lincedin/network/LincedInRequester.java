@@ -307,4 +307,10 @@ public class LincedInRequester {
             HttpRequestHelper.post(url,requestParams,coordinatesToSend,successListener,errorListener,"SendUserLocation");
         }
     }
+
+    public static void sendRemoveFriendRequest(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String userId) {
+        final String url = getAppServerBaseURL(context) + "/friends/" + userId;
+        final Map<String,String> requestParams = new HashMap<>();
+        HttpRequestHelper.delete(url,requestParams,successListener,errorListener,"RemoveFriendRequest");
+    }
 }
