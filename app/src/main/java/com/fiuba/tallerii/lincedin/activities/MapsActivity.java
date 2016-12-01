@@ -85,12 +85,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                if (isNetworkEnabled && locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) != null) {
                    lat = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
                    lo = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLongitude();
+                   LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
+                               @Override
+                               public void onResponse(JSONObject response) {
+                                   Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
+                                   Log.d("GEOLOC", "Succesfully sent coordinates");
+                                   finish();
+
+                               }
+                           },
+                           new Response.ErrorListener() {
+                               @Override
+                               public void onErrorResponse(VolleyError error) {
+                                   error.printStackTrace();
+                                   Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
+
+                               }
+                           },new LatLng(lat,lo));
                }
 
                if (isGPSEnabled && permission) {
                    if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
                        lat = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
                        lo = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
+                       LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
+                                   @Override
+                                   public void onResponse(JSONObject response) {
+                                       Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
+                                       Log.d("GEOLOC", "Succesfully sent coordinates");
+                                       finish();
+
+                                   }
+                               },
+                               new Response.ErrorListener() {
+                                   @Override
+                                   public void onErrorResponse(VolleyError error) {
+                                       error.printStackTrace();
+                                       Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
+
+                                   }
+                               },new LatLng(lat,lo));
                    }
                }
            }
