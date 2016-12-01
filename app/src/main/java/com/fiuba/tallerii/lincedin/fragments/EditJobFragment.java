@@ -112,11 +112,11 @@ public class EditJobFragment extends Fragment {
             if (selectedJob.company != null && !selectedJob.company.equals("")) {
                 companyEditText.setText(selectedJob.company);
             }
-            if (selectedJob.since != null && !selectedJob.since.equals("")) {
-                startDateEditText.setText(selectedJob.since);
+            if (selectedJob.date_since != null && !selectedJob.date_since.equals("")) {
+                startDateEditText.setText(selectedJob.date_since);
             }
-            if (selectedJob.to != null && !selectedJob.to.equals("")) {
-                endDateEditText.setText(selectedJob.to);
+            if (selectedJob.date_to != null && !selectedJob.date_to.equals("")) {
+                endDateEditText.setText(selectedJob.date_to);
             }
         }
     }
@@ -320,8 +320,8 @@ public class EditJobFragment extends Fragment {
 
         job.position = (UserJobPosition) ((android.support.v7.widget.AppCompatSpinner) v.findViewById(R.id.edit_job_positions_dropdown)).getSelectedItem();
 
-        job.since = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_since_date_edittext)).getText().toString());
-        job.to = ((CheckBox) v.findViewById(R.id.edit_job_current_work_checkbox)).isChecked() ?
+        job.date_since = DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_since_date_edittext)).getText().toString());
+        job.date_to = ((CheckBox) v.findViewById(R.id.edit_job_current_work_checkbox)).isChecked() ?
                 ""
                 : DateUtils.parseDateWithoutTimeToDatetime(((EditText) v.findViewById(R.id.edit_job_until_date_edittext)).getText().toString());
 
