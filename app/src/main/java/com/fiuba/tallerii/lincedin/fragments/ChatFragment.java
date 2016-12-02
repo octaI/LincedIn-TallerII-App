@@ -213,6 +213,8 @@ public class ChatFragment extends Fragment {
     }
 
     private void sendNewMessage(final String message) {
+        clearMessage();
+        refreshLoadingIndicator(fragmentView, true);
         LincedInRequester.sendMessageToChat(
                 chatId,
                 message,
@@ -228,7 +230,7 @@ public class ChatFragment extends Fragment {
                         chatMessagesAdapter.addToDataset(chatMessage);
                         chatMessagesAdapter.notifyDataSetChanged();
 
-                        clearMessage();
+                        refreshLoadingIndicator(fragmentView, false);
                     }
                 },
                 new Response.ErrorListener() {
@@ -236,6 +238,7 @@ public class ChatFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.e(TAG, error.toString());
                         error.printStackTrace();
+                        refreshLoadingIndicator(fragmentView, false);
                         ViewUtils.setSnackbar(fragmentView, R.string.error_send_message_try_again, Snackbar.LENGTH_LONG);
                     }
                 }
