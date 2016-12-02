@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/friends_see_pending_requests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_pending_requests"
+        android:tint="@color/colorAccent"
+
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
 
     <LinearLayout
         android:id="@+id/fragment_friends_user_not_logged_layout"
@@ -43,7 +54,8 @@
         android:id="@+id/user_friend_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/friends_see_pending_requests"
         >
     </ListView>
 
-</LinearLayout>
+</RelativeLayout>

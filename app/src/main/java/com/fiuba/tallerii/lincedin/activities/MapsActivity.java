@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -49,86 +50,111 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         locationManager  = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},ACCESS_COARSE_GPS);
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},ACCESS_FINE_GPS);
-        }
+
         permission = ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         mapFragment.getMapAsync(this);
+
     }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != ACCESS_COARSE_GPS) {
+            return;
+        }
+
+        if (requestCode == ACCESS_COARSE_GPS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                if (!isLocationEnabled()){
+                    showAlert();
+                }
+                locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+                // getting GPS status
+                boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+                // getting network status
+                boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                if (!isNetworkEnabled || !isGPSEnabled || permission) {
+
+                } else {
+                    if (isNetworkEnabled && locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) != null) {
+                        lat = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
+                        lo = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLongitude();
+                        LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
+                                        Log.d("GEOLOC", "Succesfully sent coordinates");
+                                        finish();
+
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        error.printStackTrace();
+                                        Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
+
+                                    }
+                                },new LatLng(lat,lo));
+                    }
+
+                    if (isGPSEnabled && permission) {
+                        if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                            lat = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
+                            lo = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
+                            LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
+                                            Log.d("GEOLOC", "Succesfully sent coordinates");
+                                            finish();
+
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            error.printStackTrace();
+                                            Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    },new LatLng(lat,lo));
+                        }
+                    }
+                }
+
+
+            } else {
+                finish();
+            }
+
+            }
+        }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},ACCESS_COARSE_GPS);
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},ACCESS_FINE_GPS);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_COARSE_GPS);
         }
 
-        if (!isLocationEnabled()){
-            showAlert();
-        }
-            locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        noLocationEnabled(googleMap);
+    }
 
-            // getting GPS status
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-            // getting network status
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-           if (!isNetworkEnabled || !isGPSEnabled || permission) {
-               lat = -34.6037;
-               lo = -58.3816;
-           } else {
-               if (isNetworkEnabled && locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER) != null) {
-                   lat = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
-                   lo = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLongitude();
-                   LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
-                               @Override
-                               public void onResponse(JSONObject response) {
-                                   Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
-                                   Log.d("GEOLOC", "Succesfully sent coordinates");
-                                   finish();
-
-                               }
-                           },
-                           new Response.ErrorListener() {
-                               @Override
-                               public void onErrorResponse(VolleyError error) {
-                                   error.printStackTrace();
-                                   Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
-
-                               }
-                           },new LatLng(lat,lo));
-               }
-
-               if (isGPSEnabled && permission) {
-                   if (locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
-                       lat = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
-                       lo = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
-                       LincedInRequester.sendUserCoordinates(getApplicationContext(), new Response.Listener<JSONObject>() {
-                                   @Override
-                                   public void onResponse(JSONObject response) {
-                                       Toast.makeText(getApplicationContext(), "Guardando su nueva localización.", Toast.LENGTH_SHORT).show();
-                                       Log.d("GEOLOC", "Succesfully sent coordinates");
-                                       finish();
-
-                                   }
-                               },
-                               new Response.ErrorListener() {
-                                   @Override
-                                   public void onErrorResponse(VolleyError error) {
-                                       error.printStackTrace();
-                                       Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
-
-                                   }
-                               },new LatLng(lat,lo));
-                   }
-               }
-           }
+    private void noLocationEnabled(GoogleMap googleMap) {
+        lat = -34.6037;
+        lo = -58.3816;
         mMap = googleMap;
+
         LatLng initialPos = new LatLng(lat,lo);
         mMap.addMarker(new MarkerOptions().position(initialPos).title("Aquí está usted"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(initialPos));
@@ -148,16 +174,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 error.printStackTrace();
-                                Toast.makeText(getApplicationContext(),"Error al enviar su ubicación.Revisa tu conexión.",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Error al enviar su ubicación.Revisa tu conexión.", Toast.LENGTH_SHORT).show();
 
                             }
-                        },latLng);
+                        }, latLng);
             }
-
         });
-
-
-
     }
 
     private boolean isLocationEnabled() {

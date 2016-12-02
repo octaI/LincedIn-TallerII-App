@@ -105,6 +105,8 @@ public class FriendsFragment extends Fragment {
         if (SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false)) {
             refreshUserNotLoggedMessage(getView(),true);
             refreshLoadingIndicator(getView(),true);
+            userFriends.getOnlineUserFriends().clear();
+            userFriends.getUserFriends().clear();
             LincedInRequester.getUserFriends(getContext(),
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -114,7 +116,7 @@ public class FriendsFragment extends Fragment {
                                 JSONArray array = response.getJSONArray("friends");
                                 JSONArray onlinearray = response.getJSONArray("online");
                                 Log.d(TAG,array.toString());
-                                Log.d(TAG,array.toString());
+                                Log.d(TAG,onlinearray.toString());
                                 for(int i  = 0; i<array.length();i++) {
                                     userFriends.addUserFriend(array.get(i).toString());
                                 }
