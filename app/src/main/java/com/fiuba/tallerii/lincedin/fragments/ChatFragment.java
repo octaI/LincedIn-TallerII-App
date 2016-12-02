@@ -50,7 +50,7 @@ public class ChatFragment extends Fragment {
     private static final String ARG_CHAT_ID = "ARG_CHAT_ID";
     private static final String ARG_RECEIVING_USER_ID = "ARG_USER_RECEIVING_USER_ID";
 
-    private static final int pagingSize = 20;
+    private static final int PAGING_SIZE = 20;
 
     private String chatId;
     private String receivingUserId;
@@ -83,36 +83,9 @@ public class ChatFragment extends Fragment {
     private void retrieveChat() {
         refreshLoadingIndicator(fragmentView, true);
         if (chatId != null) {
-            getChatById(chatId, pagingSize);
+            getChatById(chatId, PAGING_SIZE);
         } else {
-            LincedInRequester.getAllUserChats(
-                    getActivity(),
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Gson gson = new Gson();
-                            Log.d(TAG, gson.toJson(response));
-
-                            List<Chat> chats = new ArrayList<>();
-                            Type chatListType = new TypeToken<List<Chat>>() {}.getType();
-                            try {
-                                chats = gson.fromJson(response.getString("chats"), chatListType);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            createChatIfNecessary(chats);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, error.toString());
-                            error.printStackTrace();
-                            refreshLoadingIndicator(fragmentView, false);
-                            mListener.onError();
-                        }
-                    }
-            );
+            createChat(receivingUserId, PAGING_SIZE);
         }
     }
 
@@ -124,41 +97,19 @@ public class ChatFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Log.d(TAG, gson.toJson(response));
-
-                        CompleteChat chat = gson.fromJson(response.toString(), CompleteChat.class);
-                        loadMessages(chat);
-                        refreshLoadingIndicator(fragmentView, false);
+                        onChatRetrieved(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                        error.printStackTrace();
-                        refreshLoadingIndicator(fragmentView, false);
-                        mListener.onError();
+                        onErrorRetrievingChat(error);
                     }
                 }
         );
     }
 
-    private void createChatIfNecessary(List<Chat> chats) {
-        List<String> chatIdOptions = new ArrayList<>();
-        chatIdOptions.add(
-                receivingUserId + "_" + SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, "")
-        );
-        chatIdOptions.add(
-                 SharedPreferencesUtils.getStringFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_ID, "") + "_" + receivingUserId
-        );
-        for (Chat chat : chats) {
-            if (chatIdOptions.contains(chat.chatId)) {
-                getChatById(chat.chatId, pagingSize);
-                return;
-            }
-        }
-
+    private void createChat(String receivingUserId, final int pagingSize) {
         LincedInRequester.createChatWithUser(
                 receivingUserId,
                 getContext(),
@@ -166,8 +117,8 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            chatId = response.getString("id");
-                            Log.i(TAG, "Chat with id " + chatId + " created successfully!");
+                            Log.d(TAG, new Gson().toJson(response));
+                            chatId = response.getString("chat_id");
                             getChatById(chatId, pagingSize);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -179,13 +130,27 @@ public class ChatFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-                        error.printStackTrace();
-                        refreshLoadingIndicator(fragmentView, false);
-                        mListener.onError();
+                        onErrorRetrievingChat(error);
                     }
                 }
         );
+    }
+
+    private void onChatRetrieved(JSONObject response) {
+        Gson gson = new Gson();
+        Log.d(TAG, gson.toJson(response));
+        Log.i(TAG, "Chat with id " + chatId + " retrieved successfully!");
+
+        CompleteChat chat = gson.fromJson(response.toString(), CompleteChat.class);
+        loadMessages(chat);
+        refreshLoadingIndicator(fragmentView, false);
+    }
+
+    private void onErrorRetrievingChat(VolleyError error) {
+        Log.e(TAG, error.toString());
+        error.printStackTrace();
+        refreshLoadingIndicator(fragmentView, false);
+        mListener.onError();
     }
 
     private void loadMessages(CompleteChat chat) {
@@ -208,6 +173,11 @@ public class ChatFragment extends Fragment {
         ListView messageListView = (ListView) fragmentView.findViewById(R.id.fragment_chat_messages_listview);
         messageListView.setAdapter(chatMessagesAdapter);
         messageListView.setEmptyView(fragmentView.findViewById(android.R.id.empty));
+
+        TextView noMessagesTextView = (TextView) fragmentView.findViewById(android.R.id.empty);
+        noMessagesTextView.setText(
+                noMessagesTextView.getText().toString().replace(":1", parseUserIdToUsername(receivingUserId))
+        );
     }
 
     private void setListeners() {
