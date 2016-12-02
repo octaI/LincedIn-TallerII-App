@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -207,6 +208,13 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
+        parentView.findViewById(R.id.user_profile_accept_user_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptFriendRequest();
+            }
+        });
+
         parentView.findViewById(R.id.user_profile_remove_user_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,11 +238,18 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void removeFriend() {
+        refreshLoadingIndicator(convertView, true);
         LincedInRequester.sendRemoveFriendRequest(getContext(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("SENDFRIENDREQUEST", "Succesfully sent remove request!");
                         Toast.makeText(getContext(), "Amigo eliminado exitosamente.", Toast.LENGTH_SHORT).show();
+
+                        convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.VISIBLE);
+                        convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                        convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+
+                        refreshLoadingIndicator(convertView, false);
                     }
                 },
                 new Response.ErrorListener() {
@@ -242,10 +257,10 @@ public class UserProfileFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("SENDFRIENDREQUEST","Error on remove request delivery");
                         error.printStackTrace();
-
+                        refreshLoadingIndicator(convertView, false);
                     }
-                },getArguments().getString(ARG_USER_ID).toString());
-
+                },
+                getArguments().getString(ARG_USER_ID).toString());
     }
 
     private void googleMapsPrompt() {
@@ -255,11 +270,19 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void sendFriendRequest() {
+        refreshLoadingIndicator(convertView, true);
         LincedInRequester.sendFriendRequest(getContext(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("SENDFRIENDREQUEST", "Succesfully sent friend request!");
                         Toast.makeText(getContext(), "Solicitud enviada exitósamente.", Toast.LENGTH_SHORT).show();
+
+                        convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.VISIBLE);
+                        ((ImageButton) convertView.findViewById(R.id.user_profile_add_user_button)).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey));
+                        convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                        convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+
+                        refreshLoadingIndicator(convertView, false);
                     }
                 },
                 new Response.ErrorListener() {
@@ -267,9 +290,36 @@ public class UserProfileFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         Log.d("SENDFRIENDREQUEST","Error on friend request delivery");
                         error.printStackTrace();
-
+                        refreshLoadingIndicator(convertView, false);
                     }
-                },getArguments().getString(ARG_USER_ID).toString());
+                },
+                getArguments().getString(ARG_USER_ID).toString());
+    }
+
+    private void acceptFriendRequest() {
+        refreshLoadingIndicator(convertView, true);
+        LincedInRequester.sendFriendRequest(getContext(), new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SENDFRIENDREQUEST", "Succesfully accepted friend request!");
+                        Toast.makeText(getContext(), "Solicitud de amistad aceptada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                        convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.GONE);
+                        convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                        convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.VISIBLE);
+
+                        refreshLoadingIndicator(convertView, false);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("SENDFRIENDREQUEST","Error on friend request delivery");
+                        error.printStackTrace();
+                        refreshLoadingIndicator(convertView, false);
+                    }
+                },
+                getArguments().getString(ARG_USER_ID).toString());
     }
 
     private void promptGalleryChoice() {
@@ -498,6 +548,34 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
+    private void setFriendshipButtonsVisibility(String friendshipStatus) {
+        if (convertView != null) {
+            switch (friendshipStatus) {
+                case "ACCEPTED":
+                    convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.VISIBLE);
+                    break;
+                case "PENDING_FOR_ME":
+                    convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.VISIBLE);
+                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+                    break;
+                case "PENDING_FOR_HIM":
+                    convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.VISIBLE);
+                    ((ImageButton) convertView.findViewById(R.id.user_profile_add_user_button)).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey));
+                    convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+                    break;
+                case "NONE":
+                    convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.VISIBLE);
+                    convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+                    break;
+            }
+        }
+    }
+
     private void requestUserProfile() {
         if (convertView != null) {
             boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
@@ -514,6 +592,7 @@ public class UserProfileFragment extends Fragment {
                                 Log.d(TAG, gson.toJson(response));
 
                                 user = gson.fromJson(response.toString(), User.class);
+                                requestFriendshipStatus();
                                 populateProfile(convertView, user);
                                 refreshLoadingIndicator(convertView, false);
                                 hideErrorScreen(convertView);
@@ -530,6 +609,35 @@ public class UserProfileFragment extends Fragment {
                         }
                 );
             }
+        }
+    }
+
+    private void requestFriendshipStatus() {
+        if (convertView != null) {
+                LincedInRequester.getFriendshipStatus(
+                        getArguments().getString(ARG_USER_ID),
+                        getContext(),
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Gson gson = new Gson();
+                                Log.d(TAG, gson.toJson(response));
+                                try {
+                                    setFriendshipButtonsVisibility(response.getString("status"));
+                                } catch (JSONException e) {
+                                    Log.e(TAG, "Couldn't retrieve friendship status with user");
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e(TAG, error.toString());
+                                error.printStackTrace();
+                            }
+                        }
+                );
         }
     }
 

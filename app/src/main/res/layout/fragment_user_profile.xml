@@ -128,7 +128,7 @@
                                     android:tint="@color/colorAccent"
                                     android:background="?attr/selectableItemBackgroundBorderless"
                                     android:layout_marginBottom="8dp"
-                                    android:visibility="visible"/>
+                                    android:visibility="gone"/>
                                 <ImageButton
                                     android:id="@+id/user_profile_chat_user_button"
                                     android:layout_width="42dp"

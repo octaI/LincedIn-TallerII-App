@@ -278,6 +278,21 @@ public class LincedInRequester {
         HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetUserFriends");
     }
 
+    public static void getFriendshipStatus(String userId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/friends/status/"
+                + userId;
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetFriendshipStatus"
+        );
+    }
+
     public static void sendFriendRequest(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, String requestedUserId) {
         final Map<String,String> requestParams = new HashMap<>();
         final String url = getAppServerBaseURL(context) + "/friends/" + requestedUserId;
