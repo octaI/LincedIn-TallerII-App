@@ -2,8 +2,11 @@ package com.fiuba.tallerii.lincedin.services;
 
 import android.util.Log;
 
+import com.fiuba.tallerii.lincedin.events.MessageReceivedEvent;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class LincedInFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -26,5 +29,6 @@ public class LincedInFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         // TODO: 02/11/16 Decide what to do when Firebase message received.
+        EventBus.getDefault().post(new MessageReceivedEvent(null));
     }
 }

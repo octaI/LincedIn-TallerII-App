@@ -22,7 +22,7 @@ import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.ChatMessagesAdapter;
-import com.fiuba.tallerii.lincedin.model.chat.Chat;
+import com.fiuba.tallerii.lincedin.events.MessageReceivedEvent;
 import com.fiuba.tallerii.lincedin.model.chat.ChatMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CompleteChat;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
@@ -30,14 +30,12 @@ import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChatFragment extends Fragment {
 
@@ -74,6 +72,8 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+
         if (getArguments() != null) {
             chatId = getArguments().getString(ARG_CHAT_ID);
             receivingUserId = getArguments().getString(ARG_RECEIVING_USER_ID);
@@ -81,11 +81,13 @@ public class ChatFragment extends Fragment {
     }
 
     private void retrieveChat() {
-        refreshLoadingIndicator(fragmentView, true);
-        if (chatId != null) {
-            getChatById(chatId, PAGING_SIZE);
-        } else {
-            createChat(receivingUserId, PAGING_SIZE);
+        if (fragmentView != null) {
+            refreshLoadingIndicator(fragmentView, true);
+            if (chatId != null) {
+                getChatById(chatId, PAGING_SIZE);
+            } else {
+                createChat(receivingUserId, PAGING_SIZE);
+            }
         }
     }
 
@@ -253,6 +255,11 @@ public class ChatFragment extends Fragment {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageReceived(MessageReceivedEvent event) {
+        retrieveChat();
     }
 
     private void openUserProfile(String userId) {

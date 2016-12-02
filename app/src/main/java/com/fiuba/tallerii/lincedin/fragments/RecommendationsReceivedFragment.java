@@ -18,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.RecommendationsReceivedAdapter;
-import com.fiuba.tallerii.lincedin.events.RecommendationPostedEvent;
 import com.fiuba.tallerii.lincedin.model.recommendations.RecommendationReceived;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
 import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
@@ -26,9 +25,6 @@ import com.fiuba.tallerii.lincedin.utils.ViewUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 

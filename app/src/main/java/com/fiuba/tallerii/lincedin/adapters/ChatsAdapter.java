@@ -10,13 +10,11 @@ import android.widget.TextView;
 
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.model.chat.Chat;
-import com.fiuba.tallerii.lincedin.model.chat.ChatRow;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.fiuba.tallerii.lincedin.utils.DateUtils.parseTimestampToDatetime;
 
