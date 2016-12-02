@@ -16,10 +16,13 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.FindUserAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserFriends;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
+import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,28 +62,39 @@ public class FindFriendsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         convertView = inflater.inflate(R.layout.fragment_searchfriends,container,false);
+        convertView.findViewById(R.id.fragment_findfriends_login_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLogin();
+            }
+        });
+        boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
+        refreshUserNotLogged(convertView,isUserLogged);
         SearchView searchView = (SearchView) convertView.findViewById(R.id.searchfriends_view);
         final ListView strangerList = (ListView) convertView.findViewById(R.id.found_friends_listview);
-
+        searchView.setIconifiedByDefault(false);
+        searchView.requestFocus();
         strangerList.setAdapter(new FindUserAdapter(userFriends,getContext()));
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                refreshLoading(getView(),true);
+                userFriends.getUserFriends().clear();
                 final String query = s;
                 LincedInRequester.submitSearchQuery(getContext(), new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                                Toast.makeText(getContext(),"Se ha enviado la query "+query,Toast.LENGTH_SHORT).show();
                             JSONArray responsearray = response.getJSONArray("users_found");
-                            Log.d("FOUND USERS",responsearray.toString());
+                            Log.d(TAG,responsearray.toString());
                             for (int i = 0; i < responsearray.length(); i++) {
                                 userFriends.addUserFriend(responsearray.get(i).toString());
                             }
                             strangerList.setAdapter(new FindUserAdapter(userFriends,getContext()));
-
+                            refreshLoading(getView(),false);
                         } catch (JSONException e) {
+                            refreshLoading(getView(),false);
                             e.printStackTrace();
                         }
                     }
@@ -102,7 +116,6 @@ public class FindFriendsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                UserProfileFragment switchFragment =  UserProfileFragment.newInstance(userFriends.getUserFriends().get(i).toString());
                 Intent switchUserProfileIntent = new Intent(getActivity(), UserProfileActivity.class);
                 switchUserProfileIntent.putExtra("ARG_USER_ID",userFriends.getUserFriends().get(i).toString());
                 getActivity().startActivity(switchUserProfileIntent);
@@ -113,4 +126,35 @@ public class FindFriendsFragment extends Fragment {
         });
         return convertView;
     }
+
+    private void refreshUserNotLogged(View convertView, boolean isUserLogged) {
+        if (isUserLogged) {
+            convertView.findViewById(R.id.fragment_findfriends_user_not_logged_layout).setVisibility(View.GONE);
+            convertView.findViewById(R.id.found_friends_listview).setVisibility(View.VISIBLE);
+            convertView.findViewById(R.id.searchfriends_view).setVisibility(View.VISIBLE);
+        } else {
+            convertView.findViewById(R.id.found_friends_listview).setVisibility(View.INVISIBLE);
+            convertView.findViewById(R.id.searchfriends_view).setVisibility(View.INVISIBLE);
+            convertView.findViewById(R.id.fragment_findfriends_user_not_logged_layout).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void refreshLoading(View v, boolean loading) {
+        if (loading) {
+            v.findViewById(R.id.user_findfriends_loading_circular_progress).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.found_friends_listview).setVisibility(View.GONE);
+        } else {
+            v.findViewById(R.id.found_friends_listview).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_findfriends_loading_circular_progress).setVisibility(View.GONE);
+        }
+    }
+
+
+
+
+    private void openLogin() {
+        Intent loginIntent = new Intent(getActivity(), LogInActivity.class);
+        startActivity(loginIntent);
+    }
+
 }

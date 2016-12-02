@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
+import com.fiuba.tallerii.lincedin.activities.LogInActivity;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserFriendsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserFriends;
@@ -72,6 +73,15 @@ public class FriendsFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container,
                               Bundle savedInstanceState) {
         convertView = inflater.inflate(R.layout.fragment_friends,container,false);
+        convertView.findViewById(R.id.fragment_friends_login_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLogin();
+            }
+        });
+
+        boolean isUserLogged = SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false);
+        refreshUserNotLoggedMessage(convertView,isUserLogged);
         final ListView friendList = (ListView) convertView.findViewById(R.id.user_friend_list);
         UserFriendsAdapter friendListAdapter = new UserFriendsAdapter(userFriends,getContext());
         friendList.setAdapter(friendListAdapter);
@@ -79,7 +89,6 @@ public class FriendsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                UserProfileFragment switchFragment =  UserProfileFragment.newInstance(userFriends.getUserFriends().get(i).toString());
                 Intent switchUserProfileIntent = new Intent(getActivity(), UserProfileActivity.class);
                 switchUserProfileIntent.putExtra("ARG_USER_ID",userFriends.getUserFriends().get(i).toString());
                 getActivity().startActivity(switchUserProfileIntent);
@@ -93,38 +102,45 @@ public class FriendsFragment extends Fragment {
     }
 
     private void requestUserFriends() {
-         LincedInRequester.getUserFriends(getContext(),
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Toast.makeText(getContext(),"Se accedio a la lista de amigos",Toast.LENGTH_SHORT);
-                                try {
-                                    JSONArray array = response.getJSONArray("friends");
-                                    JSONArray onlinearray = response.getJSONArray("online");
-                                    Log.d(TAG,array.toString());
-                                    Log.d(TAG,array.toString());
-                                    for(int i  = 0; i<array.length();i++) {
-                                        userFriends.addUserFriend(array.get(i).toString());
-                                    }
-                                    for (int i = 0; i<onlinearray.length();i++) {
-                                        userFriends.addOnlineUser(onlinearray.get(i).toString());
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+        if (SharedPreferencesUtils.getBooleanFromSharedPreferences(getContext(), SharedPreferencesKeys.USER_LOGGED_IN, false)) {
+            refreshUserNotLoggedMessage(getView(),true);
+            refreshLoadingIndicator(getView(),true);
+            LincedInRequester.getUserFriends(getContext(),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            refreshLoadingIndicator(getView(),false);
+                            try {
+                                JSONArray array = response.getJSONArray("friends");
+                                JSONArray onlinearray = response.getJSONArray("online");
+                                Log.d(TAG,array.toString());
+                                Log.d(TAG,array.toString());
+                                for(int i  = 0; i<array.length();i++) {
+                                    userFriends.addUserFriend(array.get(i).toString());
                                 }
+                                for (int i = 0; i<onlinearray.length();i++) {
+                                    userFriends.addOnlineUser(onlinearray.get(i).toString());
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
 
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getContext(),"Ha ocurrido un error al traer la lista de amigos, verifique su conexión.",Toast.LENGTH_SHORT).show();
-                                Log.e(TAG,error.toString());
-                                error.printStackTrace();
-                            }
                         }
-                , UserAuthenticationManager.getUserId(getContext()));
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            refreshLoadingIndicator(getView(),false);
+                            Toast.makeText(getContext(),"Ha ocurrido un error al traer la lista de amigos, verifique su conexión.",Toast.LENGTH_SHORT).show();
+                            Log.e(TAG,error.toString());
+                            error.printStackTrace();
+                        }
+                    }
+                    , UserAuthenticationManager.getUserId(getContext()));
+
+        }
+
             }
 
 
@@ -137,12 +153,27 @@ public class FriendsFragment extends Fragment {
 
     private void refreshLoadingIndicator(View v, boolean loading) {
         if (loading) {
-            v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.INVISIBLE);
-            v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.user_profile_network_error_layout).setVisibility(View.GONE);
+            v.findViewById(R.id.user_friends_loading_circular_progress).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.user_friend_list).setVisibility(View.INVISIBLE);
         } else {
-            v.findViewById(R.id.user_profile_main_container_nestedscrollview).setVisibility(View.VISIBLE);
-            v.findViewById(R.id.user_profile_loading_circular_progress).setVisibility(View.GONE);
+            v.findViewById(R.id.user_friends_loading_circular_progress).setVisibility(View.GONE);
+            v.findViewById(R.id.user_friend_list).setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    private void openLogin() {
+        Intent loginIntent = new Intent(getActivity(), LogInActivity.class);
+        startActivity(loginIntent);
+    }
+
+    private void refreshUserNotLoggedMessage(View v, boolean isUserLogged) {
+        if (isUserLogged) {
+            v.findViewById(R.id.fragment_friends_user_not_logged_layout).setVisibility(View.GONE);
+            v.findViewById(R.id.user_friend_list).setVisibility(View.VISIBLE);
+        } else {
+            v.findViewById(R.id.user_friend_list).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.fragment_friends_user_not_logged_layout).setVisibility(View.VISIBLE);
         }
     }
 

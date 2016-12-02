@@ -150,7 +150,6 @@ public class UserFriendsAdapter extends ArrayAdapter<String>  {
         }
 
 
-        //ImageUtils.setBase64ImageFromString(mContext,mContext.getResources().getString(R.string.literal_riquelme),viewHolder.friendPicture);
         return view;
     }
 
