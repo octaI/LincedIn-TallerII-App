@@ -38,17 +38,20 @@ public class LincedInFirebaseMessagingService extends FirebaseMessagingService {
 
                     Intent chatIntent = new Intent(this, ChatActivity.class);
                     chatIntent.putExtra(ChatActivity.ARG_CHAT_ID, data.get("id"));
+                    chatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(chatIntent);
                     break;
                 case "RECOMMENDATION":
                     Intent recommendationsIntent = new Intent(this, RecommendationsActivity.class);
                     recommendationsIntent.putExtra(RecommendationsActivity.ARG_USER_ID, UserAuthenticationManager.getUserId(this));
                     recommendationsIntent.putExtra(RecommendationsActivity.ARG_IS_OWN_PROFILE, true);
+                    recommendationsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(recommendationsIntent);
                     break;
                 case "FRIEND_REQUEST":
                     Intent userProfileIntent = new Intent(this, UserProfileActivity.class);
                     userProfileIntent.putExtra(UserProfileActivity.ARG_USER_ID, data.get("id"));
+                    userProfileIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(userProfileIntent);
                     break;
             }
