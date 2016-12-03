@@ -360,6 +360,7 @@ public class UserProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case ACTIVITY_SELECT_IMAGE:
+                requestUserProfile();
                 Bitmap bitmap = getImageFromResult(getContext(), resultCode, data);
                 if (bitmap != null) {
 
@@ -668,8 +669,19 @@ public class UserProfileFragment extends Fragment {
         populateSkills(v, user);
     }
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateBasicInfo(getView(),user);
+    }
+
     private void populateBasicInfo(View v, User user) {
         final ImageView userImageView = (ImageView) v.findViewById(R.id.user_profile_picture_imageview);
+        if (user == null){
+            return;
+        }
         final String url = LincedInRequester.getAppServerBaseURL(getContext()) + user.profilePicture;
         JsonObjectRequest userImage = new JsonObjectRequest(Request.Method.GET, LincedInRequester.getAppServerBaseURL(getContext()) + user.profilePicture, null
                 , new Response.Listener<JSONObject>() {
@@ -700,13 +712,10 @@ public class UserProfileFragment extends Fragment {
                 return params;
             }
         };
-        //userImage.setRetryPolicy(new DefaultRetryPolicy(20*1000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyRequestQueueSingleton.getInstance(getContext()).addToRequestQueue(userImage);
 
-        //String baseliteral = getResources().getString(R.string.literal_riquelme);
 
 
-        //ImageUtils.setBase64ImageFromString(getContext(),baseliteral,userImageView);
 
         ((TextView) v.findViewById(R.id.user_profile_username_textview)).setText(user.fullName);
 
@@ -724,7 +733,6 @@ public class UserProfileFragment extends Fragment {
         ((TextView) v.findViewById(R.id.user_profile_biography_email_textview)).setText(user.email);
         setEmailListeners(v);
 
-        // TODO: 05/11/16 Set location when API supports it.
     }
 
     private void setDateOfBirthInfo(View v, User user) {

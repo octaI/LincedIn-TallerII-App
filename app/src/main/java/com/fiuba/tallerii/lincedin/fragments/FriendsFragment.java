@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.fiuba.tallerii.lincedin.R;
 import com.fiuba.tallerii.lincedin.activities.LogInActivity;
+import com.fiuba.tallerii.lincedin.activities.PendingRequestActivity;
 import com.fiuba.tallerii.lincedin.activities.UserProfileActivity;
 import com.fiuba.tallerii.lincedin.adapters.UserFriendsAdapter;
 import com.fiuba.tallerii.lincedin.model.user.UserFriends;
@@ -98,7 +100,19 @@ public class FriendsFragment extends Fragment {
             }
         });
 
+        ImageButton pendingRequestsbutton = (ImageButton) convertView.findViewById(R.id.friends_see_pending_requests);
+        pendingRequestsbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPendingRequestActivity();
+            }
+        });
         return convertView;
+    }
+
+    private void startPendingRequestActivity() {
+        Intent pendingIntent = new Intent(getContext(),PendingRequestActivity.class);
+        startActivity(pendingIntent);
     }
 
     private void requestUserFriends() {
@@ -115,8 +129,8 @@ public class FriendsFragment extends Fragment {
                             try {
                                 JSONArray array = response.getJSONArray("friends");
                                 JSONArray onlinearray = response.getJSONArray("online");
-                                Log.d(TAG,array.toString());
-                                Log.d(TAG,onlinearray.toString());
+                                Log.i(TAG,array.toString());
+                                Log.i(TAG,onlinearray.toString());
                                 for(int i  = 0; i<array.length();i++) {
                                     userFriends.addUserFriend(array.get(i).toString());
                                 }
@@ -157,9 +171,11 @@ public class FriendsFragment extends Fragment {
         if (loading) {
             v.findViewById(R.id.user_friends_loading_circular_progress).setVisibility(View.VISIBLE);
             v.findViewById(R.id.user_friend_list).setVisibility(View.INVISIBLE);
+            v.findViewById(R.id.friends_see_pending_requests).setVisibility(View.INVISIBLE);
         } else {
             v.findViewById(R.id.user_friends_loading_circular_progress).setVisibility(View.GONE);
             v.findViewById(R.id.user_friend_list).setVisibility(View.VISIBLE);
+            v.findViewById(R.id.friends_see_pending_requests).setVisibility(View.VISIBLE);
         }
     }
 

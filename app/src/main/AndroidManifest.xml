@@ -55,6 +55,13 @@
 
         </activity>
         <activity
+            android:name=".activities.PendingRequestActivity"
+            android:label="Pending Requests"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings_title"
             android:launchMode="singleTop"
