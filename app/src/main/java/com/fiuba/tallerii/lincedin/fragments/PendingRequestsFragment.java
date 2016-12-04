@@ -79,7 +79,7 @@ public class PendingRequestsFragment extends Fragment {
                 try {
                     pendingRequests.getUserFriends().clear();
                     JSONObject friendsjson = response.getJSONObject("friends");
-                    JSONArray friends_pending = friendsjson.getJSONArray("pending_for_him");
+                    JSONArray friends_pending = friendsjson.getJSONArray("pending_for_me");
                     for(int i = 0; i < friends_pending.length(); i++){
                         pendingRequests.getUserFriends().add(friends_pending.get(i).toString());
                     }
