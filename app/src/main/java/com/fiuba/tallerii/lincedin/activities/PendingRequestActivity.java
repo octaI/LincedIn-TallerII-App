@@ -70,6 +70,7 @@ public class PendingRequestActivity extends AppCompatActivity {
     private void setToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_pendingrequests);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Solicitudes Pendientes");
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
