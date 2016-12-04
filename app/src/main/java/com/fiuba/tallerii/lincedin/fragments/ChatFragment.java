@@ -26,6 +26,7 @@ import com.fiuba.tallerii.lincedin.events.MessageReceivedEvent;
 import com.fiuba.tallerii.lincedin.model.chat.ChatMessage;
 import com.fiuba.tallerii.lincedin.model.chat.CompleteChat;
 import com.fiuba.tallerii.lincedin.network.LincedInRequester;
+import com.fiuba.tallerii.lincedin.network.UserAuthenticationManager;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesKeys;
 import com.fiuba.tallerii.lincedin.utils.SharedPreferencesUtils;
 import com.fiuba.tallerii.lincedin.utils.ViewUtils;
@@ -48,7 +49,7 @@ public class ChatFragment extends Fragment {
     private static final String ARG_CHAT_ID = "ARG_CHAT_ID";
     private static final String ARG_RECEIVING_USER_ID = "ARG_USER_RECEIVING_USER_ID";
 
-    private static final int PAGING_SIZE = 20;
+    private static final int PAGING_SIZE = 100;
 
     private String chatId;
     private String receivingUserId;
@@ -144,6 +145,15 @@ public class ChatFragment extends Fragment {
         Log.i(TAG, "Chat with id " + chatId + " retrieved successfully!");
 
         CompleteChat chat = gson.fromJson(response.toString(), CompleteChat.class);
+
+        for (ChatMessage message : chat.messages) {
+            if (!message.userId.equals(UserAuthenticationManager.getUserId(getContext()))) {
+                receivingUserId = message.userId;
+                setUsernamesHeader();
+                break;
+            }
+        }
+
         loadMessages(chat);
         refreshLoadingIndicator(fragmentView, false);
     }
@@ -165,7 +175,7 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
         setAdapter();
-        setListeners();
+        setSendButtonListener();
         retrieveChat();
         return fragmentView;
     }
@@ -176,26 +186,26 @@ public class ChatFragment extends Fragment {
         messageListView.setAdapter(chatMessagesAdapter);
         messageListView.setEmptyView(fragmentView.findViewById(android.R.id.empty));
 
-        TextView noMessagesTextView = (TextView) fragmentView.findViewById(android.R.id.empty);
-        noMessagesTextView.setText(
-                noMessagesTextView.getText().toString().replace(":1", parseUserIdToUsername(receivingUserId))
-        );
-    }
-
-    private void setListeners() {
-        setUsernamesHeader();
-        setSendButtonListener();
+        if (receivingUserId != null) {
+            TextView noMessagesTextView = (TextView) fragmentView.findViewById(android.R.id.empty);
+            noMessagesTextView.setText(
+                    noMessagesTextView.getText().toString().replace(":1", parseUserIdToUsername(receivingUserId))
+            );
+        }
     }
 
     private void setUsernamesHeader() {
-        TextView otherUsernameTextView = (TextView) fragmentView.findViewById(R.id.fragment_chat_other_username_textview);
-        otherUsernameTextView.setText(parseUserIdToUsername(receivingUserId));
-        otherUsernameTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserProfile(receivingUserId);
-            }
-        });
+        // TODO: 03/12/16 Only supports 1-1 conversations!
+        if (receivingUserId != null) {
+            TextView otherUsernameTextView = (TextView) fragmentView.findViewById(R.id.fragment_chat_other_username_textview);
+            otherUsernameTextView.setText(parseUserIdToUsername(receivingUserId));
+            otherUsernameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openUserProfile(receivingUserId);
+                }
+            });
+        }
 
     }
 
