@@ -178,7 +178,22 @@ public class LincedInRequester {
         );
     }
 
-    public static void getChat(String chatId, int size, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+    public static void getChat(String chatId, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final Map<String, String> requestParams = new HashMap<>();
+        final String url = getAppServerBaseURL(context)
+                + "/chat/"
+                + chatId;
+
+        HttpRequestHelper.get(
+                url,
+                requestParams,
+                successListener,
+                errorListener,
+                "GetChat"
+        );
+    }
+
+    public static void getPagedChat(String chatId, int size, Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
         final Map<String, String> requestParams = new HashMap<>();
         requestParams.put("size", Integer.toString(size));
         final String url = getAppServerBaseURL(context)

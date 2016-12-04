@@ -49,7 +49,7 @@ public class ChatFragment extends Fragment {
     private static final String ARG_CHAT_ID = "ARG_CHAT_ID";
     private static final String ARG_RECEIVING_USER_ID = "ARG_USER_RECEIVING_USER_ID";
 
-    private static final int PAGING_SIZE = 100;
+    private static final int PAGING_SIZE = 20;
 
     private String chatId;
     private String receivingUserId;
@@ -85,17 +85,16 @@ public class ChatFragment extends Fragment {
         if (fragmentView != null) {
             refreshLoadingIndicator(fragmentView, true);
             if (chatId != null) {
-                getChatById(chatId, PAGING_SIZE);
+                getChatById(chatId);
             } else {
                 createChat(receivingUserId, PAGING_SIZE);
             }
         }
     }
 
-    private void getChatById(String chatId, int size) {
+    private void getChatById(String chatId) {
         LincedInRequester.getChat(
                 chatId,
-                size,
                 getContext(),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -122,7 +121,7 @@ public class ChatFragment extends Fragment {
                         try {
                             Log.d(TAG, new Gson().toJson(response));
                             chatId = response.getString("chat_id");
-                            getChatById(chatId, pagingSize);
+                            getChatById(chatId);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             refreshLoadingIndicator(fragmentView, false);
@@ -168,6 +167,19 @@ public class ChatFragment extends Fragment {
     private void loadMessages(CompleteChat chat) {
         chatMessagesAdapter.setDataset(chat.messages);
         chatMessagesAdapter.notifyDataSetChanged();
+
+        scrollToBottom();
+    }
+
+    private void scrollToBottom() {
+        final ListView messageListView = (ListView) fragmentView.findViewById(R.id.fragment_chat_messages_listview);
+        messageListView.post(new Runnable() {
+                @Override
+                public void run() {
+                    // Select the last row so it will scroll into view...
+                    messageListView.setSelection(chatMessagesAdapter.getCount() - 1);
+                }
+        });
     }
 
     @Override

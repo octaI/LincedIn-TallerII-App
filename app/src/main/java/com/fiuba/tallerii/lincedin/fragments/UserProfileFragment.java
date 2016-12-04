@@ -609,7 +609,10 @@ public class UserProfileFragment extends Fragment {
                                 Log.d(TAG, gson.toJson(response));
 
                                 user = gson.fromJson(response.toString(), User.class);
-                                requestFriendshipStatus();
+
+                                if (!isOwnProfile) {
+                                    requestFriendshipStatus();
+                                }
                                 populateProfile(convertView, user);
                                 refreshLoadingIndicator(convertView, false);
                                 hideErrorScreen(convertView);
