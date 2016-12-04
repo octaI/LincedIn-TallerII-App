@@ -572,11 +572,15 @@ public class UserProfileFragment extends Fragment {
                 case "PENDING_FOR_ME":
                     convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.GONE);
                     convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.VISIBLE);
-                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
+                    convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.VISIBLE);
                     break;
                 case "PENDING_FOR_HIM":
-                    convertView.findViewById(R.id.user_profile_add_user_button).setVisibility(View.VISIBLE);
-                    ((ImageButton) convertView.findViewById(R.id.user_profile_add_user_button)).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey));
+                    ImageButton addFriendButton = (ImageButton) convertView.findViewById(R.id.user_profile_add_user_button);
+                    addFriendButton.setVisibility(View.VISIBLE);
+                    addFriendButton.setColorFilter(ContextCompat.getColor(getContext(), R.color.grey));
+                    addFriendButton.setEnabled(false);
+                    addFriendButton.setClickable(false);
+
                     convertView.findViewById(R.id.user_profile_accept_user_button).setVisibility(View.GONE);
                     convertView.findViewById(R.id.user_profile_remove_user_button).setVisibility(View.GONE);
                     break;
@@ -777,7 +781,7 @@ public class UserProfileFragment extends Fragment {
 
     private void populateWorkExperience(View v, User user) {
         List<UserJob> jobsToShow = user.jobs != null && !user.jobs.isEmpty() ?
-                user.jobs.subList(0, user.jobs.size() - 1) : user.jobs;
+                user.jobs.subList(0, user.jobs.size()) : new ArrayList<UserJob>();
         if (user.isCurrentlyWorking()) {
             jobsToShow.remove(user.getCurrentWork());
         }
