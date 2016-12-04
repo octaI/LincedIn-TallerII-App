@@ -111,7 +111,24 @@ public class FriendsFragment extends Fragment {
     }
 
     private void startPendingRequestActivity() {
-        Intent pendingIntent = new Intent(getContext(),PendingRequestActivity.class);
+        final Intent pendingIntent = new Intent(getContext(),PendingRequestActivity.class);
+        LincedInRequester.getPendingRequests(getContext(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject friendsjson = response.getJSONObject("friends");
+                    pendingIntent.putExtra("USER_PENDING", friendsjson.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
         startActivity(pendingIntent);
     }
 

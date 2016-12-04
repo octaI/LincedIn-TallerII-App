@@ -10,7 +10,7 @@ public class UserFriends {
 
     @SerializedName("friends")
     public ArrayList<String> userFriendsIDs = new ArrayList<>();
-
+    @SerializedName("online_users")
     public ArrayList<String> onlineUsers = new ArrayList<>();
 
     public void addUserFriend(String userid) {

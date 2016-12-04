@@ -2,6 +2,8 @@ package com.fiuba.tallerii.lincedin.network;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+
 import com.android.volley.Response;
 import com.fiuba.tallerii.lincedin.fragments.HTTPConfigurationDialogFragment;
 import com.fiuba.tallerii.lincedin.model.chat.ChatNewMessage;
@@ -333,5 +335,11 @@ public class LincedInRequester {
         final String url = getAppServerBaseURL(context) + "/search?text=" + textQuery;
         final Map<String,String> requestParams = new HashMap<>();
         HttpRequestHelper.get(url,requestParams,successListener,errorListener,"FindFriendByString");
+    }
+
+    public static void getPendingRequests(Context context, Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener) {
+        final String url = getAppServerBaseURL(context) + "/friends/pending";
+        final Map<String,String> requestParams = new HashMap<>();
+        HttpRequestHelper.get(url,requestParams,successListener,errorListener,"GetPendingRequests");
     }
 }
