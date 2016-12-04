@@ -37,7 +37,7 @@ public class LincedInFirebaseMessagingService extends FirebaseMessagingService {
                     EventBus.getDefault().post(new MessageReceivedEvent(null));
 
                     Intent chatIntent = new Intent(this, ChatActivity.class);
-                    chatIntent.putExtra(ChatActivity.ARG_CHAT_ID, data.get("id"));
+                    chatIntent.putExtra(ChatActivity.ARG_RECEIVING_USER_ID, data.get("id"));
                     chatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(chatIntent);
                     break;
